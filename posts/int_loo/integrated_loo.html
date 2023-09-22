@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrew Ghazi">
+<meta name="dcterms.date" content="2023-09-21">
+
+<title>andrewGhazi.github.io - Integrated LOO walkthrough</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">andrewGhazi.github.io</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/andrewGhazi" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Integrated LOO walkthrough</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Andrew Ghazi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 21, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#why-use-integrated-loo" id="toc-why-use-integrated-loo" class="nav-link" data-scroll-target="#why-use-integrated-loo">Why use integrated LOO?</a></li>
+  <li><a href="#identify-the-integral" id="toc-identify-the-integral" class="nav-link" data-scroll-target="#identify-the-integral">Identify the integral</a></li>
+  <li><a href="#simulated-pathological-example" id="toc-simulated-pathological-example" class="nav-link" data-scroll-target="#simulated-pathological-example">Simulated pathological example</a></li>
+  <li><a href="#write-the-vectorized-integrand" id="toc-write-the-vectorized-integrand" class="nav-link" data-scroll-target="#write-the-vectorized-integrand">Write the vectorized integrand</a></li>
+  <li><a href="#get-the-inputs" id="toc-get-the-inputs" class="nav-link" data-scroll-target="#get-the-inputs">Get the inputs</a></li>
+  <li><a href="#evaluate-the-integral" id="toc-evaluate-the-integral" class="nav-link" data-scroll-target="#evaluate-the-integral">Evaluate the integral</a>
+  <ul class="collapse">
+  <li><a href="#integrand-at-one-point-for-one-observation-in-one-draw" id="toc-integrand-at-one-point-for-one-observation-in-one-draw" class="nav-link" data-scroll-target="#integrand-at-one-point-for-one-observation-in-one-draw">Integrand at one point for one observation in one draw</a></li>
+  <li><a href="#integral-for-one-observation-in-one-draw" id="toc-integral-for-one-observation-in-one-draw" class="nav-link" data-scroll-target="#integral-for-one-observation-in-one-draw">Integral for one observation in one draw</a></li>
+  <li><a href="#integral-for-all-observations-in-one-draw" id="toc-integral-for-all-observations-in-one-draw" class="nav-link" data-scroll-target="#integral-for-all-observations-in-one-draw">Integral for all observations in one draw</a></li>
+  <li><a href="#integral-for-all-observations-for-one-draw" id="toc-integral-for-all-observations-for-one-draw" class="nav-link" data-scroll-target="#integral-for-all-observations-for-one-draw">Integral for all observations, for one draw</a></li>
+  </ul></li>
+  <li><a href="#speed-concerns" id="toc-speed-concerns" class="nav-link" data-scroll-target="#speed-concerns">Speed concerns</a></li>
+  <li><a href="#numerical-accuracy-concerns" id="toc-numerical-accuracy-concerns" class="nav-link" data-scroll-target="#numerical-accuracy-concerns">Numerical accuracy concerns</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from <span class="citation" data-cites="vehtari_bayesian">(<a href="#ref-vehtari_bayesian" role="doc-biblioref">Vehtari et al., n.d.</a>)</span>. I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:</p>
+<ul>
+<li>crystallize my thoughts</li>
+<li>record my notes on how it works / how it’s done</li>
+<li>explain how it works in more depth than <a href="https://avehtari.github.io/modelselection/roaches.html#5_Poisson_model_with_%E2%80%9Crandom_effects%E2%80%9D_and_integrated_LOO">the existing example I know of</a></li>
+<li>show how to perform the integral more flexibly in R / outside of Stan</li>
+</ul>
+<p>Load some setup libraries:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-1_adb1fa5edb404d74bfe907a4ee1e69d4">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cmdstanr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="why-use-integrated-loo" class="level1">
+<h1>Why use integrated LOO?</h1>
+<p>The LOO method as implemented in the <code>loo</code> package requires an array of log-likelihood values for every observation at every iteration in the MCMC chains. There are some addtional complications around extensions like k-fold LOO and leave-one-group-out, but I’m going to ignore those. There’s a built in example in the <code>loo</code> package from a model fit with 32 observations - here’s the first 3 of 1000 rows (i.e.&nbsp;the MCMC chain took 1000 draws):</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-2_e2701638a8a927b9bcee14f27de2e2dc">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loo<span class="sc">::</span><span class="fu">example_loglik_matrix</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9] [,10] [,11] [,12]
+[1,] -2.37 -2.31 -2.34 -2.42 -2.31 -2.31 -2.68 -3.02 -2.59 -2.33 -2.32 -2.35
+[2,] -2.12 -1.88 -2.05 -2.04 -1.86 -1.88 -2.93 -3.37 -2.39 -1.88 -1.92 -1.92
+[3,] -2.24 -1.94 -2.17 -2.01 -1.89 -1.93 -3.01 -3.13 -2.29 -1.89 -1.98 -1.93
+     [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]
+[1,] -2.31 -2.38 -2.33 -2.40 -3.30 -4.27 -2.60 -4.13 -2.39 -2.50 -2.63 -2.61
+[2,] -1.86 -2.10 -1.92 -2.09 -4.31 -6.07 -2.32 -5.69 -2.21 -2.45 -2.81 -2.73
+[3,] -1.89 -2.16 -1.95 -2.13 -4.25 -5.40 -2.15 -5.00 -2.35 -2.54 -2.91 -2.79
+     [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32]
+[1,] -2.55 -2.38 -2.36 -2.51 -2.78 -2.43 -2.54 -2.31
+[2,] -2.36 -1.93 -1.90 -2.14 -3.25 -2.30 -2.56 -1.89
+[3,] -2.30 -1.91 -1.89 -2.03 -3.38 -2.43 -2.65 -1.96</code></pre>
+</div>
+</div>
+<p>LOO works by looking at the distributions of observation-wise log-likelihoods to assess how strongly each observation influences the overall fit. Low log-likelihood = strong influence on fit.</p>
+<p>Observation-wise log-likelihood values can be unstable when a given observation strongly influences the posterior for a related parameter. Normally you’ll notice this when a Stan model gets through the MCMC stage without any warnings, but the Pareto k diagnostics come out badly when you try to run LOO and warning messages go off.</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_a7b885cc5f5c239e717fa32f7e518089">
+<div class="cell-output-display">
+<p><img src="img/diagram.png" class="img-fluid" width="1179"></p>
+</div>
+</div>
+<p>I’ve come across this twice:</p>
+<ul>
+<li>once when using <a href="https://github.com/biobakery/anpan/blob/f13ad4f2fe2251265f7d14fc66d1a313547e9fe5/R/pglmm_loo.R#L344">LOO on phylogenetic generalized linear mixed models</a> in my <a href="https://github.com/biobakery/anpan">anpan</a> package. Each leaf has its own “phylogenetic effect” parameter that is of course strongly influenced by the observed outcome for that leaf. (Side note: the model doesn’t overfit because there are <span class="math inline">\(O(n^2)\)</span> constraints on the parameters through a correlation matrix.)</li>
+<li>once when using subject-level Gaussian processes to model subject-wise outcome trajectories over time. A patient’s observation on a given day again strongly influenced the value of the estimated GP at that time point.</li>
+</ul>
+<p>Why are unstable log-likehood values problematic? Because it makes estimating that observation’s contribution to the model fit challenging. When the log-likelihood values are unstable, the importance ratios can have high or infinite variance <span class="citation" data-cites="vehtari_practical_2017">(<a href="#ref-vehtari_practical_2017" role="doc-biblioref">Vehtari, Gelman, and Gabry 2017</a>)</span>. The loo package automatically performs <em>Pareto smoothed</em> importance sampling to smooth the importance weights. This estimates a generalized Pareto distribution to the tail of each log-likelihood distribution. The k parameter of this Pareto distribution is used as a diagnostic to assess whether or not the leave-one-out distribution for the observation in question has been accurately characterized by the log-likelihood values from the MCMC fit.</p>
+<p>The example below compares log-likelihood values for a single observation over two long MCMC chains evaluated with and without integration.</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-4_27e6cef21460f6a0b5747d4288ffb8db">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r fold-hide code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Result of the anpan tutorial example with n = 300</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"~/misc/output/result_with_int_n300.RData"</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>loo_df_with_int_loo <span class="ot">&lt;-</span> result_with_int<span class="sc">$</span>loo<span class="sc">$</span>pglmm_ll_df</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>geryon<span class="sc">::</span><span class="fu">args2ge</span>(anpan_pglmm)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>meta_file <span class="ot">&lt;-</span> result_with_int<span class="sc">$</span>model_input</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>tree_file <span class="ot">&lt;-</span> tr</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span> <span class="st">"outcome"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>covariates <span class="ot">&lt;-</span> <span class="st">"covariate"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;step through anpan_pglmm(), then use nonint_loo to get the loo values&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># V This is pglmm_loo.R from anpan with some updates to drop the integration, the key distinction being the log_lik_i_j_gaussian function below.</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"~/misc/R/pglmm_nonint_loo.R"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># THIS IS NOT INTEGRATED!!!</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>log_lik_i_j_gaussian <span class="ot">&lt;-</span> <span class="cf">function</span>(effect_j,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    mu_bar_j, sigma_bar_j, <span class="co"># phylo term components</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    sigma_resid, yj, lm_term, <span class="co"># LM term components</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    offset_term) {</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    phylo_term <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(effect_j,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> mu_bar_j,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma_bar_j),</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">log =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    model_mean <span class="ot">&lt;-</span> <span class="fu">c</span>(lm_term) <span class="sc">+</span> effect_j</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    fit_term <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> yj,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> model_mean,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> sigma_resid,</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">log =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> phylo_term <span class="sc">+</span> fit_term <span class="sc">-</span> offset_term</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(res)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>ll_attempt <span class="ot">&lt;-</span> <span class="fu">safely_get_ll_mat</span>(draw_df,</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">effect_means =</span> effect_means,</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">cor_mat =</span> cor_mat,</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">Lcov =</span> Lcov,</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">Xc =</span> Xc,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">offset_val =</span> data_list<span class="sc">$</span>offset_val,</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y =</span> data_list<span class="sc">$</span>Y,</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> family,</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> verbose</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>ll_mat <span class="ot">&lt;-</span> ll_attempt<span class="sc">$</span>result</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>nonint_loo <span class="ot">&lt;-</span> loo<span class="sc">::</span><span class="fu">loo</span>(</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> ll_mat,</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">r_eff =</span> loo<span class="sc">::</span><span class="fu">relative_eff</span>(<span class="fu">exp</span>(ll_mat),</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>        <span class="at">chain_id =</span> draw_df<span class="sc">$</span><span class="st">`</span><span class="at">.chain</span><span class="st">`</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>nonint_loo</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">which.max</span>(nonint_loo<span class="sc">$</span>diagnostics<span class="sc">$</span>pareto_k) <span class="co"># 280</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>nonint_loo<span class="sc">$</span>diagnostics<span class="sc">$</span>pareto_k[k] <span class="co"># 280</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>int_comp <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">with_integration =</span> loo_df_with_int_loo[[<span class="fu">paste0</span>(<span class="st">"log_lik["</span>, k, <span class="st">"]"</span>)]],</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">without =</span> ll_mat[, k]</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"type"</span>)</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>int_comp <span class="sc">|&gt;</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(value)) <span class="sc">+</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>        <span class="at">bins =</span> <span class="dv">60</span>,</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">"grey25"</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="st">"type"</span>, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_rug</span>(</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        <span class="at">alpha =</span> .<span class="dv">333</span>,</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">"grey25"</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey75"</span>)</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_3336824f8c31a82ff1e696f4a08015a4">
+<div class="cell-output-display">
+<p><img src="img/integral_comparison2.png" class="img-fluid" width="1050"></p>
+</div>
+</div>
+<p>Ignoring the slight shift in the location of the distribution, you should note the much <em>heavier tail</em> without integration. The Pareto k diagnostic for this observation is 1.003 (“very bad”) without integration, so the LOO model comparison to some other model would not be feasible without integration.</p>
+<p>High pareto k diagnostics = high or infinite variance loo distribution = inaccurate/misleading loo model comparison.</p>
+<p>A way around this is “integrated” LOO. This involves computing the log-likehood in a different way, by <em>integrating out</em> the parameter causing the instability. <em>Usually</em> loo expects a variable called <code>log_lik</code> in the generated quantities block of the Stan model. This usually looks something like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>generated quantitites {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[N] log_lik;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:N) log_lik[i] = normal_lpdf(y[i] | mu, sigma);</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This example is only for a very simple normal outcome model of course. There might also be regression coefficients, group-level parameters, etc involved in computing the log-likelihood, depending on the model.</p>
+<p>By contrast, in the PGLMM example I flagged above, I had something analogous to this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>generated quantitites {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[N] log_lik;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:N) log_lik[i] = normal_lpdf(y[i] | observation_mu[i], sigma);</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That <code>observation_mu[i]</code> is a problem. The observation-level mean parameter varies a lot and is only weakly influenced by the -i observations. <code>log_lik[i]</code> produced in this way will have extremely high or infinite variance.</p>
+<p>The key to computing a stable <code>log_lik[i]</code> is to integrate out <code>observation_mu[i]</code>. You can work out the integral analytically if you have a nice Gaussian model, but I’m going to go over the more problematic case where you have to evaluate it numerically.</p>
+</section>
+<section id="identify-the-integral" class="level1">
+<h1>Identify the integral</h1>
+<p>It’s easy to say “integrate out the parameter”, but it’s harder to understand what that means. For me it was really difficult to even identify the integral that I needed to perform.</p>
+<p>The key was to recall that the problematic parameter that I needed to integrate out depended on other higher level hyperparameters that I was also sampling in the MCMC chain. Elsewhere in the program I had a line to this effect:</p>
+<pre><code>observation_mu ~ multi_normal(0, sigma^2*cor_mat);</code></pre>
+<p>So when we need to integrate out <code>observation_mu[i]</code>, that means we need to integrate the log-likelihood not only over the outcome variable <code>Y</code> distributed according to <code>observation_mu[i]</code>, but also over the distribution of <code>observation_mu[i]</code> <em>conditioned on the other parameter values of that posterior draw</em>. In this case, that’s a multivariate normal conditioned on <code>observation_mu[-i]</code> and <code>sigma</code> at each iteration. We’ll cover how to calculate the conditional distribution later.</p>
+</section>
+<section id="simulated-pathological-example" class="level1">
+<h1>Simulated pathological example</h1>
+<p>I’ll work with a simplified version of the PGLMM example (no intercepts, covariates, etc). Here’s a tiny data simulation with sigma_phylo = 1 and sigma_resid = 0.5:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-6_9f016c224d7ef0d1cd49c010679fccc2">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">150</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>cor_mat <span class="ot">&lt;-</span> ape<span class="sc">::</span><span class="fu">rtree</span>(n) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    ape<span class="sc">::</span><span class="fu">ladderize</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    ape<span class="sc">::</span><span class="fu">vcv.phylo</span>(<span class="at">corr =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>sim_outcome <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="dv">1</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, n),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Sigma =</span> cor_mat</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Lcov <span class="ot">&lt;-</span> <span class="fu">chol</span>(cor_mat) <span class="sc">|&gt;</span> <span class="fu">t</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This is the Stan model. Essentially just a normally distributed outcome, and the model needs to assess how much variation to ascribe to residual variance versus phylogenetic variance according to the pre-established phylogenetic structure. I also include the <em>unstable</em> log-likelihood calculations in the generated quantities:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;  <span class="co">// total number of observations</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] Y;  <span class="co">// response variable</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N, N] Lcov;  <span class="co">// cholesky factor of known covariance matrix</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a> <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_resid;  <span class="co">// residual variation</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_phylo;  <span class="co">// spread of phylo_effects</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] std_phylo_effects;</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">real</span> phylo_effects;</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  phylo_effects = to_array_1d(sigma_phylo * (Lcov * std_phylo_effects));</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:N) <span class="kw">target +=</span> normal_lpdf(Y[i] | phylo_effects[i], sigma_resid);</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">// priors</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">target +=</span> std_normal_lpdf(sigma_resid) - normal_lccdf(<span class="dv">0</span> | <span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">target +=</span> std_normal_lpdf(sigma_phylo) - normal_lccdf(<span class="dv">0</span> | <span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">target +=</span> std_normal_lpdf(std_phylo_effects);</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] log_lik;</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">// This will yield unstable log-likelihood values:</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:N){</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    log_lik[i] = normal_lpdf(Y[i] | phylo_effects[i], sigma_resid);</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s run it:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/stanfit_f2ef98389e345beafb9eda7059645e8b">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dir_prefix <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">interactive</span>()) <span class="st">"~/miscR/qmd/"</span> <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>model_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir_prefix, <span class="st">"stan/simple_pglmm.stan"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>out_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir_prefix, <span class="st">"cmdstanr_out/"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(model_path)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>data_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">N =</span> n,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y =</span> sim_outcome,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Lcov =</span> Lcov</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>pglmm_fit <span class="ot">&lt;-</span> m<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data_list,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">refresh =</span> <span class="fu">interactive</span>() <span class="sc">*</span> <span class="dv">500</span>,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">show_messages =</span> <span class="fu">interactive</span>(),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">show_exceptions =</span> <span class="fu">interactive</span>(),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dir =</span> out_dir</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 7 of 4000 (0.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.</code></pre>
+</div>
+</div>
+<p>It samples fine, but the loo results are not good:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/naiveloo_1f931b29a33184310a87a79ffa3aa3aa">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pglmm_fit<span class="sc">$</span><span class="fu">loo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-diagnostic') for details.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Computed from 4000 by 150 log-likelihood matrix
+
+         Estimate   SE
+elpd_loo   -258.1  8.4
+p_loo        61.4  5.0
+looic       516.2 16.7
+------
+Monte Carlo SE of elpd_loo is NA.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     64    42.7%   292       
+ (0.5, 0.7]   (ok)       61    40.7%   111       
+   (0.7, 1]   (bad)      24    16.0%   26        
+   (1, Inf)   (very bad)  1     0.7%   32        
+See help('pareto-k-diagnostic') for details.</code></pre>
+</div>
+</div>
+<p>That’s a lot of bad diagnostics! We’ll fix this with integration.</p>
+</section>
+<section id="write-the-vectorized-integrand" class="level1">
+<h1>Write the vectorized integrand</h1>
+<p>We’re going to evaluate the integral in R. More on that later. For now, just know that we’ll need to write a vectorized R function that takes a vector of <code>phylo_effect[i]</code> values and returns the likelihood (<em>not log!</em>) for observation i using the parameter values from mcmc chain iteration j. Other arguments derived from other parameters at the interation are also required. Those other arguments include:</p>
+<ul>
+<li>The observed outcome value for the i-th leaf.</li>
+<li>The <em>conditional</em> mean and standard deviation of the phylogenetic effect (conditioned on <code>phylo_effect[-i]</code>), which depend on the iteration’s <code>sigma_phylo</code> value.</li>
+<li>the iteration’s <code>sigma_resid</code> value</li>
+</ul>
+<p>Here’s the function. It adds together the <code>target</code> terms that depend on <code>phylo_effect[i]</code>:</p>
+<ul>
+<li>the term from the phylogenetically correlated distribution of phylo effects</li>
+<li>and the term from the fit to the observation <code>y[i]</code></li>
+</ul>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-7_0bcadfcedd464c4146df4f4004ebe4fe">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>vec_integrand <span class="ot">&lt;-</span> <span class="cf">function</span>(phylo_effect_vec,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    mu_bar_ij, sigma_bar_ij,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    sigma_resid_j, yi,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">log =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    phylo_term <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(phylo_effect_vec,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> mu_bar_ij,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma_bar_ij),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">log =</span> <span class="cn">TRUE</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    fit_term <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> yi,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> phylo_effect_vec,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> sigma_resid_j,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">log =</span> <span class="cn">TRUE</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> phylo_term <span class="sc">+</span> fit_term</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>log) res <span class="ot">&lt;-</span> <span class="fu">exp</span>(res)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(res)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><code>sigma_resid_j</code> and <code>yi</code> are fairly obvious. What about <code>mu_bar_ij</code> and <code>sigma_bar_ij</code>? Given the structure of the model, the mean and standard deviation of <code>phylo_effects[i]</code> are conditional on <code>phylo_effects[-i]</code> and <code>sigma_phylo[j]</code>. We’ll have to use <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions">the conditional distribution of a multivariate normal</a>:</p>
+<p><span class="math display">\[ \bar{\boldsymbol{\mu}} = \boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}(\boldsymbol{a} - \boldsymbol{\mu}_2)\]</span></p>
+<p><span class="math display">\[\bar{\boldsymbol{\Sigma}} = \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}\]</span></p>
+<p>Here <span class="math inline">\(\bar{\boldsymbol{\mu}}\)</span> is <code>mu_bar_ij</code> and <span class="math inline">\(\bar{\boldsymbol{\Sigma}}\)</span> (which reduces to a 1x1 matrix) is <code>sigma_bar_ij</code>.</p>
+<p>You can look up the 11 vs 12 vs 22 notation on the wikipedia link but basically <span class="math inline">\(\Sigma\)</span> is rearranged to have the i-th element in the first row/column, then partitioned into the ith vs everything else.</p>
+<p>The tricky part here is <span class="math inline">\(\Sigma_{22}^{-1}\)</span>, which is the inverse of an (n-1) x (n-1) matrix. We’ll do two things to make this computationally feasible in general:</p>
+<ul>
+<li>factor out <code>sigma_phylo</code> so we’re working in terms of the correlation matrix <span class="math inline">\(\Omega\)</span>, which doesn’t vary with posterior iteration</li>
+<li>Use the Woodbury matrix identity to get <span class="math inline">\(\Omega_{22}^{-1}\)</span> which together with <code>sigma_phylo[j]</code> can give you the</li>
+</ul>
+<p>For the sake of brevity I’m not going to use the Woodbury identity and instead just call <code>solve()</code> 150 times. That’s in the next section.</p>
+</section>
+<section id="get-the-inputs" class="level1">
+<h1>Get the inputs</h1>
+<p>This code chunk does a lot of the book-keeping to prepare lists of correlation matrix products and format the posterior draws into a nice <code>draw_list</code>.</p>
+<div class="cell" data-hash="integrated_loo_cache/html/inverses_9ca3116c3f8fcc117bfdba06653dbbf4">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>get_corr_mat_minus_i_inv <span class="ot">&lt;-</span> <span class="cf">function</span>(i, cor_mat, n) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    cor_mat[<span class="sc">-</span>i, <span class="sc">-</span>i] <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">solve</span>()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># precompute lists of corr_11, corr_12, corr_22_inv, and corr_12 * corr_22_inv</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>corr_minus_i_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    get_corr_mat_minus_i_inv,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">cor_mat =</span> cor_mat, <span class="at">n =</span> n</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>corr_12_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    \(i) cor_mat[</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(i, (<span class="dv">1</span><span class="sc">:</span>n)[<span class="sc">-</span>i]),</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(i, (<span class="dv">1</span><span class="sc">:</span>n)[<span class="sc">-</span>i])</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    ][<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>]</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>corr_11 <span class="ot">&lt;-</span> <span class="fu">diag</span>(cor_mat)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>corr12xcorr22_inv_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    \(i) corr_12_list[[i]] <span class="sc">%*%</span> corr_minus_i_list[[i]]</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>corr_11_i_list <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    \(i) corr_11[i] <span class="sc">-</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        corr12xcorr22_inv_list[[i]] <span class="sc">%*%</span> <span class="fu">t</span>(corr_12_list[[i]])</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>get_sigma_bar_ij <span class="ot">&lt;-</span> <span class="cf">function</span>(sigma_phylo, corr_minus_i_list,</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    corr_12_list) {</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># returns a vector</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>(sigma_phylo<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> corr_11_i_list)</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>get_mu_bar_ij <span class="ot">&lt;-</span> <span class="cf">function</span>(a) {</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mu_1 and mu_2 are 0</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sapply</span>(</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        \(i) corr12xcorr22_inv_list[[i]] <span class="sc">%*%</span> <span class="fu">matrix</span>(a[<span class="sc">-</span>i], <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>draw_df <span class="ot">&lt;-</span> pglmm_fit<span class="sc">$</span><span class="fu">draws</span>(</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>        <span class="st">"phylo_effects"</span>,</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>        <span class="st">"sigma_resid"</span>,</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>        <span class="st">"sigma_phylo"</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">"data.frame"</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    tidybayes<span class="sc">::</span><span class="fu">tidy_draws</span>(</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        sigma_resid, sigma_phylo,</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>        phylo_effects[i]</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>draw_list <span class="ot">&lt;-</span> draw_df <span class="sc">|&gt;</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">phylo_effect_vectors =</span> <span class="fu">lapply</span>(</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span><span class="sc">:</span><span class="dv">4000</span>,</span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>        \(x) <span class="fu">as.numeric</span>(draw_df[x, <span class="dv">1</span><span class="sc">:</span>n])</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">|&gt;</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">matches</span>(<span class="st">"phylo_effects"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_split</span>(<span class="st">`</span><span class="at">.draw</span><span class="st">`</span>) <span class="co"># one list element per draw</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="evaluate-the-integral" class="level1">
+<h1>Evaluate the integral</h1>
+<p>So using one draw from the <code>draw_list</code> we prepared in the previous section, along with the functions <code>get_mu_bar_ij()</code> and <code>get_sigma_bar_ij()</code>, we can get the set of <code>mu_bar_ij</code> and <code>sigma_bar_ij</code> for each observation for this one draw:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-8_ea9ce275ca7414e5d5b4a3a088d4bd4f">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mu_bar_i1 <span class="ot">&lt;-</span> draw_list[[<span class="dv">1</span>]]<span class="sc">$</span>phylo_effect_vectors[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> <span class="fu">get_mu_bar_ij</span>()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>sigma_bar_i1 <span class="ot">&lt;-</span> draw_list[[<span class="dv">1</span>]]<span class="sc">$</span>sigma_phylo <span class="sc">|&gt;</span> <span class="fu">get_sigma_bar_ij</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    corr_minus_i_list,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    corr_12_list</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="integrand-at-one-point-for-one-observation-in-one-draw" class="level2">
+<h2 class="anchored" data-anchor-id="integrand-at-one-point-for-one-observation-in-one-draw">Integrand at one point for one observation in one draw</h2>
+<p>Let’s evaluate the integrand for an (arbitrarily selected) phylogenetic effect of 0.333 for the fifth observation on the first draw:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-9_2535432966cd3aab92b48f2ff34e1a7c">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_integrand</span>(<span class="fl">0.333</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    mu_bar_i1[<span class="dv">5</span>],</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_bar_ij =</span> sigma_bar_i1[<span class="dv">5</span>],</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    draw_list[[<span class="dv">1</span>]]<span class="sc">$</span>sigma_resid, data_list<span class="sc">$</span>Y[<span class="dv">5</span>]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      t136 
+0.02345266 </code></pre>
+</div>
+</div>
+<p>A reasonable-looking number, hooray!</p>
+</section>
+<section id="integral-for-one-observation-in-one-draw" class="level2">
+<h2 class="anchored" data-anchor-id="integral-for-one-observation-in-one-draw">Integral for one observation in one draw</h2>
+<p>Instead of just evaluating at an arbitrary point, let’s integrate it numerically. <code>vec_integrand()</code> as written actually has an analytic integral (the sum of two parabolas is just another parabola, so you can work out <a href="https://www.wolframalpha.com/input?i=integrate+exp%28a*x%5E2+%2B+b*x+%2B+c%29+from+-inf+to+inf">an expression for the integral</a>), but I’m going to do it numerically for the more generic case (which I also do in anpan for logistic PGLMM LOO).</p>
+<p>In the roaches example they use Stan’s built-in <code>integrate_1d()</code> function. While it’s nice to keep the log-likelihood calculation in the Stan program, the interface is unwieldy to me. You have to pass in ALL of the secondary real-valued arguments into the integrand function in a single argument, which is tricky when that includes many irregularly structured components. Same goes for integers. To me, doing the integral after the fact in R is much simpler. You can then hand the log-likelihood matrix directly to <code>loo::loo()</code>.</p>
+<p>The R function <code>stats::integrate()</code> uses adaptive quadrature to numerically integrate functions. I don’t know much about how it works, but it internally calls C code for the heavy lifting, so it’s pretty fast. It would be interesting to benchmark it against Stan’s <code>integrate_1d()</code>.</p>
+<p>Anyway, you just hand <code>stats::integrate()</code> the function, the integration range, and other needed arguments.</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-10_832b194957314d7760a763a9953c1299">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integrate</span>(vec_integrand,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_bar_ij =</span> mu_bar_i1[<span class="dv">5</span>],</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_bar_ij =</span> sigma_bar_i1[<span class="dv">5</span>],</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_resid =</span> draw_list[[<span class="dv">1</span>]]<span class="sc">$</span>sigma_resid,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">yi =</span> data_list<span class="sc">$</span>Y[<span class="dv">5</span>]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.1941623 with absolute error &lt; 3.8e-05</code></pre>
+</div>
+</div>
+<p>Another reasonable number, hooray!</p>
+</section>
+<section id="integral-for-all-observations-in-one-draw" class="level2">
+<h2 class="anchored" data-anchor-id="integral-for-all-observations-in-one-draw">Integral for all observations in one draw</h2>
+<p>Going further, let’s write a couple functions to evaluate the integral for all observations in a given draw:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-11_1671498397dd2a584fa05713e10cdac9">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>integrate_one_obs <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_bar_ij, sigma_bar_ij, Y,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    sigma_resid) {</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">integrate</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        vec_integrand,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        mu_bar_ij, sigma_bar_ij,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>        sigma_resid, Y</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">$</span>value</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>integrate_all_obs <span class="ot">&lt;-</span> <span class="cf">function</span>(draw_j) {</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    mu_bar_ij <span class="ot">&lt;-</span> draw_j<span class="sc">$</span>phylo_effect_vectors[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> <span class="fu">get_mu_bar_ij</span>()</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    sigma_bar_ij <span class="ot">&lt;-</span> draw_j<span class="sc">$</span>sigma_phylo <span class="sc">|&gt;</span> <span class="fu">get_sigma_bar_ij</span>(</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        corr_minus_i_list,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        corr_12_list</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mapply</span>(integrate_one_obs,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>        mu_bar_ij, sigma_bar_ij, data_list<span class="sc">$</span>Y,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">sigma_resid =</span> draw_j<span class="sc">$</span>sigma_resid</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>({</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    draw42_integrals <span class="ot">&lt;-</span> <span class="fu">integrate_all_obs</span>(draw_list[[<span class="dv">42</span>]])</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+   0.02    0.00    0.02 </code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>draw42_integrals <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 0.14 0.24 0.27 0.27 0.21 0.23 0.19 0.14 0.11 0.29 0.29 0.30 0.31 0.29 0.29
+ [16] 0.24 0.09 0.25 0.05 0.34 0.33 0.23 0.18 0.21 0.33 0.34 0.30 0.03 0.30 0.20
+ [31] 0.06 0.27 0.10 0.22 0.15 0.27 0.24 0.34 0.21 0.28 0.14 0.30 0.33 0.29 0.35
+ [46] 0.31 0.20 0.25 0.28 0.28 0.29 0.33 0.31 0.00 0.04 0.34 0.28 0.33 0.32 0.33
+ [61] 0.06 0.12 0.06 0.29 0.23 0.27 0.31 0.28 0.01 0.29 0.29 0.23 0.31 0.22 0.23
+ [76] 0.32 0.27 0.28 0.34 0.33 0.29 0.13 0.26 0.22 0.34 0.22 0.34 0.27 0.10 0.28
+ [91] 0.13 0.26 0.23 0.32 0.33 0.29 0.32 0.20 0.33 0.31 0.28 0.03 0.29 0.29 0.31
+[106] 0.07 0.39 0.20 0.11 0.31 0.28 0.30 0.30 0.27 0.09 0.31 0.16 0.03 0.26 0.12
+[121] 0.16 0.12 0.30 0.12 0.28 0.16 0.22 0.34 0.07 0.32 0.21 0.30 0.16 0.08 0.29
+[136] 0.07 0.19 0.27 0.26 0.31 0.33 0.32 0.07 0.29 0.30 0.15 0.09 0.10 0.25 0.16</code></pre>
+</div>
+</div>
+<p>Fast, reasonable likelihoods!</p>
+</section>
+<section id="integral-for-all-observations-for-one-draw" class="level2">
+<h2 class="anchored" data-anchor-id="integral-for-all-observations-for-one-draw">Integral for all observations, for one draw</h2>
+<p>Finally, let’s apply it to every posterior draw. I just remembered that <code>purrr::map()</code> recently introduced a <code>.progress</code> argument, let’s use it. <code>purrr</code> is sick.</p>
+<div class="cell" data-hash="integrated_loo_cache/html/_555e06ce18a628f6137f720ff04c1059">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>lik_mat <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map</span>(draw_list,</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    integrate_all_obs,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">.progress =</span> <span class="fu">interactive</span>()</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">reduce</span>(rbind)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That <code>purrr::map()</code> call is embarassingly parallelizable.</p>
+<p>Finally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:</p>
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-12_24c38faff93c98006050f379e040e3ed">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>loo<span class="sc">::</span><span class="fu">loo</span>(<span class="fu">log</span>(lik_mat),</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">r_eff =</span> loo<span class="sc">::</span><span class="fu">relative_eff</span>(lik_mat,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">chain_id =</span> draw_df<span class="sc">$</span><span class="st">`</span><span class="at">.chain</span><span class="st">`</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Computed from 4000 by 150 log-likelihood matrix
+
+         Estimate   SE
+elpd_loo   -259.6  7.8
+p_loo        16.5  1.7
+looic       519.1 15.6
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     149   99.3%   852       
+ (0.5, 0.7]   (ok)         1    0.7%   1762      
+   (0.7, 1]   (bad)        0    0.0%   &lt;NA&gt;      
+   (1, Inf)   (very bad)   0    0.0%   &lt;NA&gt;      
+
+All Pareto k estimates are ok (k &lt; 0.7).
+See help('pareto-k-diagnostic') for details.</code></pre>
+</div>
+</div>
+<p>Okay, so there may be one or two that are just “ok”, but way, way better and totally usable!</p>
+</section>
+</section>
+<section id="speed-concerns" class="level1">
+<h1>Speed concerns</h1>
+<p>Integrated LOO involves performing a numerical integral for every observation at every posterior iteration. That’s a lot of integrals. Performance can be a concern. Techniques that I’ve found to be helpful:</p>
+<ul>
+<li>Parallelization over posterior iterations, of course.</li>
+<li>Pre-computing conditional covariance matrices</li>
+<li>Linear algebra identities like the <a href="https://en.wikipedia.org/wiki/Woodbury_matrix_identity">Woodbury matrix identity</a></li>
+</ul>
+<p>In the PGLMM example, I needed leave-one-out conditional covariance matrices for each observation on trees that had up to ~3000 leaves. Computing a conditional covariance matrix involves inverting the sub-block of the covariance matrix that you’re conditioning on. Inverting a 2999 x 2999 matrix once isn’t so bad, inverting 3000 2999 x 2999 matrices 4000 times is. There were two key points to solving this (the latter of which came from <a href="https://stats.stackexchange.com/questions/592591/efficiently-calculating-leave-one-out-conditional-multivariate-normal-distributi">help on StackExchange</a>): 1) get the covariance matrix at each iteration by simply multiplying the iteration’s variance parameter times a precomputed conditional correlation matrix that didn’t change with iteration. That removes the factor of 4000. And 2) precompute the conditional correlation matrix with the Woodbury matrix identity from the inverse correlation matrix I already had before the MCMC fit. A leave-one-out operation can be encoded as a rank two update, so that took me from 3000 2999x2999 inverses to 3000 2x2 inverses. Nice. The Woodbury matrix identity does introduce some numerical inaccuracy which necessitates some additional checks (beyond being huge, the phylogenetic trees can also yield poorly conditioned correlation matrices), but it’s generally worth it.</p>
+</section>
+<section id="numerical-accuracy-concerns" class="level1">
+<h1>Numerical accuracy concerns</h1>
+<p>In tension with the speed concerns we also have numerical accuracy concerns. The integral has to be evaluated on the <em>identity</em> scale, <em>not the log scale</em>. It has to be <span class="math inline">\(log(\int{exp(loglik)d\theta})\)</span>. <span class="math inline">\(\int{loglik d\theta}\)</span> won’t work. This can cause over/underflow issues depending on the model / data.</p>
+<p>This post is already too long, so I won’t demonstrate it here, but the key to overcoming this is a technique akin to the <a href="https://en.wikipedia.org/wiki/LogSumExp">LogSumExp()</a> trick, kind of like LogIntExp() or something. Optimize the integrand, then use the optimal value as an offset when integrating, then subtract the contribution of that constant off of the integral.</p>
+<p>Also of concern are the integration limits. Sometimes, for very low values of <code>sigma_phylo</code> in this case, the integrand function can be extremely sharp. To <code>stats::integrate()</code> it will look like a flat function at 0, so you’ll get 0. <code>anpan</code> uses some tricks to optimize the integrand, look at the curvature, then go out a reasonable number of SDs in order to capture the body of the spike. Different sorts of problems can also occur if the integrand is extremely flat and you chose a poor offset value.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-vehtari_practical_2017" class="csl-entry" role="listitem">
+Vehtari, Aki, Andrew Gelman, and Jonah Gabry. 2017. <span>“Practical <span>Bayesian</span> Model Evaluation Using Leave-One-Out Cross-Validation and <span>WAIC</span>.”</span> <em>Statistics and Computing</em> 27 (5): 1413–32. <a href="https://doi.org/10.1007/s11222-016-9696-4">https://doi.org/10.1007/s11222-016-9696-4</a>.
+</div>
+<div id="ref-vehtari_bayesian" class="csl-entry" role="listitem">
+Vehtari, Aki, Tommi Mononen, Ville Tolvanen, Tuomas Sivula, and Ole Winther. n.d. <span>“Bayesian <span>Leave</span>-<span>One</span>-<span>Out</span> <span>Cross</span>-<span>Validation</span> <span>Approximations</span> for <span>Gaussian</span> <span>Latent</span> <span>Variable</span> <span>Models</span>,”</span> 38.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
