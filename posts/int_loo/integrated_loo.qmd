@@ -31,6 +31,7 @@ This is a guide/walkthrough on how to use the "Integrated Importance Sampling" a
 -   crystallize my thoughts
 -   record my notes on how it works / how it's done
 -   explain how it works in more depth than [the existing example I know of](https://avehtari.github.io/modelselection/roaches.html#5_Poisson_model_with_%E2%80%9Crandom_effects%E2%80%9D_and_integrated_LOO)
+-   Demonstrate a more complicated example involving conditional parameter distributions
 -   show how to perform the integral more flexibly in R / outside of Stan
 
 Load some setup libraries:
@@ -60,7 +61,6 @@ Observation-wise log-likelihood values can be unstable when a given observation 
 #| echo: false
 knitr::include_graphics("img/diagram.png")
 ```
-
 
 I've come across this twice:
 
@@ -234,7 +234,7 @@ sim_outcome <- 2 * MASS::mvrnorm(1,
 Lcov <- chol(cor_mat) |> t()
 ```
 
-This is the Stan model. Essentially just a normally distributed outcome, and the model needs to assess how much variation to ascribe to residual variance versus phylogenetic variance according to the pre-established phylogenetic structure. I also include the *unstable* log-likelihood calculations in the generated quantities:
+This is the Stan model. It's essentially just a continuous outcome with phylogenetically-distributed and normally-distributed error. The model needs to assess how much variation to ascribe to residual variance versus phylogenetic variance according to the pre-established phylogenetic structure (passed in as a Cholesky factor `Lcov`). I also include the *unstable* log-likelihood calculations in the generated quantities:
 
 ```{.stan}
 data {
