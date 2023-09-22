@@ -4,7 +4,7 @@
     "href": "posts/int_loo/integrated_loo.html",
     "title": "Integrated LOO walkthrough",
     "section": "",
-    "text": "This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from (Vehtari et al., n.d.). I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:\n\ncrystallize my thoughts\nrecord my notes on how it works / how it’s done\nexplain how it works in more depth than the existing example I know of\nshow how to perform the integral more flexibly in R / outside of Stan\n\nLoad some setup libraries:\n\n\nCode\nlibrary(cmdstanr)"
+    "text": "This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from (Vehtari et al., n.d.). I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:\n\ncrystallize my thoughts\nrecord my notes on how it works / how it’s done\nexplain how it works in more depth than the existing example I know of\nDemonstrate a more complicated example involving conditional parameter distributions\nshow how to perform the integral more flexibly in R / outside of Stan\n\nLoad some setup libraries:\n\n\nCode\nlibrary(cmdstanr)"
   },
   {
     "objectID": "posts/int_loo/integrated_loo.html#integrand-at-one-point-for-one-observation-in-one-draw",
@@ -46,6 +46,6 @@
     "href": "index.html",
     "title": "andrewGhazi.github.io",
     "section": "",
-    "text": "Integrated LOO walkthrough\n\n\n\n\n\n\n\n\n\n\n\n\nSep 21, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
+    "text": "Integrated LOO walkthrough\n\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
   }
 ]

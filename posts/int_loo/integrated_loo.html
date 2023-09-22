@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Andrew Ghazi">
-<meta name="dcterms.date" content="2023-09-21">
+<meta name="dcterms.date" content="2023-09-22">
 
 <title>andrewGhazi.github.io - Integrated LOO walkthrough</title>
 <style>
@@ -175,7 +175,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 21, 2023</p>
+        <p class="date">September 22, 2023</p>
       </div>
     </div>
     
@@ -222,6 +222,7 @@ div.csl-indent {
 <li>crystallize my thoughts</li>
 <li>record my notes on how it works / how it’s done</li>
 <li>explain how it works in more depth than <a href="https://avehtari.github.io/modelselection/roaches.html#5_Poisson_model_with_%E2%80%9Crandom_effects%E2%80%9D_and_integrated_LOO">the existing example I know of</a></li>
+<li>Demonstrate a more complicated example involving conditional parameter distributions</li>
 <li>show how to perform the integral more flexibly in R / outside of Stan</li>
 </ul>
 <p>Load some setup libraries:</p>
@@ -418,7 +419,7 @@ div.csl-indent {
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Lcov <span class="ot">&lt;-</span> <span class="fu">chol</span>(cor_mat) <span class="sc">|&gt;</span> <span class="fu">t</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>This is the Stan model. Essentially just a normally distributed outcome, and the model needs to assess how much variation to ascribe to residual variance versus phylogenetic variance according to the pre-established phylogenetic structure. I also include the <em>unstable</em> log-likelihood calculations in the generated quantities:</p>
+<p>This is the Stan model. It’s essentially just a continuous outcome with phylogenetically-distributed and normally-distributed error. The model needs to assess how much variation to ascribe to residual variance versus phylogenetic variance according to the pre-established phylogenetic structure (passed in as a Cholesky factor <code>Lcov</code>). I also include the <em>unstable</em> log-likelihood calculations in the generated quantities:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;  <span class="co">// total number of observations</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] Y;  <span class="co">// response variable</span></span>
