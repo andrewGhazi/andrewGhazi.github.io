@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "andrewGhazi.github.io"
+  title: "andrewghazi.github.io"
   navbar:
     right:
       - about.qmd
