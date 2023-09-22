@@ -1,0 +1,12 @@
+---
+title: "About"
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/andrewGhazi
+
+---
+
+I'm a Statistical Geneticist at the [Center for Computational Biomedicine at Harvard Medical School](https://computationalbiomed.hms.harvard.edu).

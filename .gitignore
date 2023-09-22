@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+/.quarto/
+/_site/
+/_freeze/
+/posts/int_loo/stan/*
+/posts/int_loo/*.odp
+/posts/int_loo/cmdstanr_out/*
+/posts/int_loo/integrated_loo_cache/*
+/posts/int_loo/integrated_loo_files/*
