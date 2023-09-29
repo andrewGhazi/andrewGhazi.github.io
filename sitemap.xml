@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://andrewGhazi.github.io/posts/int_loo/integrated_loo.html</loc>
-    <lastmod>2023-09-22T21:27:28.968Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewGhazi.github.io/about.html</loc>
-    <lastmod>2023-09-22T21:27:27.956Z</lastmod>
+    <loc>https://andrewGhazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
+    <lastmod>2023-09-29T02:13:40.761Z</lastmod>
   </url>
   <url>
     <loc>https://andrewGhazi.github.io/index.html</loc>
-    <lastmod>2023-09-22T21:27:28.164Z</lastmod>
+    <lastmod>2023-09-29T02:13:39.293Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewGhazi.github.io/about.html</loc>
+    <lastmod>2023-09-29T02:13:39.065Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewGhazi.github.io/posts/int_loo/integrated_loo.html</loc>
+    <lastmod>2023-09-29T02:13:40.113Z</lastmod>
   </url>
 </urlset>

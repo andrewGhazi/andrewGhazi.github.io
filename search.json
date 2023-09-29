@@ -1,5 +1,208 @@
 [
   {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html",
+    "href": "posts/tidy_dt/tidy_dt_translation.html",
+    "title": "Tidyverse/data.table translations",
+    "section": "",
+    "text": "A list of common tidyverse/data.table commands that do (roughly) the same thing so that you can compare the syntax. Some opinions included."
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidyverse",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidyverse",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidyverse",
+    "text": "tidyverse\n\nPros\n\neasy to read\neasy to write\napproachable to beginners\nmany useful convenience functions\ntibble pretty print\n\n\n\nCons\n\nrelatively slow (though improving over time)\ncan be verbose\nbig dependency footprint\nmore prone to interface changes\ntypical usage with nonstandard evaluation doesn’t play nicely with CRAN"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nPros\n\ninsane performance 🔥\nconcise\nno dependencies other than R itself\nsome built in parallelization (but not on Mac without some pain)\nsome low-level features tidyverse probably won’t ever have (eg keys)\n\n\n\nCons\n\nlooks like a mish-mash of punctuation 6 months after the fact (this is gradually improving)\ndocumentation can be arcane\nmodify by reference defies the general R convention of copy on modify\nlist columns don’t print as nicely"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\nmt_tbl |&gt; mutate(disp_per_cyl = disp / cyl)\n\n# A tibble: 32 × 13\n   model         mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb\n   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n 1 Mazda RX4    21       6  160    110  3.9   2.62  16.5     0     1     4     4\n 2 Mazda RX4 …  21       6  160    110  3.9   2.88  17.0     0     1     4     4\n 3 Datsun 710   22.8     4  108     93  3.85  2.32  18.6     1     1     4     1\n 4 Hornet 4 D…  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1\n 5 Hornet Spo…  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2\n 6 Valiant      18.1     6  225    105  2.76  3.46  20.2     1     0     3     1\n 7 Duster 360   14.3     8  360    245  3.21  3.57  15.8     0     0     3     4\n 8 Merc 240D    24.4     4  147.    62  3.69  3.19  20       1     0     4     2\n 9 Merc 230     22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2\n10 Merc 280     19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4\n# ℹ 22 more rows\n# ℹ 1 more variable: disp_per_cyl &lt;dbl&gt;"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-1",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-1",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nmt_dt[, disp_per_cyl := disp/cyl]\n\nBy default assignment by reference operations don’t print anything. You can tack an empty [] onto the end of that operation to get it to print.\nOR, using the new DT()/let() syntax (requires development version of data.table):\n\nmt_dt |&gt; DT(, let(disp_per_cyl = disp/cyl)) |&gt; head()\n\n               model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am\n              &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:         Mazda RX4  21.0     6   160   110  3.90 2.620 16.46     0     1\n2:     Mazda RX4 Wag  21.0     6   160   110  3.90 2.875 17.02     0     1\n3:        Datsun 710  22.8     4   108    93  3.85 2.320 18.61     1     1\n4:    Hornet 4 Drive  21.4     6   258   110  3.08 3.215 19.44     1     0\n5: Hornet Sportabout  18.7     8   360   175  3.15 3.440 17.02     0     0\n6:           Valiant  18.1     6   225   105  2.76 3.460 20.22     1     0\n    gear  carb disp_per_cyl\n   &lt;num&gt; &lt;num&gt;        &lt;num&gt;\n1:     4     4     26.66667\n2:     4     4     26.66667\n3:     4     1     27.00000\n4:     3     1     43.00000\n5:     3     2     45.00000\n6:     3     1     37.50000\n\n\nThe data.table walrus operator / let() assign by reference, so the disp_per_cyl column is added to mt_dt without using &lt;-. Let’s delete it.\n\nmt_dt[, disp_per_cyl := NULL]"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#multiple-columns",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#multiple-columns",
+    "title": "Tidyverse/data.table translations",
+    "section": "Multiple columns",
+    "text": "Multiple columns\n\nmt_tbl |&gt; mutate(disp_per_cyl = disp / cyl,\n                 hp_per_disp  = hp / disp)\n\n# A tibble: 32 × 14\n   model         mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb\n   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n 1 Mazda RX4    21       6  160    110  3.9   2.62  16.5     0     1     4     4\n 2 Mazda RX4 …  21       6  160    110  3.9   2.88  17.0     0     1     4     4\n 3 Datsun 710   22.8     4  108     93  3.85  2.32  18.6     1     1     4     1\n 4 Hornet 4 D…  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1\n 5 Hornet Spo…  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2\n 6 Valiant      18.1     6  225    105  2.76  3.46  20.2     1     0     3     1\n 7 Duster 360   14.3     8  360    245  3.21  3.57  15.8     0     0     3     4\n 8 Merc 240D    24.4     4  147.    62  3.69  3.19  20       1     0     4     2\n 9 Merc 230     22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2\n10 Merc 280     19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4\n# ℹ 22 more rows\n# ℹ 2 more variables: disp_per_cyl &lt;dbl&gt;, hp_per_disp &lt;dbl&gt;\n\n\nversus\n\nmt_dt[, `:=`(disp_per_cyl = disp / cyl,\n             hp_per_disp  = hp / disp)]\n\n# OR\n\nmt_dt |&gt;\n  DT(, let(disp_per_cyl = disp / cyl,\n           hp_per_disp  = hp / disp)) |&gt;\n  head()\n\n               model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am\n              &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:         Mazda RX4  21.0     6   160   110  3.90 2.620 16.46     0     1\n2:     Mazda RX4 Wag  21.0     6   160   110  3.90 2.875 17.02     0     1\n3:        Datsun 710  22.8     4   108    93  3.85 2.320 18.61     1     1\n4:    Hornet 4 Drive  21.4     6   258   110  3.08 3.215 19.44     1     0\n5: Hornet Sportabout  18.7     8   360   175  3.15 3.440 17.02     0     0\n6:           Valiant  18.1     6   225   105  2.76 3.460 20.22     1     0\n    gear  carb disp_per_cyl hp_per_disp\n   &lt;num&gt; &lt;num&gt;        &lt;num&gt;       &lt;num&gt;\n1:     4     4     26.66667   0.6875000\n2:     4     4     26.66667   0.6875000\n3:     4     1     27.00000   0.8611111\n4:     3     1     43.00000   0.4263566\n5:     3     2     45.00000   0.4861111\n6:     3     1     37.50000   0.4666667\n\n\nCleanup:\n\nmt_dt[,let(disp_per_cyl = NULL,\n           hp_per_disp  = NULL)]"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-1",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-1",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\nmt_tbl |&gt; filter(disp &gt; 450)\n\n# A tibble: 2 × 12\n  model          mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb\n  &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 Cadillac Fl…  10.4     8   472   205  2.93  5.25  18.0     0     0     3     4\n2 Lincoln Con…  10.4     8   460   215  3     5.42  17.8     0     0     3     4"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-2",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-2",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nmt_dt[disp &gt; 450]\n\n                 model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am\n                &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:  Cadillac Fleetwood  10.4     8   472   205  2.93 5.250 17.98     0     0\n2: Lincoln Continental  10.4     8   460   215  3.00 5.424 17.82     0     0\n    gear  carb\n   &lt;num&gt; &lt;num&gt;\n1:     3     4\n2:     3     4\n\n\nIf the condition is a pre-existing column, enclose it in parentheses:\n\nmt_dt[, big := disp &gt; 450]\n\nmt_dt[(big)]\n\n                 model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am\n                &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:  Cadillac Fleetwood  10.4     8   472   205  2.93 5.250 17.98     0     0\n2: Lincoln Continental  10.4     8   460   215  3.00 5.424 17.82     0     0\n    gear  carb    big\n   &lt;num&gt; &lt;num&gt; &lt;lgcl&gt;\n1:     3     4   TRUE\n2:     3     4   TRUE\n\nmt_dt[, big := NULL]"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-2",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-2",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\nThey recently introduced .by arguments in dplyr 1.1.0, which to me is much cleaner than a separate call to group_by()\n\nmt_tbl |&gt; \n  summarise(avg_mpg = mean(mpg), .by = cyl)\n\n# A tibble: 3 × 2\n    cyl avg_mpg\n  &lt;dbl&gt;   &lt;dbl&gt;\n1     6    19.7\n2     4    26.7\n3     8    15.1"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-3",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-3",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\nWe use the data.table .() alias for list()\n\nmt_dt[, .(avg_mpg = mean(mpg)), by = cyl]\n\n     cyl  avg_mpg\n   &lt;num&gt;    &lt;num&gt;\n1:     6 19.74286\n2:     4 26.66364\n3:     8 15.10000"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-3",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-3",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\nmt_tbl |&gt; arrange(mpg)\n\n# A tibble: 32 × 12\n   model         mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb\n   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n 1 Cadillac F…  10.4     8  472    205  2.93  5.25  18.0     0     0     3     4\n 2 Lincoln Co…  10.4     8  460    215  3     5.42  17.8     0     0     3     4\n 3 Camaro Z28   13.3     8  350    245  3.73  3.84  15.4     0     0     3     4\n 4 Duster 360   14.3     8  360    245  3.21  3.57  15.8     0     0     3     4\n 5 Chrysler I…  14.7     8  440    230  3.23  5.34  17.4     0     0     3     4\n 6 Maserati B…  15       8  301    335  3.54  3.57  14.6     0     1     5     8\n 7 Merc 450SLC  15.2     8  276.   180  3.07  3.78  18       0     0     3     3\n 8 AMC Javelin  15.2     8  304    150  3.15  3.44  17.3     0     0     3     2\n 9 Dodge Chal…  15.5     8  318    150  2.76  3.52  16.9     0     0     3     2\n10 Ford Pante…  15.8     8  351    264  4.22  3.17  14.5     0     1     5     4\n# ℹ 22 more rows"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-4",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-4",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nmt_dt[order(mpg)] |&gt; head()\n\n                 model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am\n                &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:  Cadillac Fleetwood  10.4     8   472   205  2.93 5.250 17.98     0     0\n2: Lincoln Continental  10.4     8   460   215  3.00 5.424 17.82     0     0\n3:          Camaro Z28  13.3     8   350   245  3.73 3.840 15.41     0     0\n4:          Duster 360  14.3     8   360   245  3.21 3.570 15.84     0     0\n5:   Chrysler Imperial  14.7     8   440   230  3.23 5.345 17.42     0     0\n6:       Maserati Bora  15.0     8   301   335  3.54 3.570 14.60     0     1\n    gear  carb\n   &lt;num&gt; &lt;num&gt;\n1:     3     4\n2:     3     4\n3:     3     4\n4:     3     4\n5:     3     4\n6:     5     8\n\n\nSee also ?data.table::setkey() and ?data.table::setorder()"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#inner",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#inner",
+    "title": "Tidyverse/data.table translations",
+    "section": "Inner",
+    "text": "Inner\n\ninner_join(x,y, by = 'grp') \nY[X, on = 'grp', nomatch = 0]"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#left",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#left",
+    "title": "Tidyverse/data.table translations",
+    "section": "Left",
+    "text": "Left"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#full",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#full",
+    "title": "Tidyverse/data.table translations",
+    "section": "Full",
+    "text": "Full"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-4",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-4",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\nacross() + where()\n\nmt_tbl |&gt; \n  transmute(across(where(is.character), \n                   ~str_sub(.x, 1, 5)))\n\n# A tibble: 32 × 1\n   model  \n   &lt;chr&gt;  \n 1 \"Mazda\"\n 2 \"Mazda\"\n 3 \"Datsu\"\n 4 \"Horne\"\n 5 \"Horne\"\n 6 \"Valia\"\n 7 \"Duste\"\n 8 \"Merc \"\n 9 \"Merc \"\n10 \"Merc \"\n# ℹ 22 more rows\n\nmt_tbl |&gt; \n  summarise(across(where(is.numeric),\n                   sum))\n\n# A tibble: 1 × 11\n    mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1  643.   198 7383.  4694  115.  103.  571.    14    13   118    90\n\n\n^ You can replace the where() calls with everything() or matches('d') or c(mpg, cyl, disp), or any of the usual tidyselect patterns to pick out the columns needed."
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-5",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-5",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nGet a character vector of the columns needed\nlapply() the intended function\nUse the special variable .SD and argument .SDcols\n\n\nnum_cols = mt_dt |&gt; sapply(is.numeric) |&gt; which() |&gt; names()\n\nmt_dt[, (num_cols) := lapply(.SD, sum), .SDcols = num_cols][]\n\n                  model   mpg   cyl   disp    hp   drat      wt   qsec    vs\n                 &lt;char&gt; &lt;num&gt; &lt;num&gt;  &lt;num&gt; &lt;num&gt;  &lt;num&gt;   &lt;num&gt;  &lt;num&gt; &lt;num&gt;\n 1:           Mazda RX4 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 2:       Mazda RX4 Wag 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 3:          Datsun 710 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 4:      Hornet 4 Drive 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 5:   Hornet Sportabout 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 6:             Valiant 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 7:          Duster 360 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 8:           Merc 240D 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n 9:            Merc 230 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n10:            Merc 280 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n11:           Merc 280C 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n12:          Merc 450SE 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n13:          Merc 450SL 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n14:         Merc 450SLC 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n15:  Cadillac Fleetwood 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n16: Lincoln Continental 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n17:   Chrysler Imperial 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n18:            Fiat 128 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n19:         Honda Civic 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n20:      Toyota Corolla 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n21:       Toyota Corona 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n22:    Dodge Challenger 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n23:         AMC Javelin 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n24:          Camaro Z28 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n25:    Pontiac Firebird 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n26:           Fiat X1-9 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n27:       Porsche 914-2 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n28:        Lotus Europa 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n29:      Ford Pantera L 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n30:        Ferrari Dino 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n31:       Maserati Bora 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n32:          Volvo 142E 642.9   198 7383.1  4694 115.09 102.952 571.16    14\n                  model   mpg   cyl   disp    hp   drat      wt   qsec    vs\n       am  gear  carb\n    &lt;num&gt; &lt;num&gt; &lt;num&gt;\n 1:    13   118    90\n 2:    13   118    90\n 3:    13   118    90\n 4:    13   118    90\n 5:    13   118    90\n 6:    13   118    90\n 7:    13   118    90\n 8:    13   118    90\n 9:    13   118    90\n10:    13   118    90\n11:    13   118    90\n12:    13   118    90\n13:    13   118    90\n14:    13   118    90\n15:    13   118    90\n16:    13   118    90\n17:    13   118    90\n18:    13   118    90\n19:    13   118    90\n20:    13   118    90\n21:    13   118    90\n22:    13   118    90\n23:    13   118    90\n24:    13   118    90\n25:    13   118    90\n26:    13   118    90\n27:    13   118    90\n28:    13   118    90\n29:    13   118    90\n30:    13   118    90\n31:    13   118    90\n32:    13   118    90\n       am  gear  carb"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-5",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-5",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\ndf |&gt; \n  separate_wider_delim(x, delim = '-',\n                       names = c('x1', 'x2'))\n\n# A tibble: 4 × 2\n  x1    x2   \n  &lt;chr&gt; &lt;chr&gt;\n1 &lt;NA&gt;  &lt;NA&gt; \n2 x     y    \n3 x     z    \n4 y     z    \n\n\nThis is one circumstance where an interface change bit me. It used to be that separate() with a data.table input would return a data.table output, now it gets converted to a tibble. separate_wider_delim() is still listed as “lifecycle: experimental”, so that may change too."
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-6",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-6",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nas.data.table(df)[, (c(\"x1\", \"x2\")) := tstrsplit(x, split = \"-\")][]\n\n        x     x1     x2\n   &lt;char&gt; &lt;char&gt; &lt;char&gt;\n1:   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;\n2:    x-y      x      y\n3:    x-z      x      z\n4:    y-z      y      z\n\n\nThe tstrsplit() approach is ~10x faster than tidyr::separate(), but about the same as separate_wider_delim()."
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-6",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-6",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\ndf |&gt; unite(x,\n            x1, x2,\n            sep = \"-\")\n\n    x\n1 a-A\n2 b-B\n3 c-C\n4 d-D\n5 e-E"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-7",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-7",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nas.data.table(df)[, x := paste(x1, x2, sep = \"-\")][]\n\n       x1     x2      x\n   &lt;char&gt; &lt;char&gt; &lt;char&gt;\n1:      a      A    a-A\n2:      b      B    b-B\n3:      c      C    c-C\n4:      d      D    d-D\n5:      e      E    e-E"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-7",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-7",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\nTry input_tbl |&gt; as.matrix() |&gt; t() |&gt; as_tibble() if your variable types work, otherwise try input_tbl |&gt; pivot_longer() |&gt; pivot_wider() as needed.\n\nmt_tbl[1:4,] |&gt; \n  column_to_rownames('model') |&gt;\n  as.matrix() |&gt;\n  t() |&gt; \n  as.data.frame() |&gt;\n  rownames_to_column('variable') |&gt; as_tibble()\n\n# A tibble: 11 × 5\n   variable `Mazda RX4` `Mazda RX4 Wag` `Datsun 710` `Hornet 4 Drive`\n   &lt;chr&gt;          &lt;dbl&gt;           &lt;dbl&gt;        &lt;dbl&gt;            &lt;dbl&gt;\n 1 mpg            21              21           22.8             21.4 \n 2 cyl             6               6            4                6   \n 3 disp          160             160          108              258   \n 4 hp            110             110           93              110   \n 5 drat            3.9             3.9          3.85             3.08\n 6 wt              2.62            2.88         2.32             3.22\n 7 qsec           16.5            17.0         18.6             19.4 \n 8 vs              0               0            1                1   \n 9 am              1               1            1                0   \n10 gear            4               4            4                3   \n11 carb            4               4            1                1"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-8",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-8",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\ndata.table::transpose(mt_dt[1:4,],\n                      make.names = 'model', # MAKE this variable the new names\n                      keep.names = 'variable') # KEEP the old names in this variable\n\n    variable Mazda RX4 Mazda RX4 Wag Datsun 710 Hornet 4 Drive\n      &lt;char&gt;     &lt;num&gt;         &lt;num&gt;      &lt;num&gt;          &lt;num&gt;\n 1:      mpg     21.00        21.000      22.80         21.400\n 2:      cyl      6.00         6.000       4.00          6.000\n 3:     disp    160.00       160.000     108.00        258.000\n 4:       hp    110.00       110.000      93.00        110.000\n 5:     drat      3.90         3.900       3.85          3.080\n 6:       wt      2.62         2.875       2.32          3.215\n 7:     qsec     16.46        17.020      18.61         19.440\n 8:       vs      0.00         0.000       1.00          1.000\n 9:       am      1.00         1.000       1.00          0.000\n10:     gear      4.00         4.000       4.00          3.000\n11:     carb      4.00         4.000       1.00          1.000"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-8",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-8",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\nmt_tbl |&gt; nest(.by = cyl)\n\n# A tibble: 3 × 2\n    cyl data              \n  &lt;dbl&gt; &lt;list&gt;            \n1     6 &lt;tibble [7 × 11]&gt; \n2     4 &lt;tibble [11 × 11]&gt;\n3     8 &lt;tibble [14 × 11]&gt;"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-9",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-9",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nmt_dt[, .(data = .(.SD)), by = cyl]\n\n     cyl                data\n   &lt;num&gt;              &lt;list&gt;\n1:     6  &lt;data.table[7x11]&gt;\n2:     4 &lt;data.table[11x11]&gt;\n3:     8 &lt;data.table[14x11]&gt;"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-9",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-9",
+    "title": "Tidyverse/data.table translations",
+    "section": "tidy",
+    "text": "tidy\n\nnested = mt_tbl |&gt; nest(.by = cyl)\nnested |&gt; unnest(data)\n\n# A tibble: 32 × 12\n     cyl model         mpg  disp    hp  drat    wt  qsec    vs    am  gear  carb\n   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n 1     6 Mazda RX4    21    160    110  3.9   2.62  16.5     0     1     4     4\n 2     6 Mazda RX4 …  21    160    110  3.9   2.88  17.0     0     1     4     4\n 3     6 Hornet 4 D…  21.4  258    110  3.08  3.22  19.4     1     0     3     1\n 4     6 Valiant      18.1  225    105  2.76  3.46  20.2     1     0     3     1\n 5     6 Merc 280     19.2  168.   123  3.92  3.44  18.3     1     0     4     4\n 6     6 Merc 280C    17.8  168.   123  3.92  3.44  18.9     1     0     4     4\n 7     6 Ferrari Di…  19.7  145    175  3.62  2.77  15.5     0     1     5     6\n 8     4 Datsun 710   22.8  108     93  3.85  2.32  18.6     1     1     4     1\n 9     4 Merc 240D    24.4  147.    62  3.69  3.19  20       1     0     4     2\n10     4 Merc 230     22.8  141.    95  3.92  3.15  22.9     1     0     4     2\n# ℹ 22 more rows"
+  },
+  {
+    "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-10",
+    "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-10",
+    "title": "Tidyverse/data.table translations",
+    "section": "data.table",
+    "text": "data.table\n\nnested = mt_dt[, .(data = list(.SD)), by = cyl]\nnested[, rbindlist(data), by = cyl] |&gt; head()\n\n     cyl          model   mpg  disp    hp  drat    wt  qsec    vs    am  gear\n   &lt;num&gt;         &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:     6      Mazda RX4  21.0 160.0   110  3.90 2.620 16.46     0     1     4\n2:     6  Mazda RX4 Wag  21.0 160.0   110  3.90 2.875 17.02     0     1     4\n3:     6 Hornet 4 Drive  21.4 258.0   110  3.08 3.215 19.44     1     0     3\n4:     6        Valiant  18.1 225.0   105  2.76 3.460 20.22     1     0     3\n5:     6       Merc 280  19.2 167.6   123  3.92 3.440 18.30     1     0     4\n6:     6      Merc 280C  17.8 167.6   123  3.92 3.440 18.90     1     0     4\n    carb\n   &lt;num&gt;\n1:     4\n2:     4\n3:     1\n4:     1\n5:     4\n6:     4\n\n\nIf there’s only one column in the nested column:\n\ndt[,unlist(data), by = group]\n\nThis can be adapted to unlisting multiple nested columns, but as far as I can tell it can’t unlist from one nested column into multiple nested columns."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "andrewghazi.github.io",
+    "section": "",
+    "text": "Tidyverse/data.table translations\n\n\n\n\n\n\n\n\n\n\n\n\nSep 28, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nIntegrated LOO walkthrough\n\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m a Statistical Geneticist at the Center for Computational Biomedicine at Harvard Medical School."
+  },
+  {
     "objectID": "posts/int_loo/integrated_loo.html",
     "href": "posts/int_loo/integrated_loo.html",
     "title": "Integrated LOO walkthrough",
@@ -33,19 +236,5 @@
     "title": "Integrated LOO walkthrough",
     "section": "Integral for all observations, for one draw",
     "text": "Integral for all observations, for one draw\nFinally, let’s apply it to every posterior draw. I just remembered that purrr::map() recently introduced a .progress argument, let’s use it. purrr is sick.\n\n\nCode\nlik_mat &lt;- purrr::map(draw_list,\n    integrate_all_obs,\n    .progress = interactive()\n) |&gt;\n    purrr::reduce(rbind)\n\n\nIt only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That purrr::map() call is embarassingly parallelizable.\nFinally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:\n\n\nCode\nloo::loo(log(lik_mat),\n    r_eff = loo::relative_eff(lik_mat,\n        chain_id = draw_df$`.chain`\n    )\n)\n\n\nWarning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.\n\n\n\nComputed from 4000 by 150 log-likelihood matrix\n\n         Estimate   SE\nelpd_loo   -259.6  7.8\np_loo        16.5  1.7\nlooic       519.1 15.6\n------\nMonte Carlo SE of elpd_loo is 0.1.\n\nPareto k diagnostic values:\n                         Count Pct.    Min. n_eff\n(-Inf, 0.5]   (good)     149   99.3%   852       \n (0.5, 0.7]   (ok)         1    0.7%   1762      \n   (0.7, 1]   (bad)        0    0.0%   &lt;NA&gt;      \n   (1, Inf)   (very bad)   0    0.0%   &lt;NA&gt;      \n\nAll Pareto k estimates are ok (k &lt; 0.7).\nSee help('pareto-k-diagnostic') for details.\n\n\nOkay, so there may be one or two that are just “ok”, but way, way better and totally usable!"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "I’m a Statistical Geneticist at the Center for Computational Biomedicine at Harvard Medical School."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "andrewghazi.github.io",
-    "section": "",
-    "text": "Integrated LOO walkthrough\n\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
   }
 ]
