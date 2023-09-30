@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Andrew Ghazi">
-<meta name="dcterms.date" content="2023-09-28">
+<meta name="dcterms.date" content="2023-09-30">
 
 <title>andrewghazi.github.io - Tidyverse/data.table translations</title>
 <style>
@@ -138,7 +138,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page-left">
       <div class="quarto-title-block"><div><h1 class="title">Tidyverse/data.table translations</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
-                      </div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -154,7 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 28, 2023</p>
+        <p class="date">September 30, 2023</p>
       </div>
     </div>
     
@@ -1523,7 +1526,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="sourceCode" id="cb66" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Tidyverse/data.table translations"</span></span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Andrew Ghazi</span></span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "September 28, 2023"</span></span>
 <span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="an">highlight-style:</span><span class="co"> atom-one</span></span>
 <span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
 <span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
@@ -1534,422 +1537,424 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
 <span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
 <span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="co">    page-layout: full</span></span>
-<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - R</span></span>
 <span id="cb66-17"><a href="#cb66-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-18"><a href="#cb66-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/who.png)</span>{fig-align="center" width="75%"}</span>
+<span id="cb66-18"><a href="#cb66-18" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-20"><a href="#cb66-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a>A list of common tidyverse/data.table commands that do (roughly) the same thing so that you can compare the syntax. Some opinions included.</span>
+<span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/who.png)</span>{fig-align="center" width="75%"}</span>
 <span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-23"><a href="#cb66-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-24"><a href="#cb66-24" aria-hidden="true" tabindex="-1"></a><span class="fu"># Pros and Cons</span></span>
+<span id="cb66-23"><a href="#cb66-23" aria-hidden="true" tabindex="-1"></a>A list of common tidyverse/data.table commands that do (roughly) the same thing so that you can compare the syntax. Some opinions included.</span>
+<span id="cb66-24"><a href="#cb66-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-25"><a href="#cb66-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-26"><a href="#cb66-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidyverse</span></span>
+<span id="cb66-26"><a href="#cb66-26" aria-hidden="true" tabindex="-1"></a><span class="fu"># Pros and Cons</span></span>
 <span id="cb66-27"><a href="#cb66-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-28"><a href="#cb66-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pros</span></span>
+<span id="cb66-28"><a href="#cb66-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidyverse</span></span>
 <span id="cb66-29"><a href="#cb66-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-30"><a href="#cb66-30" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>easy to read</span>
-<span id="cb66-31"><a href="#cb66-31" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>easy to write</span>
-<span id="cb66-32"><a href="#cb66-32" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>approachable to beginners</span>
-<span id="cb66-33"><a href="#cb66-33" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>many useful convenience functions</span>
-<span id="cb66-34"><a href="#cb66-34" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>tibble pretty print</span>
-<span id="cb66-35"><a href="#cb66-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-36"><a href="#cb66-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cons</span></span>
+<span id="cb66-30"><a href="#cb66-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pros</span></span>
+<span id="cb66-31"><a href="#cb66-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-32"><a href="#cb66-32" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>easy to read</span>
+<span id="cb66-33"><a href="#cb66-33" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>easy to write</span>
+<span id="cb66-34"><a href="#cb66-34" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>approachable to beginners</span>
+<span id="cb66-35"><a href="#cb66-35" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>many useful convenience functions</span>
+<span id="cb66-36"><a href="#cb66-36" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>tibble pretty print</span>
 <span id="cb66-37"><a href="#cb66-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-38"><a href="#cb66-38" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>relatively slow (though improving over time)</span>
-<span id="cb66-39"><a href="#cb66-39" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>can be verbose</span>
-<span id="cb66-40"><a href="#cb66-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>big dependency footprint</span>
-<span id="cb66-41"><a href="#cb66-41" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>more prone to interface changes</span>
-<span id="cb66-42"><a href="#cb66-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>typical usage with nonstandard evaluation doesn't play nicely with CRAN</span>
-<span id="cb66-43"><a href="#cb66-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-44"><a href="#cb66-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-38"><a href="#cb66-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cons</span></span>
+<span id="cb66-39"><a href="#cb66-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-40"><a href="#cb66-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>relatively slow (though improving over time)</span>
+<span id="cb66-41"><a href="#cb66-41" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>can be verbose</span>
+<span id="cb66-42"><a href="#cb66-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>big dependency footprint</span>
+<span id="cb66-43"><a href="#cb66-43" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>more prone to interface changes</span>
+<span id="cb66-44"><a href="#cb66-44" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>typical usage with nonstandard evaluation doesn't play nicely with CRAN</span>
 <span id="cb66-45"><a href="#cb66-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-46"><a href="#cb66-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pros</span></span>
+<span id="cb66-46"><a href="#cb66-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
 <span id="cb66-47"><a href="#cb66-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-48"><a href="#cb66-48" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">insane performance</span><span class="co">](https://h2oai.github.io/db-benchmark/)</span> 🔥</span>
-<span id="cb66-49"><a href="#cb66-49" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>concise</span>
-<span id="cb66-50"><a href="#cb66-50" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>no dependencies other than R itself</span>
-<span id="cb66-51"><a href="#cb66-51" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">some built in parallelization</span><span class="co">](https://stackoverflow.com/a/69508224)</span> (but not on Mac without some pain)</span>
-<span id="cb66-52"><a href="#cb66-52" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>some low-level features tidyverse probably won't ever have (eg keys)</span>
-<span id="cb66-53"><a href="#cb66-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-54"><a href="#cb66-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cons</span></span>
+<span id="cb66-48"><a href="#cb66-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pros</span></span>
+<span id="cb66-49"><a href="#cb66-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-50"><a href="#cb66-50" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">insane performance</span><span class="co">](https://h2oai.github.io/db-benchmark/)</span> 🔥</span>
+<span id="cb66-51"><a href="#cb66-51" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>concise</span>
+<span id="cb66-52"><a href="#cb66-52" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>no dependencies other than R itself</span>
+<span id="cb66-53"><a href="#cb66-53" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">some built in parallelization</span><span class="co">](https://stackoverflow.com/a/69508224)</span> (but not on Mac without some pain)</span>
+<span id="cb66-54"><a href="#cb66-54" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>some low-level features tidyverse probably won't ever have (eg keys)</span>
 <span id="cb66-55"><a href="#cb66-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-56"><a href="#cb66-56" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>looks like a mish-mash of punctuation 6 months after the fact (this is gradually improving)</span>
-<span id="cb66-57"><a href="#cb66-57" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>documentation can be arcane</span>
-<span id="cb66-58"><a href="#cb66-58" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>modify by reference defies the general R convention of copy on modify</span>
-<span id="cb66-59"><a href="#cb66-59" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>list columns don't print as nicely</span>
-<span id="cb66-60"><a href="#cb66-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-61"><a href="#cb66-61" aria-hidden="true" tabindex="-1"></a><span class="fu"># Setup</span></span>
+<span id="cb66-56"><a href="#cb66-56" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cons</span></span>
+<span id="cb66-57"><a href="#cb66-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-58"><a href="#cb66-58" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>looks like a mish-mash of punctuation 6 months after the fact (this is gradually improving)</span>
+<span id="cb66-59"><a href="#cb66-59" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>documentation can be arcane</span>
+<span id="cb66-60"><a href="#cb66-60" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>modify by reference defies the general R convention of copy on modify</span>
+<span id="cb66-61"><a href="#cb66-61" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>list columns don't print as nicely</span>
 <span id="cb66-62"><a href="#cb66-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-65"><a href="#cb66-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-66"><a href="#cb66-66" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb66-67"><a href="#cb66-67" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb66-68"><a href="#cb66-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-69"><a href="#cb66-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-70"><a href="#cb66-70" aria-hidden="true" tabindex="-1"></a>We'll edit the <span class="in">`mtcars`</span> data frame as the example input.</span>
+<span id="cb66-63"><a href="#cb66-63" aria-hidden="true" tabindex="-1"></a><span class="fu"># Setup</span></span>
+<span id="cb66-64"><a href="#cb66-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-67"><a href="#cb66-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-68"><a href="#cb66-68" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb66-69"><a href="#cb66-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb66-70"><a href="#cb66-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-71"><a href="#cb66-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-74"><a href="#cb66-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-75"><a href="#cb66-75" aria-hidden="true" tabindex="-1"></a>mtcars <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">'model'</span>)</span>
-<span id="cb66-76"><a href="#cb66-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-77"><a href="#cb66-77" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
-<span id="cb66-78"><a href="#cb66-78" aria-hidden="true" tabindex="-1"></a>mt_dt  <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span>
-<span id="cb66-79"><a href="#cb66-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-80"><a href="#cb66-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-72"><a href="#cb66-72" aria-hidden="true" tabindex="-1"></a>We'll edit the <span class="in">`mtcars`</span> data frame as the example input.</span>
+<span id="cb66-73"><a href="#cb66-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-76"><a href="#cb66-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-77"><a href="#cb66-77" aria-hidden="true" tabindex="-1"></a>mtcars <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">'model'</span>)</span>
+<span id="cb66-78"><a href="#cb66-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-79"><a href="#cb66-79" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb66-80"><a href="#cb66-80" aria-hidden="true" tabindex="-1"></a>mt_dt  <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span>
 <span id="cb66-81"><a href="#cb66-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-82"><a href="#cb66-82" aria-hidden="true" tabindex="-1"></a>I'll throw in <span class="in">` |&gt; head()`</span> where appropriate to reduce the size of the output. Some <span class="in">`data.table`</span> operations that modify their input by reference don't print afterwards (by design), so in these cases I'll add an empty <span class="in">`[]`</span> where necessary to do so.</span>
+<span id="cb66-82"><a href="#cb66-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-83"><a href="#cb66-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-84"><a href="#cb66-84" aria-hidden="true" tabindex="-1"></a><span class="fu"># Add a column</span></span>
+<span id="cb66-84"><a href="#cb66-84" aria-hidden="true" tabindex="-1"></a>I'll throw in <span class="in">` |&gt; head()`</span> where appropriate to reduce the size of the output. Some <span class="in">`data.table`</span> operations that modify their input by reference don't print afterwards (by design), so in these cases I'll add an empty <span class="in">`[]`</span> where necessary to do so.</span>
 <span id="cb66-85"><a href="#cb66-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-86"><a href="#cb66-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-86"><a href="#cb66-86" aria-hidden="true" tabindex="-1"></a><span class="fu"># Add a column</span></span>
 <span id="cb66-87"><a href="#cb66-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-90"><a href="#cb66-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-91"><a href="#cb66-91" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl)</span>
-<span id="cb66-92"><a href="#cb66-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-93"><a href="#cb66-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-88"><a href="#cb66-88" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-89"><a href="#cb66-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-92"><a href="#cb66-92" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-93"><a href="#cb66-93" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl)</span>
 <span id="cb66-94"><a href="#cb66-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-95"><a href="#cb66-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-95"><a href="#cb66-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-96"><a href="#cb66-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-99"><a href="#cb66-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-100"><a href="#cb66-100" aria-hidden="true" tabindex="-1"></a>mt_dt[, disp_per_cyl <span class="sc">:</span><span class="er">=</span> disp<span class="sc">/</span>cyl]</span>
-<span id="cb66-101"><a href="#cb66-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-102"><a href="#cb66-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-103"><a href="#cb66-103" aria-hidden="true" tabindex="-1"></a>By default assignment by reference operations don't print anything. You can tack an empty <span class="in">`[]`</span> onto the end of that operation to get it to print.</span>
+<span id="cb66-97"><a href="#cb66-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-98"><a href="#cb66-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-101"><a href="#cb66-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-102"><a href="#cb66-102" aria-hidden="true" tabindex="-1"></a>mt_dt[, disp_per_cyl <span class="sc">:</span><span class="er">=</span> disp<span class="sc">/</span>cyl]</span>
+<span id="cb66-103"><a href="#cb66-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-104"><a href="#cb66-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-105"><a href="#cb66-105" aria-hidden="true" tabindex="-1"></a>OR, using the new DT()/let() syntax (requires development version of <span class="in">`data.table`</span>):</span>
+<span id="cb66-105"><a href="#cb66-105" aria-hidden="true" tabindex="-1"></a>By default assignment by reference operations don't print anything. You can tack an empty <span class="in">`[]`</span> onto the end of that operation to get it to print.</span>
 <span id="cb66-106"><a href="#cb66-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-109"><a href="#cb66-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-110"><a href="#cb66-110" aria-hidden="true" tabindex="-1"></a>mt_dt <span class="sc">|&gt;</span> <span class="fu">DT</span>(, <span class="fu">let</span>(<span class="at">disp_per_cyl =</span> disp<span class="sc">/</span>cyl)) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
-<span id="cb66-111"><a href="#cb66-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-112"><a href="#cb66-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-113"><a href="#cb66-113" aria-hidden="true" tabindex="-1"></a>The data.table walrus operator / <span class="in">`let()`</span> assign by reference, so the <span class="in">`disp_per_cyl`</span> column is added to <span class="in">`mt_dt`</span> without using <span class="in">`&lt;-`</span>. Let's delete it.</span>
+<span id="cb66-107"><a href="#cb66-107" aria-hidden="true" tabindex="-1"></a>OR, using the new DT()/let() syntax (requires development version of <span class="in">`data.table`</span>):</span>
+<span id="cb66-108"><a href="#cb66-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-111"><a href="#cb66-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-112"><a href="#cb66-112" aria-hidden="true" tabindex="-1"></a>mt_dt <span class="sc">|&gt;</span> <span class="fu">DT</span>(, <span class="fu">let</span>(<span class="at">disp_per_cyl =</span> disp<span class="sc">/</span>cyl)) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
+<span id="cb66-113"><a href="#cb66-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-114"><a href="#cb66-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-117"><a href="#cb66-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-118"><a href="#cb66-118" aria-hidden="true" tabindex="-1"></a>mt_dt[, disp_per_cyl <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
-<span id="cb66-119"><a href="#cb66-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-120"><a href="#cb66-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-121"><a href="#cb66-121" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multiple columns</span></span>
+<span id="cb66-115"><a href="#cb66-115" aria-hidden="true" tabindex="-1"></a>The data.table walrus operator / <span class="in">`let()`</span> assign by reference, so the <span class="in">`disp_per_cyl`</span> column is added to <span class="in">`mt_dt`</span> without using <span class="in">`&lt;-`</span>. Let's delete it.</span>
+<span id="cb66-116"><a href="#cb66-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-119"><a href="#cb66-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-120"><a href="#cb66-120" aria-hidden="true" tabindex="-1"></a>mt_dt[, disp_per_cyl <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb66-121"><a href="#cb66-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-122"><a href="#cb66-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-125"><a href="#cb66-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-126"><a href="#cb66-126" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl,</span>
-<span id="cb66-127"><a href="#cb66-127" aria-hidden="true" tabindex="-1"></a>                 <span class="at">hp_per_disp  =</span> hp <span class="sc">/</span> disp)</span>
-<span id="cb66-128"><a href="#cb66-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-129"><a href="#cb66-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-130"><a href="#cb66-130" aria-hidden="true" tabindex="-1"></a>versus</span>
+<span id="cb66-123"><a href="#cb66-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multiple columns</span></span>
+<span id="cb66-124"><a href="#cb66-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-127"><a href="#cb66-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-128"><a href="#cb66-128" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl,</span>
+<span id="cb66-129"><a href="#cb66-129" aria-hidden="true" tabindex="-1"></a>                 <span class="at">hp_per_disp  =</span> hp <span class="sc">/</span> disp)</span>
+<span id="cb66-130"><a href="#cb66-130" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-131"><a href="#cb66-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-134"><a href="#cb66-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-135"><a href="#cb66-135" aria-hidden="true" tabindex="-1"></a>mt_dt[, <span class="st">`</span><span class="at">:=</span><span class="st">`</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl,</span>
-<span id="cb66-136"><a href="#cb66-136" aria-hidden="true" tabindex="-1"></a>             <span class="at">hp_per_disp  =</span> hp <span class="sc">/</span> disp)]</span>
-<span id="cb66-137"><a href="#cb66-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-138"><a href="#cb66-138" aria-hidden="true" tabindex="-1"></a><span class="co"># OR</span></span>
+<span id="cb66-132"><a href="#cb66-132" aria-hidden="true" tabindex="-1"></a>versus</span>
+<span id="cb66-133"><a href="#cb66-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-136"><a href="#cb66-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-137"><a href="#cb66-137" aria-hidden="true" tabindex="-1"></a>mt_dt[, <span class="st">`</span><span class="at">:=</span><span class="st">`</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl,</span>
+<span id="cb66-138"><a href="#cb66-138" aria-hidden="true" tabindex="-1"></a>             <span class="at">hp_per_disp  =</span> hp <span class="sc">/</span> disp)]</span>
 <span id="cb66-139"><a href="#cb66-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-140"><a href="#cb66-140" aria-hidden="true" tabindex="-1"></a>mt_dt <span class="sc">|&gt;</span></span>
-<span id="cb66-141"><a href="#cb66-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">DT</span>(, <span class="fu">let</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl,</span>
-<span id="cb66-142"><a href="#cb66-142" aria-hidden="true" tabindex="-1"></a>           <span class="at">hp_per_disp  =</span> hp <span class="sc">/</span> disp)) <span class="sc">|&gt;</span></span>
-<span id="cb66-143"><a href="#cb66-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb66-144"><a href="#cb66-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-145"><a href="#cb66-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-140"><a href="#cb66-140" aria-hidden="true" tabindex="-1"></a><span class="co"># OR</span></span>
+<span id="cb66-141"><a href="#cb66-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-142"><a href="#cb66-142" aria-hidden="true" tabindex="-1"></a>mt_dt <span class="sc">|&gt;</span></span>
+<span id="cb66-143"><a href="#cb66-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">DT</span>(, <span class="fu">let</span>(<span class="at">disp_per_cyl =</span> disp <span class="sc">/</span> cyl,</span>
+<span id="cb66-144"><a href="#cb66-144" aria-hidden="true" tabindex="-1"></a>           <span class="at">hp_per_disp  =</span> hp <span class="sc">/</span> disp)) <span class="sc">|&gt;</span></span>
+<span id="cb66-145"><a href="#cb66-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
 <span id="cb66-146"><a href="#cb66-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-147"><a href="#cb66-147" aria-hidden="true" tabindex="-1"></a>Cleanup:</span>
+<span id="cb66-147"><a href="#cb66-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-148"><a href="#cb66-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-151"><a href="#cb66-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-152"><a href="#cb66-152" aria-hidden="true" tabindex="-1"></a>mt_dt[,<span class="fu">let</span>(<span class="at">disp_per_cyl =</span> <span class="cn">NULL</span>,</span>
-<span id="cb66-153"><a href="#cb66-153" aria-hidden="true" tabindex="-1"></a>           <span class="at">hp_per_disp  =</span> <span class="cn">NULL</span>)]</span>
-<span id="cb66-154"><a href="#cb66-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-155"><a href="#cb66-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-156"><a href="#cb66-156" aria-hidden="true" tabindex="-1"></a><span class="fu"># Filter</span></span>
+<span id="cb66-149"><a href="#cb66-149" aria-hidden="true" tabindex="-1"></a>Cleanup:</span>
+<span id="cb66-150"><a href="#cb66-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-153"><a href="#cb66-153" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-154"><a href="#cb66-154" aria-hidden="true" tabindex="-1"></a>mt_dt[,<span class="fu">let</span>(<span class="at">disp_per_cyl =</span> <span class="cn">NULL</span>,</span>
+<span id="cb66-155"><a href="#cb66-155" aria-hidden="true" tabindex="-1"></a>           <span class="at">hp_per_disp  =</span> <span class="cn">NULL</span>)]</span>
+<span id="cb66-156"><a href="#cb66-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-157"><a href="#cb66-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-158"><a href="#cb66-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-158"><a href="#cb66-158" aria-hidden="true" tabindex="-1"></a><span class="fu"># Filter</span></span>
 <span id="cb66-159"><a href="#cb66-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-162"><a href="#cb66-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-163"><a href="#cb66-163" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">filter</span>(disp <span class="sc">&gt;</span> <span class="dv">450</span>)</span>
-<span id="cb66-164"><a href="#cb66-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-165"><a href="#cb66-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-166"><a href="#cb66-166" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-160"><a href="#cb66-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-161"><a href="#cb66-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-164"><a href="#cb66-164" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-165"><a href="#cb66-165" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">filter</span>(disp <span class="sc">&gt;</span> <span class="dv">450</span>)</span>
+<span id="cb66-166"><a href="#cb66-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-167"><a href="#cb66-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-170"><a href="#cb66-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-171"><a href="#cb66-171" aria-hidden="true" tabindex="-1"></a>mt_dt[disp <span class="sc">&gt;</span> <span class="dv">450</span>]</span>
-<span id="cb66-172"><a href="#cb66-172" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-173"><a href="#cb66-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-174"><a href="#cb66-174" aria-hidden="true" tabindex="-1"></a>If the condition is a pre-existing column, enclose it in parentheses:</span>
+<span id="cb66-168"><a href="#cb66-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-169"><a href="#cb66-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-172"><a href="#cb66-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-173"><a href="#cb66-173" aria-hidden="true" tabindex="-1"></a>mt_dt[disp <span class="sc">&gt;</span> <span class="dv">450</span>]</span>
+<span id="cb66-174"><a href="#cb66-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-175"><a href="#cb66-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-178"><a href="#cb66-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-179"><a href="#cb66-179" aria-hidden="true" tabindex="-1"></a>mt_dt[, big <span class="sc">:</span><span class="er">=</span> disp <span class="sc">&gt;</span> <span class="dv">450</span>]</span>
-<span id="cb66-180"><a href="#cb66-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-181"><a href="#cb66-181" aria-hidden="true" tabindex="-1"></a>mt_dt[(big)]</span>
+<span id="cb66-176"><a href="#cb66-176" aria-hidden="true" tabindex="-1"></a>If the condition is a pre-existing column, enclose it in parentheses:</span>
+<span id="cb66-177"><a href="#cb66-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-180"><a href="#cb66-180" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-181"><a href="#cb66-181" aria-hidden="true" tabindex="-1"></a>mt_dt[, big <span class="sc">:</span><span class="er">=</span> disp <span class="sc">&gt;</span> <span class="dv">450</span>]</span>
 <span id="cb66-182"><a href="#cb66-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-183"><a href="#cb66-183" aria-hidden="true" tabindex="-1"></a>mt_dt[, big <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
-<span id="cb66-184"><a href="#cb66-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-185"><a href="#cb66-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-186"><a href="#cb66-186" aria-hidden="true" tabindex="-1"></a><span class="fu"># Group-wise summaries</span></span>
+<span id="cb66-183"><a href="#cb66-183" aria-hidden="true" tabindex="-1"></a>mt_dt[(big)]</span>
+<span id="cb66-184"><a href="#cb66-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-185"><a href="#cb66-185" aria-hidden="true" tabindex="-1"></a>mt_dt[, big <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb66-186"><a href="#cb66-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-187"><a href="#cb66-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-188"><a href="#cb66-188" aria-hidden="true" tabindex="-1"></a>Both can compute multiple summaries by adding additional named arguments to <span class="in">`summarise()`</span> or <span class="in">`.()`</span> (see <span class="co">[</span><span class="ot">Multiple columns</span><span class="co">]</span> above)</span>
+<span id="cb66-188"><a href="#cb66-188" aria-hidden="true" tabindex="-1"></a><span class="fu"># Group-wise summaries</span></span>
 <span id="cb66-189"><a href="#cb66-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-190"><a href="#cb66-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-190"><a href="#cb66-190" aria-hidden="true" tabindex="-1"></a>Both can compute multiple summaries by adding additional named arguments to <span class="in">`summarise()`</span> or <span class="in">`.()`</span> (see <span class="co">[</span><span class="ot">Multiple columns</span><span class="co">]</span> above)</span>
 <span id="cb66-191"><a href="#cb66-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-192"><a href="#cb66-192" aria-hidden="true" tabindex="-1"></a>They recently introduced <span class="in">`.by`</span> arguments in <span class="in">`dplyr 1.1.0`</span>, which to me is much cleaner than a separate call to <span class="in">`group_by()`</span></span>
+<span id="cb66-192"><a href="#cb66-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
 <span id="cb66-193"><a href="#cb66-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-196"><a href="#cb66-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-197"><a href="#cb66-197" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> </span>
-<span id="cb66-198"><a href="#cb66-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_mpg =</span> <span class="fu">mean</span>(mpg), <span class="at">.by =</span> cyl)</span>
-<span id="cb66-199"><a href="#cb66-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-200"><a href="#cb66-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-201"><a href="#cb66-201" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-194"><a href="#cb66-194" aria-hidden="true" tabindex="-1"></a>They recently introduced <span class="in">`.by`</span> arguments in <span class="in">`dplyr 1.1.0`</span>, which to me is much cleaner than a separate call to <span class="in">`group_by()`</span></span>
+<span id="cb66-195"><a href="#cb66-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-198"><a href="#cb66-198" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-199"><a href="#cb66-199" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb66-200"><a href="#cb66-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_mpg =</span> <span class="fu">mean</span>(mpg), <span class="at">.by =</span> cyl)</span>
+<span id="cb66-201"><a href="#cb66-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-202"><a href="#cb66-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-203"><a href="#cb66-203" aria-hidden="true" tabindex="-1"></a>We use the data.table <span class="in">`.()`</span> alias for <span class="in">`list()`</span></span>
+<span id="cb66-203"><a href="#cb66-203" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
 <span id="cb66-204"><a href="#cb66-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-207"><a href="#cb66-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-208"><a href="#cb66-208" aria-hidden="true" tabindex="-1"></a>mt_dt[, .(<span class="at">avg_mpg =</span> <span class="fu">mean</span>(mpg)), by <span class="ot">=</span> cyl]</span>
-<span id="cb66-209"><a href="#cb66-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-210"><a href="#cb66-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-211"><a href="#cb66-211" aria-hidden="true" tabindex="-1"></a><span class="fu"># Order</span></span>
+<span id="cb66-205"><a href="#cb66-205" aria-hidden="true" tabindex="-1"></a>We use the data.table <span class="in">`.()`</span> alias for <span class="in">`list()`</span></span>
+<span id="cb66-206"><a href="#cb66-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-209"><a href="#cb66-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-210"><a href="#cb66-210" aria-hidden="true" tabindex="-1"></a>mt_dt[, .(<span class="at">avg_mpg =</span> <span class="fu">mean</span>(mpg)), by <span class="ot">=</span> cyl]</span>
+<span id="cb66-211"><a href="#cb66-211" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-212"><a href="#cb66-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-213"><a href="#cb66-213" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-213"><a href="#cb66-213" aria-hidden="true" tabindex="-1"></a><span class="fu"># Order</span></span>
 <span id="cb66-214"><a href="#cb66-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-217"><a href="#cb66-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-218"><a href="#cb66-218" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">arrange</span>(mpg)</span>
-<span id="cb66-219"><a href="#cb66-219" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-220"><a href="#cb66-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-221"><a href="#cb66-221" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-215"><a href="#cb66-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-216"><a href="#cb66-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-219"><a href="#cb66-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-220"><a href="#cb66-220" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">arrange</span>(mpg)</span>
+<span id="cb66-221"><a href="#cb66-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-222"><a href="#cb66-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-225"><a href="#cb66-225" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-226"><a href="#cb66-226" aria-hidden="true" tabindex="-1"></a>mt_dt[<span class="fu">order</span>(mpg)] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
-<span id="cb66-227"><a href="#cb66-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-228"><a href="#cb66-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-229"><a href="#cb66-229" aria-hidden="true" tabindex="-1"></a>See also <span class="in">`?data.table::setkey()`</span> and <span class="in">`?data.table::setorder()`</span></span>
+<span id="cb66-223"><a href="#cb66-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-224"><a href="#cb66-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-227"><a href="#cb66-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-228"><a href="#cb66-228" aria-hidden="true" tabindex="-1"></a>mt_dt[<span class="fu">order</span>(mpg)] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
+<span id="cb66-229"><a href="#cb66-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-230"><a href="#cb66-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-231"><a href="#cb66-231" aria-hidden="true" tabindex="-1"></a><span class="fu"># Joins</span></span>
+<span id="cb66-231"><a href="#cb66-231" aria-hidden="true" tabindex="-1"></a>See also <span class="in">`?data.table::setkey()`</span> and <span class="in">`?data.table::setorder()`</span></span>
 <span id="cb66-232"><a href="#cb66-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-233"><a href="#cb66-233" aria-hidden="true" tabindex="-1"></a>Ran out of time to finish this section, just see <span class="co">[</span><span class="ot">this gist</span><span class="co">](https://gist.github.com/nacnudus/ef3b22b79164bbf9c0ebafbf558f22a0)</span> for data.table. dplyr joins have clear names <span class="in">`inner_join()`</span>, <span class="in">`left_join`</span>, <span class="in">`full_join()`</span> etc.</span>
+<span id="cb66-233"><a href="#cb66-233" aria-hidden="true" tabindex="-1"></a><span class="fu"># Joins</span></span>
 <span id="cb66-234"><a href="#cb66-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-235"><a href="#cb66-235" aria-hidden="true" tabindex="-1"></a>data.table is faster under normal circumstances, and is WAY faster if both tables are already keyed. See also <span class="in">`?merge.data.table`</span> for more complicated behavior.</span>
+<span id="cb66-235"><a href="#cb66-235" aria-hidden="true" tabindex="-1"></a>Ran out of time to finish this section, just see <span class="co">[</span><span class="ot">this gist</span><span class="co">](https://gist.github.com/nacnudus/ef3b22b79164bbf9c0ebafbf558f22a0)</span> for data.table. dplyr joins have clear names <span class="in">`inner_join()`</span>, <span class="in">`left_join`</span>, <span class="in">`full_join()`</span> etc.</span>
 <span id="cb66-236"><a href="#cb66-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-237"><a href="#cb66-237" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inner</span></span>
+<span id="cb66-237"><a href="#cb66-237" aria-hidden="true" tabindex="-1"></a>data.table is faster under normal circumstances, and is WAY faster if both tables are already keyed. See also <span class="in">`?merge.data.table`</span> for more complicated behavior.</span>
 <span id="cb66-238"><a href="#cb66-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-241"><a href="#cb66-241" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-242"><a href="#cb66-242" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb66-243"><a href="#cb66-243" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(x,y, <span class="at">by =</span> <span class="st">'grp'</span>) </span>
-<span id="cb66-244"><a href="#cb66-244" aria-hidden="true" tabindex="-1"></a>Y[X, on <span class="ot">=</span> <span class="st">'grp'</span>, nomatch <span class="ot">=</span> <span class="dv">0</span>]</span>
-<span id="cb66-245"><a href="#cb66-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-246"><a href="#cb66-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-247"><a href="#cb66-247" aria-hidden="true" tabindex="-1"></a><span class="fu">## Left</span></span>
+<span id="cb66-239"><a href="#cb66-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inner</span></span>
+<span id="cb66-240"><a href="#cb66-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-243"><a href="#cb66-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-244"><a href="#cb66-244" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb66-245"><a href="#cb66-245" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(x,y, <span class="at">by =</span> <span class="st">'grp'</span>) </span>
+<span id="cb66-246"><a href="#cb66-246" aria-hidden="true" tabindex="-1"></a>Y[X, on <span class="ot">=</span> <span class="st">'grp'</span>, nomatch <span class="ot">=</span> <span class="dv">0</span>]</span>
+<span id="cb66-247"><a href="#cb66-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-248"><a href="#cb66-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-249"><a href="#cb66-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## Full</span></span>
+<span id="cb66-249"><a href="#cb66-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## Left</span></span>
 <span id="cb66-250"><a href="#cb66-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-251"><a href="#cb66-251" aria-hidden="true" tabindex="-1"></a><span class="fu"># Operation over multiple columns</span></span>
+<span id="cb66-251"><a href="#cb66-251" aria-hidden="true" tabindex="-1"></a><span class="fu">## Full</span></span>
 <span id="cb66-252"><a href="#cb66-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-253"><a href="#cb66-253" aria-hidden="true" tabindex="-1"></a>This sort of thing is much simpler/cleaner with tidyverse. Only switch to data.table if necessary.</span>
+<span id="cb66-253"><a href="#cb66-253" aria-hidden="true" tabindex="-1"></a><span class="fu"># Operation over multiple columns</span></span>
 <span id="cb66-254"><a href="#cb66-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-255"><a href="#cb66-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-255"><a href="#cb66-255" aria-hidden="true" tabindex="-1"></a>This sort of thing is much simpler/cleaner with tidyverse. Only switch to data.table if necessary.</span>
 <span id="cb66-256"><a href="#cb66-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-257"><a href="#cb66-257" aria-hidden="true" tabindex="-1"></a>across() + where()</span>
+<span id="cb66-257"><a href="#cb66-257" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
 <span id="cb66-258"><a href="#cb66-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-261"><a href="#cb66-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-262"><a href="#cb66-262" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> </span>
-<span id="cb66-263"><a href="#cb66-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), </span>
-<span id="cb66-264"><a href="#cb66-264" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">~</span><span class="fu">str_sub</span>(.x, <span class="dv">1</span>, <span class="dv">5</span>)))</span>
-<span id="cb66-265"><a href="#cb66-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-266"><a href="#cb66-266" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> </span>
-<span id="cb66-267"><a href="#cb66-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric),</span>
-<span id="cb66-268"><a href="#cb66-268" aria-hidden="true" tabindex="-1"></a>                   sum))</span>
-<span id="cb66-269"><a href="#cb66-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-270"><a href="#cb66-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-271"><a href="#cb66-271" aria-hidden="true" tabindex="-1"></a>\^ You can replace the <span class="in">`where()`</span> calls with <span class="in">`everything()`</span> or <span class="in">`matches('d')`</span> or <span class="in">`c(mpg, cyl, disp)`</span>, or any of the usual tidyselect patterns to pick out the columns needed.</span>
+<span id="cb66-259"><a href="#cb66-259" aria-hidden="true" tabindex="-1"></a>across() + where()</span>
+<span id="cb66-260"><a href="#cb66-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-263"><a href="#cb66-263" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-264"><a href="#cb66-264" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb66-265"><a href="#cb66-265" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), </span>
+<span id="cb66-266"><a href="#cb66-266" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">~</span><span class="fu">str_sub</span>(.x, <span class="dv">1</span>, <span class="dv">5</span>)))</span>
+<span id="cb66-267"><a href="#cb66-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-268"><a href="#cb66-268" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb66-269"><a href="#cb66-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric),</span>
+<span id="cb66-270"><a href="#cb66-270" aria-hidden="true" tabindex="-1"></a>                   sum))</span>
+<span id="cb66-271"><a href="#cb66-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-272"><a href="#cb66-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-273"><a href="#cb66-273" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-273"><a href="#cb66-273" aria-hidden="true" tabindex="-1"></a>\^ You can replace the <span class="in">`where()`</span> calls with <span class="in">`everything()`</span> or <span class="in">`matches('d')`</span> or <span class="in">`c(mpg, cyl, disp)`</span>, or any of the usual tidyselect patterns to pick out the columns needed.</span>
 <span id="cb66-274"><a href="#cb66-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-275"><a href="#cb66-275" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Get a character vector of the columns needed</span>
-<span id="cb66-276"><a href="#cb66-276" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`lapply()`</span> the intended function</span>
-<span id="cb66-277"><a href="#cb66-277" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Use the special variable <span class="in">`.SD`</span> and argument <span class="in">`.SDcols`</span></span>
-<span id="cb66-278"><a href="#cb66-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-281"><a href="#cb66-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-282"><a href="#cb66-282" aria-hidden="true" tabindex="-1"></a>num_cols <span class="ot">=</span> mt_dt <span class="sc">|&gt;</span> <span class="fu">sapply</span>(is.numeric) <span class="sc">|&gt;</span> <span class="fu">which</span>() <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
-<span id="cb66-283"><a href="#cb66-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-284"><a href="#cb66-284" aria-hidden="true" tabindex="-1"></a>mt_dt[, (num_cols) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, sum), .SDcols <span class="ot">=</span> num_cols][]</span>
-<span id="cb66-285"><a href="#cb66-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-286"><a href="#cb66-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-289"><a href="#cb66-289" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-290"><a href="#cb66-290" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb66-291"><a href="#cb66-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-292"><a href="#cb66-292" aria-hidden="true" tabindex="-1"></a>mt_dt <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span>
-<span id="cb66-293"><a href="#cb66-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-294"><a href="#cb66-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-295"><a href="#cb66-295" aria-hidden="true" tabindex="-1"></a><span class="fu"># Separate</span></span>
+<span id="cb66-275"><a href="#cb66-275" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-276"><a href="#cb66-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-277"><a href="#cb66-277" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Get a character vector of the columns needed</span>
+<span id="cb66-278"><a href="#cb66-278" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`lapply()`</span> the intended function</span>
+<span id="cb66-279"><a href="#cb66-279" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Use the special variable <span class="in">`.SD`</span> and argument <span class="in">`.SDcols`</span></span>
+<span id="cb66-280"><a href="#cb66-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-283"><a href="#cb66-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-284"><a href="#cb66-284" aria-hidden="true" tabindex="-1"></a>num_cols <span class="ot">=</span> mt_dt <span class="sc">|&gt;</span> <span class="fu">sapply</span>(is.numeric) <span class="sc">|&gt;</span> <span class="fu">which</span>() <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb66-285"><a href="#cb66-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-286"><a href="#cb66-286" aria-hidden="true" tabindex="-1"></a>mt_dt[, (num_cols) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, sum), .SDcols <span class="ot">=</span> num_cols][]</span>
+<span id="cb66-287"><a href="#cb66-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-288"><a href="#cb66-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-291"><a href="#cb66-291" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-292"><a href="#cb66-292" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb66-293"><a href="#cb66-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-294"><a href="#cb66-294" aria-hidden="true" tabindex="-1"></a>mt_dt <span class="ot">=</span> mtcars <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span>
+<span id="cb66-295"><a href="#cb66-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-296"><a href="#cb66-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-297"><a href="#cb66-297" aria-hidden="true" tabindex="-1"></a>Useful for splitting <span class="in">`g__Eschericia.s__Eschericia_coli`</span> type identifiers.</span>
+<span id="cb66-297"><a href="#cb66-297" aria-hidden="true" tabindex="-1"></a><span class="fu"># Separate</span></span>
 <span id="cb66-298"><a href="#cb66-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-301"><a href="#cb66-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-302"><a href="#cb66-302" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">"x-y"</span>, <span class="st">"x-z"</span>, <span class="st">"y-z"</span>))</span>
-<span id="cb66-303"><a href="#cb66-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-304"><a href="#cb66-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-305"><a href="#cb66-305" aria-hidden="true" tabindex="-1"></a>benchmark:</span>
+<span id="cb66-299"><a href="#cb66-299" aria-hidden="true" tabindex="-1"></a>Useful for splitting <span class="in">`g__Eschericia.s__Eschericia_coli`</span> type identifiers.</span>
+<span id="cb66-300"><a href="#cb66-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-303"><a href="#cb66-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-304"><a href="#cb66-304" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">"x-y"</span>, <span class="st">"x-z"</span>, <span class="st">"y-z"</span>))</span>
+<span id="cb66-305"><a href="#cb66-305" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-306"><a href="#cb66-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-309"><a href="#cb66-309" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-310"><a href="#cb66-310" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb66-311"><a href="#cb66-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-312"><a href="#cb66-312" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> <span class="fl">5e5</span></span>
+<span id="cb66-307"><a href="#cb66-307" aria-hidden="true" tabindex="-1"></a>benchmark:</span>
+<span id="cb66-308"><a href="#cb66-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-311"><a href="#cb66-311" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-312"><a href="#cb66-312" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
 <span id="cb66-313"><a href="#cb66-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-314"><a href="#cb66-314" aria-hidden="true" tabindex="-1"></a>microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(<span class="at">i =</span> {</span>
-<span id="cb66-315"><a href="#cb66-315" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb66-316"><a href="#cb66-316" aria-hidden="true" tabindex="-1"></a>                                                               <span class="st">'-'</span>, </span>
-<span id="cb66-317"><a href="#cb66-317" aria-hidden="true" tabindex="-1"></a>                                                               <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))},</span>
-<span id="cb66-318"><a href="#cb66-318" aria-hidden="true" tabindex="-1"></a>                               <span class="at">i2 =</span> {</span>
-<span id="cb66-319"><a href="#cb66-319" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb66-320"><a href="#cb66-320" aria-hidden="true" tabindex="-1"></a>                                                               <span class="st">'-'</span>, </span>
-<span id="cb66-321"><a href="#cb66-321" aria-hidden="true" tabindex="-1"></a>                                                               <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))},</span>
-<span id="cb66-322"><a href="#cb66-322" aria-hidden="true" tabindex="-1"></a>                               <span class="at">separate =</span> {</span>
-<span id="cb66-323"><a href="#cb66-323" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb66-324"><a href="#cb66-324" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
-<span id="cb66-325"><a href="#cb66-325" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb66-326"><a href="#cb66-326" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">separate</span>(df, x, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>), <span class="at">sep =</span> <span class="st">"-"</span>)},</span>
-<span id="cb66-327"><a href="#cb66-327" aria-hidden="true" tabindex="-1"></a>                               <span class="at">separate_wider_delim =</span> {</span>
-<span id="cb66-328"><a href="#cb66-328" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb66-329"><a href="#cb66-329" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
-<span id="cb66-330"><a href="#cb66-330" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb66-331"><a href="#cb66-331" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">separate_wider_delim</span>(df, x, <span class="at">delim =</span> <span class="st">"-"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>))},</span>
-<span id="cb66-332"><a href="#cb66-332" aria-hidden="true" tabindex="-1"></a>                               <span class="at">separate_wider_position =</span> {</span>
-<span id="cb66-333"><a href="#cb66-333" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb66-334"><a href="#cb66-334" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
-<span id="cb66-335"><a href="#cb66-335" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb66-336"><a href="#cb66-336" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">separate_wider_position</span>(df, x, <span class="at">widths =</span> <span class="fu">c</span>(<span class="at">x1 =</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="at">x2 =</span> <span class="dv">1</span>))},</span>
-<span id="cb66-337"><a href="#cb66-337" aria-hidden="true" tabindex="-1"></a>                               <span class="at">tstrsplit =</span> {</span>
-<span id="cb66-338"><a href="#cb66-338" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb66-339"><a href="#cb66-339" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
-<span id="cb66-340"><a href="#cb66-340" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb66-341"><a href="#cb66-341" aria-hidden="true" tabindex="-1"></a>                                 df[, (<span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">:</span><span class="er">=</span> <span class="fu">tstrsplit</span>(x, <span class="at">split =</span> <span class="st">"-"</span>)]},</span>
-<span id="cb66-342"><a href="#cb66-342" aria-hidden="true" tabindex="-1"></a>                               </span>
-<span id="cb66-343"><a href="#cb66-343" aria-hidden="true" tabindex="-1"></a>                               <span class="at">times =</span> <span class="dv">5</span>)</span>
-<span id="cb66-344"><a href="#cb66-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-345"><a href="#cb66-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-346"><a href="#cb66-346" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-314"><a href="#cb66-314" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> <span class="fl">5e5</span></span>
+<span id="cb66-315"><a href="#cb66-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-316"><a href="#cb66-316" aria-hidden="true" tabindex="-1"></a>microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(<span class="at">i =</span> {</span>
+<span id="cb66-317"><a href="#cb66-317" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb66-318"><a href="#cb66-318" aria-hidden="true" tabindex="-1"></a>                                                               <span class="st">'-'</span>, </span>
+<span id="cb66-319"><a href="#cb66-319" aria-hidden="true" tabindex="-1"></a>                                                               <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))},</span>
+<span id="cb66-320"><a href="#cb66-320" aria-hidden="true" tabindex="-1"></a>                               <span class="at">i2 =</span> {</span>
+<span id="cb66-321"><a href="#cb66-321" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb66-322"><a href="#cb66-322" aria-hidden="true" tabindex="-1"></a>                                                               <span class="st">'-'</span>, </span>
+<span id="cb66-323"><a href="#cb66-323" aria-hidden="true" tabindex="-1"></a>                                                               <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))},</span>
+<span id="cb66-324"><a href="#cb66-324" aria-hidden="true" tabindex="-1"></a>                               <span class="at">separate =</span> {</span>
+<span id="cb66-325"><a href="#cb66-325" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb66-326"><a href="#cb66-326" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
+<span id="cb66-327"><a href="#cb66-327" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb66-328"><a href="#cb66-328" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">separate</span>(df, x, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>), <span class="at">sep =</span> <span class="st">"-"</span>)},</span>
+<span id="cb66-329"><a href="#cb66-329" aria-hidden="true" tabindex="-1"></a>                               <span class="at">separate_wider_delim =</span> {</span>
+<span id="cb66-330"><a href="#cb66-330" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb66-331"><a href="#cb66-331" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
+<span id="cb66-332"><a href="#cb66-332" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb66-333"><a href="#cb66-333" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">separate_wider_delim</span>(df, x, <span class="at">delim =</span> <span class="st">"-"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>))},</span>
+<span id="cb66-334"><a href="#cb66-334" aria-hidden="true" tabindex="-1"></a>                               <span class="at">separate_wider_position =</span> {</span>
+<span id="cb66-335"><a href="#cb66-335" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb66-336"><a href="#cb66-336" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
+<span id="cb66-337"><a href="#cb66-337" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb66-338"><a href="#cb66-338" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">separate_wider_position</span>(df, x, <span class="at">widths =</span> <span class="fu">c</span>(<span class="at">x1 =</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="at">x2 =</span> <span class="dv">1</span>))},</span>
+<span id="cb66-339"><a href="#cb66-339" aria-hidden="true" tabindex="-1"></a>                               <span class="at">tstrsplit =</span> {</span>
+<span id="cb66-340"><a href="#cb66-340" aria-hidden="true" tabindex="-1"></a>                                 df <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="fu">paste0</span>(<span class="fu">sample</span>(letters, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb66-341"><a href="#cb66-341" aria-hidden="true" tabindex="-1"></a>                                                            <span class="st">'-'</span>, </span>
+<span id="cb66-342"><a href="#cb66-342" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">sample</span>(LETTERS, <span class="at">size =</span> N, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb66-343"><a href="#cb66-343" aria-hidden="true" tabindex="-1"></a>                                 df[, (<span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">:</span><span class="er">=</span> <span class="fu">tstrsplit</span>(x, <span class="at">split =</span> <span class="st">"-"</span>)]},</span>
+<span id="cb66-344"><a href="#cb66-344" aria-hidden="true" tabindex="-1"></a>                               </span>
+<span id="cb66-345"><a href="#cb66-345" aria-hidden="true" tabindex="-1"></a>                               <span class="at">times =</span> <span class="dv">5</span>)</span>
+<span id="cb66-346"><a href="#cb66-346" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-347"><a href="#cb66-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-348"><a href="#cb66-348" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-348"><a href="#cb66-348" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-349"><a href="#cb66-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-352"><a href="#cb66-352" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-353"><a href="#cb66-353" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb66-354"><a href="#cb66-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_delim</span>(x, <span class="at">delim =</span> <span class="st">'-'</span>,</span>
-<span id="cb66-355"><a href="#cb66-355" aria-hidden="true" tabindex="-1"></a>                       <span class="at">names =</span> <span class="fu">c</span>(<span class="st">'x1'</span>, <span class="st">'x2'</span>))</span>
-<span id="cb66-356"><a href="#cb66-356" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-357"><a href="#cb66-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-358"><a href="#cb66-358" aria-hidden="true" tabindex="-1"></a>This is one circumstance where an interface change bit me. It used to be that <span class="in">`separate()`</span> with a data.table input would return a data.table output, now it gets converted to a tibble. <span class="in">`separate_wider_delim()`</span> is still listed as "lifecycle: experimental", so that may change too.</span>
+<span id="cb66-350"><a href="#cb66-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-351"><a href="#cb66-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-354"><a href="#cb66-354" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-355"><a href="#cb66-355" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb66-356"><a href="#cb66-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_delim</span>(x, <span class="at">delim =</span> <span class="st">'-'</span>,</span>
+<span id="cb66-357"><a href="#cb66-357" aria-hidden="true" tabindex="-1"></a>                       <span class="at">names =</span> <span class="fu">c</span>(<span class="st">'x1'</span>, <span class="st">'x2'</span>))</span>
+<span id="cb66-358"><a href="#cb66-358" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-359"><a href="#cb66-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-360"><a href="#cb66-360" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-360"><a href="#cb66-360" aria-hidden="true" tabindex="-1"></a>This is one circumstance where an interface change bit me. It used to be that <span class="in">`separate()`</span> with a data.table input would return a data.table output, now it gets converted to a tibble. <span class="in">`separate_wider_delim()`</span> is still listed as "lifecycle: experimental", so that may change too.</span>
 <span id="cb66-361"><a href="#cb66-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-364"><a href="#cb66-364" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-365"><a href="#cb66-365" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(df)[, (<span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">:</span><span class="er">=</span> <span class="fu">tstrsplit</span>(x, <span class="at">split =</span> <span class="st">"-"</span>)][]</span>
-<span id="cb66-366"><a href="#cb66-366" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-367"><a href="#cb66-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-368"><a href="#cb66-368" aria-hidden="true" tabindex="-1"></a>The <span class="in">`tstrsplit()`</span> approach is \~10x faster than <span class="in">`tidyr::separate()`</span>, but only about 1.5x faster than <span class="in">`separate_wider_delim()`</span>.</span>
+<span id="cb66-362"><a href="#cb66-362" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-363"><a href="#cb66-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-366"><a href="#cb66-366" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-367"><a href="#cb66-367" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(df)[, (<span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">:</span><span class="er">=</span> <span class="fu">tstrsplit</span>(x, <span class="at">split =</span> <span class="st">"-"</span>)][]</span>
+<span id="cb66-368"><a href="#cb66-368" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-369"><a href="#cb66-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-370"><a href="#cb66-370" aria-hidden="true" tabindex="-1"></a><span class="fu"># Unite</span></span>
+<span id="cb66-370"><a href="#cb66-370" aria-hidden="true" tabindex="-1"></a>The <span class="in">`tstrsplit()`</span> approach is \~10x faster than <span class="in">`tidyr::separate()`</span>, but only about 1.5x faster than <span class="in">`separate_wider_delim()`</span>.</span>
 <span id="cb66-371"><a href="#cb66-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-372"><a href="#cb66-372" aria-hidden="true" tabindex="-1"></a>Inverse operation of separate.</span>
+<span id="cb66-372"><a href="#cb66-372" aria-hidden="true" tabindex="-1"></a><span class="fu"># Unite</span></span>
 <span id="cb66-373"><a href="#cb66-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-376"><a href="#cb66-376" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-377"><a href="#cb66-377" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],</span>
-<span id="cb66-378"><a href="#cb66-378" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x2 =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
-<span id="cb66-379"><a href="#cb66-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-380"><a href="#cb66-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-381"><a href="#cb66-381" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-374"><a href="#cb66-374" aria-hidden="true" tabindex="-1"></a>Inverse operation of separate.</span>
+<span id="cb66-375"><a href="#cb66-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-378"><a href="#cb66-378" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-379"><a href="#cb66-379" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],</span>
+<span id="cb66-380"><a href="#cb66-380" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x2 =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb66-381"><a href="#cb66-381" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-382"><a href="#cb66-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-385"><a href="#cb66-385" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-386"><a href="#cb66-386" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">unite</span>(x,</span>
-<span id="cb66-387"><a href="#cb66-387" aria-hidden="true" tabindex="-1"></a>            x1, x2,</span>
-<span id="cb66-388"><a href="#cb66-388" aria-hidden="true" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">"-"</span>)</span>
-<span id="cb66-389"><a href="#cb66-389" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-390"><a href="#cb66-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-391"><a href="#cb66-391" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-383"><a href="#cb66-383" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-384"><a href="#cb66-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-387"><a href="#cb66-387" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-388"><a href="#cb66-388" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">unite</span>(x,</span>
+<span id="cb66-389"><a href="#cb66-389" aria-hidden="true" tabindex="-1"></a>            x1, x2,</span>
+<span id="cb66-390"><a href="#cb66-390" aria-hidden="true" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">"-"</span>)</span>
+<span id="cb66-391"><a href="#cb66-391" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-392"><a href="#cb66-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-395"><a href="#cb66-395" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-396"><a href="#cb66-396" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(df)[, x <span class="sc">:</span><span class="er">=</span> <span class="fu">paste</span>(x1, x2, <span class="at">sep =</span> <span class="st">"-"</span>)][]</span>
-<span id="cb66-397"><a href="#cb66-397" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-398"><a href="#cb66-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-399"><a href="#cb66-399" aria-hidden="true" tabindex="-1"></a><span class="fu"># transpose</span></span>
+<span id="cb66-393"><a href="#cb66-393" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-394"><a href="#cb66-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-397"><a href="#cb66-397" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-398"><a href="#cb66-398" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(df)[, x <span class="sc">:</span><span class="er">=</span> <span class="fu">paste</span>(x1, x2, <span class="at">sep =</span> <span class="st">"-"</span>)][]</span>
+<span id="cb66-399"><a href="#cb66-399" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-400"><a href="#cb66-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-401"><a href="#cb66-401" aria-hidden="true" tabindex="-1"></a>One situation where data.table is more elegant. Note that this is NOT what <span class="in">`purrr::transpose()`</span> does.</span>
+<span id="cb66-401"><a href="#cb66-401" aria-hidden="true" tabindex="-1"></a><span class="fu"># transpose</span></span>
 <span id="cb66-402"><a href="#cb66-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-403"><a href="#cb66-403" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-403"><a href="#cb66-403" aria-hidden="true" tabindex="-1"></a>One situation where data.table is more elegant. Note that this is NOT what <span class="in">`purrr::transpose()`</span> does.</span>
 <span id="cb66-404"><a href="#cb66-404" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-405"><a href="#cb66-405" aria-hidden="true" tabindex="-1"></a>Try <span class="in">`input_tbl |&gt; as.matrix() |&gt; t() |&gt; as_tibble()`</span> if your variable types work, otherwise try <span class="in">`input_tbl |&gt; pivot_longer() |&gt; pivot_wider()`</span> as needed.</span>
+<span id="cb66-405"><a href="#cb66-405" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
 <span id="cb66-406"><a href="#cb66-406" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-409"><a href="#cb66-409" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-410"><a href="#cb66-410" aria-hidden="true" tabindex="-1"></a>mt_tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,] <span class="sc">|&gt;</span> </span>
-<span id="cb66-411"><a href="#cb66-411" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">'model'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb66-412"><a href="#cb66-412" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb66-413"><a href="#cb66-413" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb66-414"><a href="#cb66-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
-<span id="cb66-415"><a href="#cb66-415" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">'variable'</span>) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
-<span id="cb66-416"><a href="#cb66-416" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-417"><a href="#cb66-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-418"><a href="#cb66-418" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-407"><a href="#cb66-407" aria-hidden="true" tabindex="-1"></a>Try <span class="in">`input_tbl |&gt; as.matrix() |&gt; t() |&gt; as_tibble()`</span> if your variable types work, otherwise try <span class="in">`input_tbl |&gt; pivot_longer() |&gt; pivot_wider()`</span> as needed.</span>
+<span id="cb66-408"><a href="#cb66-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-411"><a href="#cb66-411" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-412"><a href="#cb66-412" aria-hidden="true" tabindex="-1"></a>mt_tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,] <span class="sc">|&gt;</span> </span>
+<span id="cb66-413"><a href="#cb66-413" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">'model'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb66-414"><a href="#cb66-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
+<span id="cb66-415"><a href="#cb66-415" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb66-416"><a href="#cb66-416" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb66-417"><a href="#cb66-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">'variable'</span>) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb66-418"><a href="#cb66-418" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-419"><a href="#cb66-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-422"><a href="#cb66-422" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-423"><a href="#cb66-423" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">transpose</span>(mt_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,],</span>
-<span id="cb66-424"><a href="#cb66-424" aria-hidden="true" tabindex="-1"></a>                      <span class="at">make.names =</span> <span class="st">'model'</span>, <span class="co"># MAKE this variable the new names</span></span>
-<span id="cb66-425"><a href="#cb66-425" aria-hidden="true" tabindex="-1"></a>                      <span class="at">keep.names =</span> <span class="st">'variable'</span>) <span class="co"># KEEP the old names in this variable</span></span>
-<span id="cb66-426"><a href="#cb66-426" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-427"><a href="#cb66-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-428"><a href="#cb66-428" aria-hidden="true" tabindex="-1"></a><span class="fu"># Nesting</span></span>
+<span id="cb66-420"><a href="#cb66-420" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-421"><a href="#cb66-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-424"><a href="#cb66-424" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-425"><a href="#cb66-425" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">transpose</span>(mt_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,],</span>
+<span id="cb66-426"><a href="#cb66-426" aria-hidden="true" tabindex="-1"></a>                      <span class="at">make.names =</span> <span class="st">'model'</span>, <span class="co"># MAKE this variable the new names</span></span>
+<span id="cb66-427"><a href="#cb66-427" aria-hidden="true" tabindex="-1"></a>                      <span class="at">keep.names =</span> <span class="st">'variable'</span>) <span class="co"># KEEP the old names in this variable</span></span>
+<span id="cb66-428"><a href="#cb66-428" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-429"><a href="#cb66-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-430"><a href="#cb66-430" aria-hidden="true" tabindex="-1"></a><span class="in">`split()`</span> and <span class="in">`dplyr::group_split()`</span> may be preferable if setting up a call to <span class="in">`future_map()`</span> or something.</span>
+<span id="cb66-430"><a href="#cb66-430" aria-hidden="true" tabindex="-1"></a><span class="fu"># Nesting</span></span>
 <span id="cb66-431"><a href="#cb66-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-432"><a href="#cb66-432" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-432"><a href="#cb66-432" aria-hidden="true" tabindex="-1"></a><span class="in">`split()`</span> and <span class="in">`dplyr::group_split()`</span> may be preferable if setting up a call to <span class="in">`future_map()`</span> or something.</span>
 <span id="cb66-433"><a href="#cb66-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-436"><a href="#cb66-436" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-437"><a href="#cb66-437" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">nest</span>(<span class="at">.by =</span> cyl)</span>
-<span id="cb66-438"><a href="#cb66-438" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-439"><a href="#cb66-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-440"><a href="#cb66-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-441"><a href="#cb66-441" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-434"><a href="#cb66-434" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-435"><a href="#cb66-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-438"><a href="#cb66-438" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-439"><a href="#cb66-439" aria-hidden="true" tabindex="-1"></a>mt_tbl <span class="sc">|&gt;</span> <span class="fu">nest</span>(<span class="at">.by =</span> cyl)</span>
+<span id="cb66-440"><a href="#cb66-440" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-441"><a href="#cb66-441" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-442"><a href="#cb66-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-445"><a href="#cb66-445" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-446"><a href="#cb66-446" aria-hidden="true" tabindex="-1"></a>mt_dt[, .(<span class="at">data =</span> .(.SD)), by <span class="ot">=</span> cyl]</span>
-<span id="cb66-447"><a href="#cb66-447" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-448"><a href="#cb66-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-449"><a href="#cb66-449" aria-hidden="true" tabindex="-1"></a><span class="fu"># Unnesting</span></span>
+<span id="cb66-443"><a href="#cb66-443" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-444"><a href="#cb66-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-447"><a href="#cb66-447" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-448"><a href="#cb66-448" aria-hidden="true" tabindex="-1"></a>mt_dt[, .(<span class="at">data =</span> .(.SD)), by <span class="ot">=</span> cyl]</span>
+<span id="cb66-449"><a href="#cb66-449" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-450"><a href="#cb66-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-451"><a href="#cb66-451" aria-hidden="true" tabindex="-1"></a><span class="in">`tidyr::unnest`</span> is usually faster than the <span class="in">`rbindlist`</span> approach, though if you have only one column in the nested column, the <span class="in">`unlist`</span> approach is the fastest of all.</span>
+<span id="cb66-451"><a href="#cb66-451" aria-hidden="true" tabindex="-1"></a><span class="fu"># Unnesting</span></span>
 <span id="cb66-452"><a href="#cb66-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-453"><a href="#cb66-453" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-453"><a href="#cb66-453" aria-hidden="true" tabindex="-1"></a><span class="in">`tidyr::unnest`</span> is usually faster than the <span class="in">`rbindlist`</span> approach, though if you have only one column in the nested column, the <span class="in">`unlist`</span> approach is the fastest of all.</span>
 <span id="cb66-454"><a href="#cb66-454" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-457"><a href="#cb66-457" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-458"><a href="#cb66-458" aria-hidden="true" tabindex="-1"></a>nested <span class="ot">=</span> mt_tbl <span class="sc">|&gt;</span> <span class="fu">nest</span>(<span class="at">.by =</span> cyl)</span>
-<span id="cb66-459"><a href="#cb66-459" aria-hidden="true" tabindex="-1"></a>nested <span class="sc">|&gt;</span> <span class="fu">unnest</span>(data)</span>
-<span id="cb66-460"><a href="#cb66-460" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-461"><a href="#cb66-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-462"><a href="#cb66-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-463"><a href="#cb66-463" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-455"><a href="#cb66-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy</span></span>
+<span id="cb66-456"><a href="#cb66-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-459"><a href="#cb66-459" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-460"><a href="#cb66-460" aria-hidden="true" tabindex="-1"></a>nested <span class="ot">=</span> mt_tbl <span class="sc">|&gt;</span> <span class="fu">nest</span>(<span class="at">.by =</span> cyl)</span>
+<span id="cb66-461"><a href="#cb66-461" aria-hidden="true" tabindex="-1"></a>nested <span class="sc">|&gt;</span> <span class="fu">unnest</span>(data)</span>
+<span id="cb66-462"><a href="#cb66-462" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-463"><a href="#cb66-463" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-464"><a href="#cb66-464" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-467"><a href="#cb66-467" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-468"><a href="#cb66-468" aria-hidden="true" tabindex="-1"></a>nested <span class="ot">=</span> mt_dt[, .(<span class="at">data =</span> <span class="fu">list</span>(.SD)), by <span class="ot">=</span> cyl]</span>
-<span id="cb66-469"><a href="#cb66-469" aria-hidden="true" tabindex="-1"></a>nested[, <span class="fu">rbindlist</span>(data), by <span class="ot">=</span> cyl] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
-<span id="cb66-470"><a href="#cb66-470" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-471"><a href="#cb66-471" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-472"><a href="#cb66-472" aria-hidden="true" tabindex="-1"></a>If there's only one column in the nested column:</span>
+<span id="cb66-465"><a href="#cb66-465" aria-hidden="true" tabindex="-1"></a><span class="fu">## data.table</span></span>
+<span id="cb66-466"><a href="#cb66-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-469"><a href="#cb66-469" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-470"><a href="#cb66-470" aria-hidden="true" tabindex="-1"></a>nested <span class="ot">=</span> mt_dt[, .(<span class="at">data =</span> <span class="fu">list</span>(.SD)), by <span class="ot">=</span> cyl]</span>
+<span id="cb66-471"><a href="#cb66-471" aria-hidden="true" tabindex="-1"></a>nested[, <span class="fu">rbindlist</span>(data), by <span class="ot">=</span> cyl] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
+<span id="cb66-472"><a href="#cb66-472" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-473"><a href="#cb66-473" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-476"><a href="#cb66-476" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-477"><a href="#cb66-477" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb66-478"><a href="#cb66-478" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">unlist</span>(data), by <span class="ot">=</span> group]</span>
-<span id="cb66-479"><a href="#cb66-479" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb66-480"><a href="#cb66-480" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-481"><a href="#cb66-481" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">This can be adapted to unlisting multiple nested columns</span><span class="co">](https://www.johannesbgruber.eu/post/a-faster-unnest/)</span>, but as far as I can tell it can't unlist from one nested column into multiple nested columns.</span>
+<span id="cb66-474"><a href="#cb66-474" aria-hidden="true" tabindex="-1"></a>If there's only one column in the nested column:</span>
+<span id="cb66-475"><a href="#cb66-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-478"><a href="#cb66-478" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-479"><a href="#cb66-479" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb66-480"><a href="#cb66-480" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">unlist</span>(data), by <span class="ot">=</span> group]</span>
+<span id="cb66-481"><a href="#cb66-481" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb66-482"><a href="#cb66-482" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-483"><a href="#cb66-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-484"><a href="#cb66-484" aria-hidden="true" tabindex="-1"></a><span class="fu"># data.table keys/indices</span></span>
+<span id="cb66-483"><a href="#cb66-483" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">This can be adapted to unlisting multiple nested columns</span><span class="co">](https://www.johannesbgruber.eu/post/a-faster-unnest/)</span>, but as far as I can tell it can't unlist from one nested column into multiple nested columns.</span>
+<span id="cb66-484"><a href="#cb66-484" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-485"><a href="#cb66-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-486"><a href="#cb66-486" aria-hidden="true" tabindex="-1"></a>These are really useful for speeding up repeated joins, which can easily be sped up ~100-fold with keys, though this may be offset by the computation required to set the key depending on the circumstance. See <span class="in">`?setkey`</span> and the <span class="in">`key`</span> argument in <span class="in">`fread()`</span>. See <span class="co">[</span><span class="ot">the data.table vignette</span><span class="co">](https://rdatatable.gitlab.io/data.table/articles/datatable-keys-fast-subset.html)</span></span>
+<span id="cb66-486"><a href="#cb66-486" aria-hidden="true" tabindex="-1"></a><span class="fu"># data.table keys/indices</span></span>
 <span id="cb66-487"><a href="#cb66-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-488"><a href="#cb66-488" aria-hidden="true" tabindex="-1"></a><span class="fu"># data.table special variables</span></span>
+<span id="cb66-488"><a href="#cb66-488" aria-hidden="true" tabindex="-1"></a>These are really useful for speeding up repeated joins, which can easily be sped up ~100-fold with keys, though this may be offset by the computation required to set the key depending on the circumstance. See <span class="in">`?setkey`</span> and the <span class="in">`key`</span> argument in <span class="in">`fread()`</span>. See <span class="co">[</span><span class="ot">the data.table vignette</span><span class="co">](https://rdatatable.gitlab.io/data.table/articles/datatable-keys-fast-subset.html)</span></span>
 <span id="cb66-489"><a href="#cb66-489" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-490"><a href="#cb66-490" aria-hidden="true" tabindex="-1"></a>https://rdatatable.gitlab.io/data.table/reference/special-symbols.html</span>
+<span id="cb66-490"><a href="#cb66-490" aria-hidden="true" tabindex="-1"></a><span class="fu"># data.table special variables</span></span>
 <span id="cb66-491"><a href="#cb66-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-492"><a href="#cb66-492" aria-hidden="true" tabindex="-1"></a>Most common/important ones are .N (group-wise counts) and .SD (group-wise data subset)</span>
+<span id="cb66-492"><a href="#cb66-492" aria-hidden="true" tabindex="-1"></a>https://rdatatable.gitlab.io/data.table/reference/special-symbols.html</span>
 <span id="cb66-493"><a href="#cb66-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-494"><a href="#cb66-494" aria-hidden="true" tabindex="-1"></a><span class="fu"># session info</span></span>
+<span id="cb66-494"><a href="#cb66-494" aria-hidden="true" tabindex="-1"></a>Most common/important ones are .N (group-wise counts) and .SD (group-wise data subset)</span>
 <span id="cb66-495"><a href="#cb66-495" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-498"><a href="#cb66-498" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb66-499"><a href="#cb66-499" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span>
-<span id="cb66-500"><a href="#cb66-500" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb66-496"><a href="#cb66-496" aria-hidden="true" tabindex="-1"></a><span class="fu"># session info</span></span>
+<span id="cb66-497"><a href="#cb66-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-500"><a href="#cb66-500" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb66-501"><a href="#cb66-501" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span>
+<span id="cb66-502"><a href="#cb66-502" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
