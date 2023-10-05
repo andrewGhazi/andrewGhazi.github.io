@@ -11,7 +11,7 @@
     "href": "posts/int_loo/integrated_loo.html",
     "title": "Integrated LOO walkthrough",
     "section": "",
-    "text": "This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from (Vehtari et al., n.d.). I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:\n\ncrystallize my thoughts\nrecord my notes on how it works / how it’s done\nexplain how it works in more depth than the existing example I know of\nDemonstrate a more complicated example involving conditional parameter distributions\nshow how to perform the integral more flexibly in R / outside of Stan\n\nLoad some setup libraries:\n\n\nCode\nlibrary(cmdstanr)"
+    "text": "This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from (Vehtari et al. 2016). I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:\n\ncrystallize my thoughts\nrecord my notes on how it works / how it’s done\nexplain how it works in more depth than the existing example I know of\nDemonstrate a more complicated example involving conditional parameter distributions\nshow how to perform the integral more flexibly in R / outside of Stan\n\nLoad some setup libraries:\n\n\nCode\nlibrary(cmdstanr)"
   },
   {
     "objectID": "posts/int_loo/integrated_loo.html#integrand-at-one-point-for-one-observation-in-one-draw",
@@ -179,14 +179,14 @@
     "href": "posts/tidy_dt/tidy_dt_translation.html#tidy-5",
     "title": "Tidyverse/data.table translations",
     "section": "tidy",
-    "text": "tidy\n\n\nCode\ndf |&gt; \n  separate_wider_delim(x, delim = '-',\n                       names = c('x1', 'x2'))\n\n\n# A tibble: 500,000 × 2\n   x1    x2   \n   &lt;chr&gt; &lt;chr&gt;\n 1 w     Z    \n 2 b     E    \n 3 e     B    \n 4 z     J    \n 5 e     I    \n 6 z     G    \n 7 n     J    \n 8 p     F    \n 9 i     W    \n10 l     E    \n# ℹ 499,990 more rows\n\n\nThis is one circumstance where an interface change bit me. It used to be that separate() with a data.table input would return a data.table output, now it gets converted to a tibble. separate_wider_delim() is still listed as “lifecycle: experimental”, so that may change too."
+    "text": "tidy\n\n\nCode\ndf |&gt; \n  separate_wider_delim(x, delim = '-',\n                       names = c('x1', 'x2'))\n\n\n# A tibble: 500,000 × 2\n   x1    x2   \n   &lt;chr&gt; &lt;chr&gt;\n 1 x     S    \n 2 p     E    \n 3 a     X    \n 4 n     Y    \n 5 z     F    \n 6 g     B    \n 7 w     P    \n 8 m     T    \n 9 s     F    \n10 b     O    \n# ℹ 499,990 more rows\n\n\nThis is one circumstance where an interface change bit me. It used to be that separate() with a data.table input would return a data.table output, now it gets converted to a tibble. separate_wider_delim() is still listed as “lifecycle: experimental”, so that may change too."
   },
   {
     "objectID": "posts/tidy_dt/tidy_dt_translation.html#data.table-6",
     "href": "posts/tidy_dt/tidy_dt_translation.html#data.table-6",
     "title": "Tidyverse/data.table translations",
     "section": "data.table",
-    "text": "data.table\n\n\nCode\nas.data.table(df)[, (c(\"x1\", \"x2\")) := tstrsplit(x, split = \"-\")][]\n\n\n             x     x1     x2\n        &lt;char&gt; &lt;char&gt; &lt;char&gt;\n     1:    w-Z      w      Z\n     2:    b-E      b      E\n     3:    e-B      e      B\n     4:    z-J      z      J\n     5:    e-I      e      I\n    ---                     \n499996:    h-Q      h      Q\n499997:    g-P      g      P\n499998:    j-G      j      G\n499999:    u-B      u      B\n500000:    b-U      b      U\n\n\nThe tstrsplit() approach is ~10x faster than tidyr::separate(), but only about 1.5x faster than separate_wider_delim()."
+    "text": "data.table\n\n\nCode\nas.data.table(df)[, (c(\"x1\", \"x2\")) := tstrsplit(x, split = \"-\")][]\n\n\n             x     x1     x2\n        &lt;char&gt; &lt;char&gt; &lt;char&gt;\n     1:    x-S      x      S\n     2:    p-E      p      E\n     3:    a-X      a      X\n     4:    n-Y      n      Y\n     5:    z-F      z      F\n    ---                     \n499996:    n-Z      n      Z\n499997:    o-Z      o      Z\n499998:    r-N      r      N\n499999:    l-Z      l      Z\n500000:    m-B      m      B\n\n\nThe tstrsplit() approach is ~10x faster than tidyr::separate(), but only about 1.5x faster than separate_wider_delim()."
   },
   {
     "objectID": "posts/tidy_dt/tidy_dt_translation.html#tidy-6",
