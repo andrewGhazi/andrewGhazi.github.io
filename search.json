@@ -1,59 +1,10 @@
 [
   {
-    "objectID": "posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
-    "href": "posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
-    "title": "ezpzmcmcpcpca package",
+    "objectID": "posts/paste_image.html",
+    "href": "posts/paste_image.html",
+    "title": "Paste images from clipboard to Quarto/Rmarkdown",
     "section": "",
-    "text": "I made an R implementation of probabilistic contrastive principal components analysis, aka PCPCA. As the name implies, this method allows you to probabilistically infer contrastive axes between experimental groups. “Contrastive” axes are directions in high dimensional space that help distinguish specified groups, rather than overall variation. More information on GitHub.\nR implementation of PCPCA. PCPCA is the work of Didong Li, Andrew Jones, and Barbara Engelhardt. Original manuscript here: https://arxiv.org/abs/2012.07977 and original Python implementation here: https://github.com/andrewcharlesjones/pcpca"
-  },
-  {
-    "objectID": "posts/int_loo/integrated_loo.html",
-    "href": "posts/int_loo/integrated_loo.html",
-    "title": "Integrated LOO walkthrough",
-    "section": "",
-    "text": "This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from (Vehtari et al. 2016). I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:\n\ncrystallize my thoughts\nrecord my notes on how it works / how it’s done\nexplain how it works in more depth than the existing example I know of\nDemonstrate a more complicated example involving conditional parameter distributions\nshow how to perform the integral more flexibly in R / outside of Stan\n\nLoad some setup libraries:\n\n\nCode\nlibrary(cmdstanr)"
-  },
-  {
-    "objectID": "posts/int_loo/integrated_loo.html#integrand-at-one-point-for-one-observation-in-one-draw",
-    "href": "posts/int_loo/integrated_loo.html#integrand-at-one-point-for-one-observation-in-one-draw",
-    "title": "Integrated LOO walkthrough",
-    "section": "Integrand at one point for one observation in one draw",
-    "text": "Integrand at one point for one observation in one draw\nLet’s evaluate the integrand for an (arbitrarily selected) phylogenetic effect of 0.333 for the fifth observation on the first draw:\n\n\nCode\nvec_integrand(0.333,\n    mu_bar_i1[5],\n    sigma_bar_ij = sigma_bar_i1[5],\n    draw_list[[1]]$sigma_resid, data_list$Y[5]\n)\n\n\n      t136 \n0.02345266 \n\n\nA reasonable-looking number, hooray!"
-  },
-  {
-    "objectID": "posts/int_loo/integrated_loo.html#integral-for-one-observation-in-one-draw",
-    "href": "posts/int_loo/integrated_loo.html#integral-for-one-observation-in-one-draw",
-    "title": "Integrated LOO walkthrough",
-    "section": "Integral for one observation in one draw",
-    "text": "Integral for one observation in one draw\nInstead of just evaluating at an arbitrary point, let’s integrate it numerically. vec_integrand() as written actually has an analytic integral (the sum of two parabolas is just another parabola, so you can work out an expression for the integral), but I’m going to do it numerically for the more generic case (which I also do in anpan for logistic PGLMM LOO).\nIn the roaches example they use Stan’s built-in integrate_1d() function. While it’s nice to keep the log-likelihood calculation in the Stan program, the interface is unwieldy to me. You have to pass in ALL of the secondary real-valued arguments into the integrand function in a single argument, which is tricky when that includes many irregularly structured components. Same goes for integers. To me, doing the integral after the fact in R is much simpler. You can then hand the log-likelihood matrix directly to loo::loo().\nThe R function stats::integrate() uses adaptive quadrature to numerically integrate functions. I don’t know much about how it works, but it internally calls C code for the heavy lifting, so it’s pretty fast. It would be interesting to benchmark it against Stan’s integrate_1d().\nAnyway, you just hand stats::integrate() the function, the integration range, and other needed arguments.\n\n\nCode\nintegrate(vec_integrand,\n    -Inf, Inf,\n    mu_bar_ij = mu_bar_i1[5],\n    sigma_bar_ij = sigma_bar_i1[5],\n    sigma_resid = draw_list[[1]]$sigma_resid,\n    yi = data_list$Y[5]\n)\n\n\n0.1941623 with absolute error &lt; 3.8e-05\n\n\nAnother reasonable number, hooray!"
-  },
-  {
-    "objectID": "posts/int_loo/integrated_loo.html#integral-for-all-observations-in-one-draw",
-    "href": "posts/int_loo/integrated_loo.html#integral-for-all-observations-in-one-draw",
-    "title": "Integrated LOO walkthrough",
-    "section": "Integral for all observations in one draw",
-    "text": "Integral for all observations in one draw\nGoing further, let’s write a couple functions to evaluate the integral for all observations in a given draw:\n\n\nCode\nintegrate_one_obs &lt;- function(mu_bar_ij, sigma_bar_ij, Y,\n    sigma_resid) {\n    integrate(\n        vec_integrand,\n        -Inf, Inf,\n        mu_bar_ij, sigma_bar_ij,\n        sigma_resid, Y\n    )$value\n}\n\nintegrate_all_obs &lt;- function(draw_j) {\n    mu_bar_ij &lt;- draw_j$phylo_effect_vectors[[1]] |&gt; get_mu_bar_ij()\n    sigma_bar_ij &lt;- draw_j$sigma_phylo |&gt; get_sigma_bar_ij(\n        corr_minus_i_list,\n        corr_12_list\n    )\n\n    mapply(integrate_one_obs,\n        mu_bar_ij, sigma_bar_ij, data_list$Y,\n        sigma_resid = draw_j$sigma_resid\n    )\n}\n\n\nsystem.time({\n    draw42_integrals &lt;- integrate_all_obs(draw_list[[42]])\n})\n\n\n   user  system elapsed \n   0.02    0.00    0.02 \n\n\nCode\ndraw42_integrals |&gt; round(digits = 2)\n\n\n  [1] 0.14 0.24 0.27 0.27 0.21 0.23 0.19 0.14 0.11 0.29 0.29 0.30 0.31 0.29 0.29\n [16] 0.24 0.09 0.25 0.05 0.34 0.33 0.23 0.18 0.21 0.33 0.34 0.30 0.03 0.30 0.20\n [31] 0.06 0.27 0.10 0.22 0.15 0.27 0.24 0.34 0.21 0.28 0.14 0.30 0.33 0.29 0.35\n [46] 0.31 0.20 0.25 0.28 0.28 0.29 0.33 0.31 0.00 0.04 0.34 0.28 0.33 0.32 0.33\n [61] 0.06 0.12 0.06 0.29 0.23 0.27 0.31 0.28 0.01 0.29 0.29 0.23 0.31 0.22 0.23\n [76] 0.32 0.27 0.28 0.34 0.33 0.29 0.13 0.26 0.22 0.34 0.22 0.34 0.27 0.10 0.28\n [91] 0.13 0.26 0.23 0.32 0.33 0.29 0.32 0.20 0.33 0.31 0.28 0.03 0.29 0.29 0.31\n[106] 0.07 0.39 0.20 0.11 0.31 0.28 0.30 0.30 0.27 0.09 0.31 0.16 0.03 0.26 0.12\n[121] 0.16 0.12 0.30 0.12 0.28 0.16 0.22 0.34 0.07 0.32 0.21 0.30 0.16 0.08 0.29\n[136] 0.07 0.19 0.27 0.26 0.31 0.33 0.32 0.07 0.29 0.30 0.15 0.09 0.10 0.25 0.16\n\n\nFast, reasonable likelihoods!"
-  },
-  {
-    "objectID": "posts/int_loo/integrated_loo.html#integral-for-all-observations-for-one-draw",
-    "href": "posts/int_loo/integrated_loo.html#integral-for-all-observations-for-one-draw",
-    "title": "Integrated LOO walkthrough",
-    "section": "Integral for all observations, for one draw",
-    "text": "Integral for all observations, for one draw\nFinally, let’s apply it to every posterior draw. I just remembered that purrr::map() recently introduced a .progress argument, let’s use it. purrr is sick.\n\n\nCode\nlik_mat &lt;- purrr::map(draw_list,\n    integrate_all_obs,\n    .progress = interactive()\n) |&gt;\n    purrr::reduce(rbind)\n\n\nIt only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That purrr::map() call is embarassingly parallelizable.\nFinally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:\n\n\nCode\nloo::loo(log(lik_mat),\n    r_eff = loo::relative_eff(lik_mat,\n        chain_id = draw_df$`.chain`\n    )\n)\n\n\nWarning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.\n\n\n\nComputed from 4000 by 150 log-likelihood matrix\n\n         Estimate   SE\nelpd_loo   -259.6  7.8\np_loo        16.5  1.7\nlooic       519.1 15.6\n------\nMonte Carlo SE of elpd_loo is 0.1.\n\nPareto k diagnostic values:\n                         Count Pct.    Min. n_eff\n(-Inf, 0.5]   (good)     149   99.3%   852       \n (0.5, 0.7]   (ok)         1    0.7%   1762      \n   (0.7, 1]   (bad)        0    0.0%   &lt;NA&gt;      \n   (1, Inf)   (very bad)   0    0.0%   &lt;NA&gt;      \n\nAll Pareto k estimates are ok (k &lt; 0.7).\nSee help('pareto-k-diagnostic') for details.\n\n\nOkay, so there may be one or two that are just “ok”, but way, way better and totally usable!"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "I’m a Statistical Geneticist at the Center for Computational Biomedicine at Harvard Medical School."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "andrewghazi.github.io",
-    "section": "",
-    "text": "ezpzmcmcpcpca package\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\n\n\n\n\n\n\n\n\n\nSep 30, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nTidyverse/data.table translations\n\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nSep 28, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nIntegrated LOO walkthrough\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\nloo\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
+    "text": "A colleague asked if there was a way to paste an image from the clipboard to Rmd without having to manually save the image to a file and type out the file path. There’s no native way to do that as far as I can tell, but I came up with this sort bash script that:\n\nsaves the image from the clipboard to a specified file in my screenshots directory\nthen types ![](/path/to/the/file.png) where my cursor is\n\nBind this to a custom keyboard shortcut and you have the desired behavior.\n#!/bin/bash\n\nfilepath=/home/ghazi/Pictures/screenshots/$(date +%Y_%m_%d_%I:%M:%S_%p).png\n\nxclip -selection clipboard -t image/png -o &gt; $filepath\n\nsleep .7\n\nxdotool type '![](' $filepath ')'\nSome other notes:\n\nWhen selecting a key combination, don’t include Alt as one of the modifiers as that can move the selection focus from the text box to the menu bar\nThe sleep .7 is there because there needs to be time to release the keyboard shortcut, otherwise you’re effectively hitting dozens of Ctrl+Shift+&lt;every key on the file path&gt; shortcuts as the command is being typed before you’ve released them. This led to some very strange behavior before figuring that out.\n\nIt would be nicer to have a while loop that detects when all keys are released, but this is good enough for me.\n\n\nBut my colleague is on macOS, which has neither xclip nor xdotool nor a non-terrible way to add custom keyboard shortcuts. Oh well…"
   },
   {
     "objectID": "posts/tidy_dt/tidy_dt_translation.html",
@@ -243,5 +194,61 @@
     "title": "Tidyverse/data.table translations",
     "section": "data.table",
     "text": "data.table\n\n\nCode\nnested = mt_dt[, .(data = list(.SD)), by = cyl]\nnested[, rbindlist(data), by = cyl] |&gt; head()\n\n\n     cyl          model   mpg  disp    hp  drat    wt  qsec    vs    am  gear\n   &lt;num&gt;         &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;\n1:     6      Mazda RX4  21.0 160.0   110  3.90 2.620 16.46     0     1     4\n2:     6  Mazda RX4 Wag  21.0 160.0   110  3.90 2.875 17.02     0     1     4\n3:     6 Hornet 4 Drive  21.4 258.0   110  3.08 3.215 19.44     1     0     3\n4:     6        Valiant  18.1 225.0   105  2.76 3.460 20.22     1     0     3\n5:     6       Merc 280  19.2 167.6   123  3.92 3.440 18.30     1     0     4\n6:     6      Merc 280C  17.8 167.6   123  3.92 3.440 18.90     1     0     4\n    carb\n   &lt;num&gt;\n1:     4\n2:     4\n3:     1\n4:     1\n5:     4\n6:     4\n\n\nIf there’s only one column in the nested column:\n\n\nCode\ndt[,unlist(data), by = group]\n\n\nThis can be adapted to unlisting multiple nested columns, but as far as I can tell it can’t unlist from one nested column into multiple nested columns."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "andrewghazi.github.io",
+    "section": "",
+    "text": "Paste images from clipboard to Quarto/Rmarkdown\n\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nezpzmcmcpcpca package\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\n\n\n\n\n\n\n\n\n\nSep 30, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nTidyverse/data.table translations\n\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nSep 28, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nIntegrated LOO walkthrough\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\nloo\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m a Statistical Geneticist at the Center for Computational Biomedicine at Harvard Medical School."
+  },
+  {
+    "objectID": "posts/int_loo/integrated_loo.html",
+    "href": "posts/int_loo/integrated_loo.html",
+    "title": "Integrated LOO walkthrough",
+    "section": "",
+    "text": "This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from (Vehtari et al. 2016). I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:\n\ncrystallize my thoughts\nrecord my notes on how it works / how it’s done\nexplain how it works in more depth than the existing example I know of\nDemonstrate a more complicated example involving conditional parameter distributions\nshow how to perform the integral more flexibly in R / outside of Stan\n\nLoad some setup libraries:\n\n\nCode\nlibrary(cmdstanr)"
+  },
+  {
+    "objectID": "posts/int_loo/integrated_loo.html#integrand-at-one-point-for-one-observation-in-one-draw",
+    "href": "posts/int_loo/integrated_loo.html#integrand-at-one-point-for-one-observation-in-one-draw",
+    "title": "Integrated LOO walkthrough",
+    "section": "Integrand at one point for one observation in one draw",
+    "text": "Integrand at one point for one observation in one draw\nLet’s evaluate the integrand for an (arbitrarily selected) phylogenetic effect of 0.333 for the fifth observation on the first draw:\n\n\nCode\nvec_integrand(0.333,\n    mu_bar_i1[5],\n    sigma_bar_ij = sigma_bar_i1[5],\n    draw_list[[1]]$sigma_resid, data_list$Y[5]\n)\n\n\n      t136 \n0.02345266 \n\n\nA reasonable-looking number, hooray!"
+  },
+  {
+    "objectID": "posts/int_loo/integrated_loo.html#integral-for-one-observation-in-one-draw",
+    "href": "posts/int_loo/integrated_loo.html#integral-for-one-observation-in-one-draw",
+    "title": "Integrated LOO walkthrough",
+    "section": "Integral for one observation in one draw",
+    "text": "Integral for one observation in one draw\nInstead of just evaluating at an arbitrary point, let’s integrate it numerically. vec_integrand() as written actually has an analytic integral (the sum of two parabolas is just another parabola, so you can work out an expression for the integral), but I’m going to do it numerically for the more generic case (which I also do in anpan for logistic PGLMM LOO).\nIn the roaches example they use Stan’s built-in integrate_1d() function. While it’s nice to keep the log-likelihood calculation in the Stan program, the interface is unwieldy to me. You have to pass in ALL of the secondary real-valued arguments into the integrand function in a single argument, which is tricky when that includes many irregularly structured components. Same goes for integers. To me, doing the integral after the fact in R is much simpler. You can then hand the log-likelihood matrix directly to loo::loo().\nThe R function stats::integrate() uses adaptive quadrature to numerically integrate functions. I don’t know much about how it works, but it internally calls C code for the heavy lifting, so it’s pretty fast. It would be interesting to benchmark it against Stan’s integrate_1d().\nAnyway, you just hand stats::integrate() the function, the integration range, and other needed arguments.\n\n\nCode\nintegrate(vec_integrand,\n    -Inf, Inf,\n    mu_bar_ij = mu_bar_i1[5],\n    sigma_bar_ij = sigma_bar_i1[5],\n    sigma_resid = draw_list[[1]]$sigma_resid,\n    yi = data_list$Y[5]\n)\n\n\n0.1941623 with absolute error &lt; 3.8e-05\n\n\nAnother reasonable number, hooray!"
+  },
+  {
+    "objectID": "posts/int_loo/integrated_loo.html#integral-for-all-observations-in-one-draw",
+    "href": "posts/int_loo/integrated_loo.html#integral-for-all-observations-in-one-draw",
+    "title": "Integrated LOO walkthrough",
+    "section": "Integral for all observations in one draw",
+    "text": "Integral for all observations in one draw\nGoing further, let’s write a couple functions to evaluate the integral for all observations in a given draw:\n\n\nCode\nintegrate_one_obs &lt;- function(mu_bar_ij, sigma_bar_ij, Y,\n    sigma_resid) {\n    integrate(\n        vec_integrand,\n        -Inf, Inf,\n        mu_bar_ij, sigma_bar_ij,\n        sigma_resid, Y\n    )$value\n}\n\nintegrate_all_obs &lt;- function(draw_j) {\n    mu_bar_ij &lt;- draw_j$phylo_effect_vectors[[1]] |&gt; get_mu_bar_ij()\n    sigma_bar_ij &lt;- draw_j$sigma_phylo |&gt; get_sigma_bar_ij(\n        corr_minus_i_list,\n        corr_12_list\n    )\n\n    mapply(integrate_one_obs,\n        mu_bar_ij, sigma_bar_ij, data_list$Y,\n        sigma_resid = draw_j$sigma_resid\n    )\n}\n\n\nsystem.time({\n    draw42_integrals &lt;- integrate_all_obs(draw_list[[42]])\n})\n\n\n   user  system elapsed \n   0.02    0.00    0.02 \n\n\nCode\ndraw42_integrals |&gt; round(digits = 2)\n\n\n  [1] 0.14 0.24 0.27 0.27 0.21 0.23 0.19 0.14 0.11 0.29 0.29 0.30 0.31 0.29 0.29\n [16] 0.24 0.09 0.25 0.05 0.34 0.33 0.23 0.18 0.21 0.33 0.34 0.30 0.03 0.30 0.20\n [31] 0.06 0.27 0.10 0.22 0.15 0.27 0.24 0.34 0.21 0.28 0.14 0.30 0.33 0.29 0.35\n [46] 0.31 0.20 0.25 0.28 0.28 0.29 0.33 0.31 0.00 0.04 0.34 0.28 0.33 0.32 0.33\n [61] 0.06 0.12 0.06 0.29 0.23 0.27 0.31 0.28 0.01 0.29 0.29 0.23 0.31 0.22 0.23\n [76] 0.32 0.27 0.28 0.34 0.33 0.29 0.13 0.26 0.22 0.34 0.22 0.34 0.27 0.10 0.28\n [91] 0.13 0.26 0.23 0.32 0.33 0.29 0.32 0.20 0.33 0.31 0.28 0.03 0.29 0.29 0.31\n[106] 0.07 0.39 0.20 0.11 0.31 0.28 0.30 0.30 0.27 0.09 0.31 0.16 0.03 0.26 0.12\n[121] 0.16 0.12 0.30 0.12 0.28 0.16 0.22 0.34 0.07 0.32 0.21 0.30 0.16 0.08 0.29\n[136] 0.07 0.19 0.27 0.26 0.31 0.33 0.32 0.07 0.29 0.30 0.15 0.09 0.10 0.25 0.16\n\n\nFast, reasonable likelihoods!"
+  },
+  {
+    "objectID": "posts/int_loo/integrated_loo.html#integral-for-all-observations-for-one-draw",
+    "href": "posts/int_loo/integrated_loo.html#integral-for-all-observations-for-one-draw",
+    "title": "Integrated LOO walkthrough",
+    "section": "Integral for all observations, for one draw",
+    "text": "Integral for all observations, for one draw\nFinally, let’s apply it to every posterior draw. I just remembered that purrr::map() recently introduced a .progress argument, let’s use it. purrr is sick.\n\n\nCode\nlik_mat &lt;- purrr::map(draw_list,\n    integrate_all_obs,\n    .progress = interactive()\n) |&gt;\n    purrr::reduce(rbind)\n\n\nIt only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That purrr::map() call is embarassingly parallelizable.\nFinally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:\n\n\nCode\nloo::loo(log(lik_mat),\n    r_eff = loo::relative_eff(lik_mat,\n        chain_id = draw_df$`.chain`\n    )\n)\n\n\nWarning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.\n\n\n\nComputed from 4000 by 150 log-likelihood matrix\n\n         Estimate   SE\nelpd_loo   -259.6  7.8\np_loo        16.5  1.7\nlooic       519.1 15.6\n------\nMonte Carlo SE of elpd_loo is 0.1.\n\nPareto k diagnostic values:\n                         Count Pct.    Min. n_eff\n(-Inf, 0.5]   (good)     149   99.3%   852       \n (0.5, 0.7]   (ok)         1    0.7%   1762      \n   (0.7, 1]   (bad)        0    0.0%   &lt;NA&gt;      \n   (1, Inf)   (very bad)   0    0.0%   &lt;NA&gt;      \n\nAll Pareto k estimates are ok (k &lt; 0.7).\nSee help('pareto-k-diagnostic') for details.\n\n\nOkay, so there may be one or two that are just “ok”, but way, way better and totally usable!"
+  },
+  {
+    "objectID": "posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
+    "href": "posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
+    "title": "ezpzmcmcpcpca package",
+    "section": "",
+    "text": "I made an R implementation of probabilistic contrastive principal components analysis, aka PCPCA. As the name implies, this method allows you to probabilistically infer contrastive axes between experimental groups. “Contrastive” axes are directions in high dimensional space that help distinguish specified groups, rather than overall variation. More information on GitHub.\nR implementation of PCPCA. PCPCA is the work of Didong Li, Andrew Jones, and Barbara Engelhardt. Original manuscript here: https://arxiv.org/abs/2012.07977 and original Python implementation here: https://github.com/andrewcharlesjones/pcpca"
   }
 ]

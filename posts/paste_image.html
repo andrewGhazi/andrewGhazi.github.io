@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Andrew Ghazi">
+<meta name="dcterms.date" content="2023-10-06">
 
-<title>andrewghazi.github.io</title>
+<title>andrewghazi.github.io - Paste images from clipboard to Quarto/Rmarkdown</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -61,50 +95,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">andrewghazi.github.io</span>
     </a>
   </div>
@@ -115,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -131,170 +134,72 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Paste images from clipboard to Quarto/Rmarkdown</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Andrew Ghazi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 6, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Stan">Stan <span class="quarto-category-count">(2)</span></div><div class="category" data-category="loo">loo <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<p>A colleague asked if there was a way to paste an image from the clipboard to Rmd without having to manually save the image to a file and type out the file path. There’s no native way to do that as far as I can tell, but I came up with this sort bash script that:</p>
+<ol type="1">
+<li>saves the image from the clipboard to a specified file in my screenshots directory</li>
+<li>then types <code>![](/path/to/the/file.png)</code> where my cursor is</li>
+</ol>
+<p>Bind this to a custom keyboard shortcut and you have the desired behavior.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">filepath</span><span class="op">=</span>/home/ghazi/Pictures/screenshots/<span class="va">$(</span><span class="fu">date</span> +%Y_%m_%d_%I:%M:%S_%p<span class="va">)</span>.png</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">xclip</span> <span class="at">-selection</span> clipboard <span class="at">-t</span> image/png <span class="at">-o</span> <span class="op">&gt;</span> <span class="va">$filepath</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> .7</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">xdotool</span> type <span class="st">'![]('</span> <span class="va">$filepath</span> <span class="st">')'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Some other notes:</p>
+<ul>
+<li>When selecting a key combination, don’t include Alt as one of the modifiers as that can move the selection focus from the text box to the menu bar</li>
+<li>The <code>sleep .7</code> is there because there needs to be time to <em>release</em> the keyboard shortcut, otherwise you’re effectively hitting dozens of Ctrl+Shift+&lt;every key on the file path&gt; shortcuts as the command is being typed before you’ve released them. This led to some <em>very</em> strange behavior before figuring that out.
+<ul>
+<li>It would be nicer to have a while loop that detects when all keys are released, but this is good enough for me.</li>
+</ul></li>
+</ul>
+<p>But my colleague is on macOS, which has neither xclip nor xdotool nor a non-terrible way to add custom keyboard shortcuts. Oh well…</p>
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1696564800000" data-listing-file-modified-sort="1696625064241" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
-<div class="thumbnail">
-<p><a href="./posts/paste_image.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="./posts/paste_image.html">
-<h3 class="no-anchor listing-title">
-Paste images from clipboard to Quarto/Rmarkdown
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-A colleague asked if there was a way to paste an image from the clipboard to Rmd…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/paste_image.html">
-<div class="listing-date">
-Oct 6, 2023
-</div>
-<div class="listing-author">
-Andrew Ghazi
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="R,Stan" data-listing-date-sort="1696046400000" data-listing-file-modified-sort="1696107368010" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<div class="thumbnail">
-<p><a href="./posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html"> <p class="card-img-top"><img src="posts/ezpzmcmcpcpca/images/bivar_plot.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html">
-<h3 class="no-anchor listing-title">
-ezpzmcmcpcpca package
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Stan'); return false;">
-Stan
-</div>
-</div>
-<a href="./posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html">
-<div class="listing-description">
-I made an R implementation of probabilistic contrastive principal components analysis, aka PCPCA. As the name implies, this method allows you to <em>probabilistically</em> infer <em>cont…</em>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html">
-<div class="listing-date">
-Sep 30, 2023
-</div>
-<div class="listing-author">
-Andrew Ghazi
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="R" data-listing-date-sort="1695873600000" data-listing-file-modified-sort="1696108822912" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
-<div class="thumbnail">
-<p><a href="./posts/tidy_dt/tidy_dt_translation.html"> <p class="card-img-top"><img src="posts/tidy_dt/images/who.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/tidy_dt/tidy_dt_translation.html">
-<h3 class="no-anchor listing-title">
-Tidyverse/data.table translations
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-</div>
-<a href="./posts/tidy_dt/tidy_dt_translation.html">
-<div class="listing-description">
-A list of common tidyverse/data.table commands that do (roughly) the same thing so that you can compare the syntax. Some opinions included.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/tidy_dt/tidy_dt_translation.html">
-<div class="listing-date">
-Sep 28, 2023
-</div>
-<div class="listing-author">
-Andrew Ghazi
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="R,Stan,loo" data-listing-date-sort="1695355200000" data-listing-file-modified-sort="1696107429915" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="18">
-<div class="thumbnail">
-<p><a href="./posts/int_loo/integrated_loo.html"> <p class="card-img-top"><img src="posts/int_loo/img/diagram.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/int_loo/integrated_loo.html">
-<h3 class="no-anchor listing-title">
-Integrated LOO walkthrough
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Stan'); return false;">
-Stan
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('loo'); return false;">
-loo
-</div>
-</div>
-<a href="./posts/int_loo/integrated_loo.html">
-<div class="listing-description">
-This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from <span class="citation" data-cites="vehtari_bayesian">(Vehtari et al. 2016)</span>. I’ve found myself needing to do this a couple times…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/int_loo/integrated_loo.html">
-<div class="listing-date">
-Sep 22, 2023
-</div>
-<div class="listing-author">
-Andrew Ghazi
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
