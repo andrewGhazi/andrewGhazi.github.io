@@ -88,6 +88,25 @@ font-style: inherit;">')'</span></span></code></pre></div>
   <pubDate>Fri, 06 Oct 2023 04:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>geryon</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/geryon/geryon.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Like many R users, I have over time accrued a number of miscellaneous R functions that I put into a little utilities package. It’s called geryon. <a href="https://github.com/andrewGhazi/geryon">The readme</a> explains (most) of the functionality, but I’m quite fond of the logo:</p>
+<p><img src="https://andrewghazi.github.io/posts/geryon/img/logo.png" class="img-fluid"></p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <guid>https://andrewghazi.github.io/posts/geryon/geryon.html</guid>
+  <pubDate>Fri, 06 Oct 2023 04:00:00 GMT</pubDate>
+</item>
+<item>
   <title>ezpzmcmcpcpca package</title>
   <dc:creator>Andrew Ghazi</dc:creator>
   <link>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</link>
