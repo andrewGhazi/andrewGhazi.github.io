@@ -95,6 +95,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
 <ul>
 <li>It would be nicer to have a while loop that detects when all keys are released, but this is good enough for me.</li>
 </ul></li>
+<li>for Quarto documents, I think it’s necessary to set <code>embed-resources: true</code> in the YAML to get the absolute paths to work.</li>
 </ul>
 <p>But my colleague is on macOS, which has neither xclip nor xdotool nor a non-terrible way to add custom keyboard shortcuts. Oh well…</p>
 
