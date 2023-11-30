@@ -10,7 +10,994 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Mon, 09 Oct 2023 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 21 Oct 2023 04:00:00 GMT</lastBuildDate>
+<item>
+  <title>collapse is sick</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/collapse_is_sick/sick.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I saw an R package I hadn’t heard of called <a href="https://sebkrantz.github.io/collapse/">collapse</a> performing well on <a href="https://duckdblabs.github.io/db-benchmark/">the duckdb database-like ops benchmark</a> and thought I’d try it out on a little statistical simulation. tl;dr: <em>collapse is sick.</em></p>
+<section id="context" class="level1">
+<h1>Context</h1>
+<p>I wanted to know the null p-value distribution that you’d get when mis-applying a t-test to non-normally distributed data with a small number of data points. So to simulate this I</p>
+<ul>
+<li>generate 100k groups</li>
+<li>generate 6*100k random t-distributed numbers (df = 3)</li>
+<li>compute the p-value test statistic for each group. In R, this is <code>2*pt(sqrt(6) * abs(mean(x)) / sd(x), 5, lower.tail = FALSE)</code> where <code>x</code> are the random values for the group.
+<ul>
+<li>This can be done naively with <code>t.test(x)$p.value</code> of course, but that comes with a lot of slow baggage.</li>
+<li>It’s probably also possible to figure out the distribution I’m trying to simulate analytically. Simulating it is easier.</li>
+</ul></li>
+</ul>
+<p>We’ll try it in <code>dplyr</code>, <code>data.table</code>, and <code>collapse</code>, making sure to use a single thread on the latter two:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(data.table); <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setDTthreads</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(collapse); <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_collapse</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nthreads =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+</details>
+</div>
+<p>And generate a synthetic dataset. We’ll use 300k groups just so we can get a really smooth histogram with a large number of bins:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3e5</span></span>
+<span id="cb2-2"></span>
+<span id="cb2-3">val_dt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.table</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">g =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">each =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>),</span>
+<span id="cb2-4">                    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rt</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> n, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>))</span>
+<span id="cb2-5"></span>
+<span id="cb2-6">val_dt</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              g           x
+      1:      1 -0.74564102
+      2:      1 -0.09775264
+      3:      1  0.49987160
+      4:      1 -2.03793671
+      5:      1  0.33529895
+     ---                   
+1799996: 300000  2.45176851
+1799997: 300000  0.16603354
+1799998: 300000  0.48634523
+1799999: 300000 -0.94295726
+1800000: 300000  0.72400245</code></pre>
+</div>
+</div>
+</section>
+<section id="functions" class="level1">
+<h1>Functions</h1>
+<p>We’ll try it in <code>dplyr</code>, <code>data.table</code>, and <code>collapse</code>.</p>
+<section id="dplyr" class="level2">
+<h2 class="anchored" data-anchor-id="dplyr"><code>dplyr</code></h2>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">dplyr_soln <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(val_dt) {</span>
+<span id="cb4-2">  val_dt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(g) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(x) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sd</span>(x)), </span>
+<span id="cb4-5">                          <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>))</span>
+<span id="cb4-6">}</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="data.table-two-ways" class="level2">
+<h2 class="anchored" data-anchor-id="data.table-two-ways"><code>data.table</code> two ways</h2>
+<p>My first attempt didn’t perform as well as I would have hoped, which turned out because I wasn’t using the <a href="https://rdatatable.gitlab.io/data.table/reference/datatable-optimize.html">GForce-optimized functions</a> for the mean and standard deviation. To use those, the expression in <code>j</code> can ONLY contain the GForce-optimized functions <code>min, max, mean, median, var, sd, sum, prod, first, last, head, tail</code>. <code>base::Arithmetic</code> and <code>stats::pt</code> are not among them!</p>
+<p>To solve this I used two data.table chained expressions <code>[][]</code>. It’s possible that there’s a more performant way to do it in one pass over the groups (while still using GForce), but I wanted to keep it to within the realm of functions I know how to write intuitively.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">dt_soln <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(val_dt) {</span>
+<span id="cb5-2"></span>
+<span id="cb5-3">  val_dt[,.(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(x) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sd</span>(x) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>))), </span>
+<span id="cb5-4">                       <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)), </span>
+<span id="cb5-5">         by <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> g]</span>
+<span id="cb5-6">}</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">dt_fast_soln <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(val_dt) {</span>
+<span id="cb5-9">  </span>
+<span id="cb5-10">  val_dt[,.(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">m =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(x),</span>
+<span id="cb5-11">            <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">s =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sd</span>(x)),</span>
+<span id="cb5-12">         by <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> g][, p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(m <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> s),</span>
+<span id="cb5-13">                                    <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>))]</span>
+<span id="cb5-14">}</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="collapse" class="level2">
+<h2 class="anchored" data-anchor-id="collapse"><code>collapse</code></h2>
+<p>I’ll talk about the amazing performance later, but what really impressed me is how easy it was to write. I literally just copy-pasted my dplyr solution (the gold standard of “easy to write” IMO) then typed four “f”s to switch to the <code>collapse</code> version of the dplyr/base functions (e.g.&nbsp;<code>summarise() -&gt; fsummarise()</code>).</p>
+<p>For me, “easy to write” is a <em>HUGE</em> benefit. Difficult to quantify, but so, so important for the interactive programming I do 80% of the time.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">collapse_soln <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(val_dt) {</span>
+<span id="cb6-2">  val_dt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-3">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># V here</span></span>
+<span id="cb6-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fgroup_by</span>(g) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-5">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># V here                    V here               V and here</span></span>
+<span id="cb6-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fsummarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fmean</span>(x) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fsd</span>(x)), </span>
+<span id="cb6-7">                          <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>))</span>
+<span id="cb6-8">}</span></code></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="benchmark" class="level1">
+<h1>Benchmark</h1>
+<p>I tried to follow the guidelines on the <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-benchmarking.html#inside-a-loop-prefer-setdt-instead-of-data-table">data.table benchmarking guidance page</a>, though my iterations are well under the 1 second mark recommended. I wanted to test my realistic use case, not something that’s artificially huge :shrug: .</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the all.equal() check fails because dplyr returns a tibble. That's the only difference,</span></span>
+<span id="cb7-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># but it necessitates setting check = FALSE.</span></span>
+<span id="cb7-3"></span>
+<span id="cb7-4">bench<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mark</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dplyr_soln</span>(val_dt),</span>
+<span id="cb7-5">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dt_soln</span>(val_dt),</span>
+<span id="cb7-6">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dt_fast_soln</span>(val_dt),</span>
+<span id="cb7-7">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collapse_soln</span>(val_dt),</span>
+<span id="cb7-8">            <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">check =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, </span>
+<span id="cb7-9">            <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min_iterations =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
+disabled.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  expression                 min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;            &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 dplyr_soln(val_dt)       3.74s     3.8s     0.263      50MB    19.5 
+2 dt_soln(val_dt)          3.08s    3.24s     0.309    12.7MB    16.4 
+3 dt_fast_soln(val_dt)  107.72ms 109.71ms     9.14     60.9MB     7.31
+4 collapse_soln(val_dt)  52.46ms  54.26ms    18.1        29MB    10.9 </code></pre>
+</div>
+</div>
+<p><code>data.table</code> is about 35x faster than <code>dplyr</code>, and <code>collapse</code> is <em>70x</em> faster.</p>
+</section>
+<section id="misc" class="level1">
+<h1>Misc</h1>
+<ul>
+<li>I also tried it in <code>r-polars</code>, and it was tied with collapse in terms of speed IF you don’t count the conversion to the <code>pl$DataFrame()</code> class. But the syntax was <em>horrifying</em>.</li>
+</ul>
+<p>And here’s the distribution I was trying to simulate so I can have a figure on this post. Violating the normality assumptions leads to an incorrect p-value distribution, surprise!</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb10-2"></span>
+<span id="cb10-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collapse_soln</span>(val_dt) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb10-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(p)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb10-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_histogram</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bins =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">boundary =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb10-6">                 <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">after_stat</span>(density)),</span>
+<span id="cb10-7">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'grey60'</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb10-8">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_hline</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">yintercept =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lty =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'grey10'</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb10-9">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_light</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb10-10">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey10"</span>),</span>
+<span id="cb10-11">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">strip.text =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey10"</span>),</span>
+<span id="cb10-12">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">plot.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey95"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey95"</span>),</span>
+<span id="cb10-13">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">panel.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey95"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey95"</span>),</span>
+<span id="cb10-14">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">panel.grid =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_line</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey75"</span>))</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/collapse_is_sick/sick_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>benchmark</category>
+  <guid>https://andrewghazi.github.io/posts/collapse_is_sick/sick.html</guid>
+  <pubDate>Sat, 21 Oct 2023 04:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Effective color palettes</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/col_pal/col_pal.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>This post reviews how and when I use my favorite color palettes in R.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(tidyverse); <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_set</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_light</span>())</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bg =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>,</span>
+<span id="cb1-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mar =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4.5</span>,.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span>.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb1-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col.lab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#222222"</span>)</span>
+<span id="cb1-6"></span>
+<span id="cb1-7">pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pal.bands</span>(pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>viridis, </span>
+<span id="cb1-8">                pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>cividis,</span>
+<span id="cb1-9">                pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>coolwarm,</span>
+<span id="cb1-10">                pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cols25</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">25</span>),</span>
+<span id="cb1-11">                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">labels =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"General continuous"</span>, </span>
+<span id="cb1-12">                           <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Centered on zero,</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">diverging to</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> two categories'</span>,</span>
+<span id="cb1-13">                           <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Centered on zero,</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">diverging to</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"low" and "high"'</span>,</span>
+<span id="cb1-14">                           <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Categorical"</span>),</span>
+<span id="cb1-15">                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">250</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">preview_palette <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(pal, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">250</span>) {</span>
+<span id="cb2-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bg =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rgb</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>),</span>
+<span id="cb2-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mar =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>),</span>
+<span id="cb2-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col.lab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#222222"</span>)</span>
+<span id="cb2-5">  </span>
+<span id="cb2-6">  pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pal.bands</span>(pal, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">labels =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>)</span>
+<span id="cb2-7">}</span></code></pre></div>
+</details>
+</div>
+<p>These are all easily available using the excellent <a href="https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html">pals package by Kevin Wright</a>, whose vignette is great for scrolling through to find case-specific palettes and the <code>pal.bands()</code> function I use throughout this post to preview palettes.</p>
+<section id="statement-of-values-on-color-palettes" class="level1">
+<h1>Statement of values on color palettes</h1>
+<p>It’s worth overviewing the boxes I’d like a candidate color palette to check, which usually aren’t all simultaneously achievable:</p>
+<ul>
+<li>visually appealing</li>
+<li>accessible to color-blind or otherwise impaired viewers</li>
+<li>simple to implement (for me, this means it’s built into <code>ggplot2</code>)</li>
+<li>the colors chosen reinforce the meaning of the data (I’ll elaborate on this)</li>
+</ul>
+<p>and specifically for discrete palettes:</p>
+<ul>
+<li>the colors are highly visually distinct, yet allow for large numbers of categories</li>
+<li>the colors are easy to verbally describe
+<ul>
+<li>as an anti-example, the default <code>ggplot2</code> colors for two categories are:
+<ul>
+<li><span style="color:#F8766D;">#F8766D</span> which I’ve heard described as pink, red, orange, clay, salmon, …</li>
+<li><span style="color:#00BFC4;">#00BFC4</span> aka blue, teal, cyan, turquoise, aquamarine, green (???), …</li>
+</ul></li>
+<li>This may seem like a persnickety point, but I’ve been in meetings where different individuals were arguing over the meaning of a plot for long periods of time before realizing they were using different words to describe the color of data groups they had been arguing over.</li>
+</ul></li>
+</ul>
+</section>
+<section id="tour-of-winners" class="level1">
+<h1>Tour of winners</h1>
+<section id="viridis" class="level2">
+<h2 class="anchored" data-anchor-id="viridis">Viridis</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">preview_palette</span>(pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>viridis)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Easy to use (see <code>?ggplot2::scale_color_viridis_c</code>), visually appealing, and <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">apparently pretty good in terms of accessbility</a>. My only qualm with Viridis (sometimes) is that it ends on bright yellow, which can sometimes lead to the deadly sin of “yellow dots on a white background”:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">p <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(mtcars, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(disp, mpg)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> drat))</span>
+<span id="cb4-3"></span>
+<span id="cb4-4">p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_color_viridis_c</span>()</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="384"></p>
+</div>
+</div>
+<p>Thankfully, this can be rectified by setting <code>end = .92</code> to end the scale earlier:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_color_viridis_c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">end =</span> .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">92</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="384"></p>
+</div>
+</div>
+<p>Or with a dark background:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_color_viridis_c</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_dark</span>()</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="384"></p>
+</div>
+</div>
+</section>
+<section id="cividis" class="level2">
+<h2 class="anchored" data-anchor-id="cividis">Cividis</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">preview_palette</span>(pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>cividis)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Some recommend this as the go-to general purpose color palette for continuous variables, and I think it’s okay in that role, but my eyes strongly latch onto the grey “center”, which sometimes isn’t helpful when the center of the data’s range doesn’t have any special meaning over any other quantile. That said, it’s <a href="https://arxiv.org/ftp/arxiv/papers/1712/1712.01662.pdf">optimized for improved accessibility over viridis</a>. I like to use when a central value diverges into two categories e.g.&nbsp;a map of where foos versus bars live.</p>
+</section>
+<section id="coolwarm" class="level2">
+<h2 class="anchored" data-anchor-id="coolwarm">coolwarm</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">preview_palette</span>(pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>coolwarm)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Similar sort of use-case as cividis for me, but particularly when the two categories have a natural “high” versus “low” interpretation (rather than two unordered categories) e.g.&nbsp;a map of temperatures.</p>
+</section>
+<section id="cols25" class="level2">
+<h2 class="anchored" data-anchor-id="cols25">cols25</h2>
+</section>
+</section>
+<section id="runner-ups" class="level1">
+<h1>Runner ups</h1>
+<p>These are palettes that I use sometimes, but that come with some downside relative to the values stated above.</p>
+<section id="parula" class="level2">
+<h2 class="anchored" data-anchor-id="parula">Parula</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">preview_palette</span>(pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>parula)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In my opinion, this is the most visually appealing continuous color scale out there, even over Viridis. Just look at it:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">bimod_dat <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbind</span>(MASS<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mvrnorm</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4000</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mu =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Sigma =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">diag</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)), </span>
+<span id="cb10-2">                  MASS<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mvrnorm</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4000</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mu =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>( <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Sigma =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">diag</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)))  <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb10-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.data.frame</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb10-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rename</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> V1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> V2) </span>
+<span id="cb10-5"></span>
+<span id="cb10-6">bimod_plot <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> bimod_dat <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb10-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(x,y)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb10-8">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_hex</span>()</span>
+<span id="cb10-9"></span>
+<span id="cb10-10">bimod_plot <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_fill_gradientn</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">colours =</span> pals<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">parula</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">guide =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="384"></p>
+</div>
+</div>
+<p>The downside is that I can never immediately remember the syntax for dropping a custom continuous color palette into ggplot. You have to use <code>scale_*_gradientn(colors = pals::parula(n = 100))</code>. This also involves setting a discrete number of colors for the values to get binned into, which seems reasonable at first, but can sometimes come back to bite you as visually-apparent aliasing if you don’t set <code>n</code> high enough. Setting it too high can create visual artifacts. Finally, this requires a dependency on <code>pals</code>, which isn’t always desirable during package development.</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>visualization</category>
+  <guid>https://andrewghazi.github.io/posts/col_pal/col_pal.html</guid>
+  <pubDate>Sat, 21 Oct 2023 04:00:00 GMT</pubDate>
+</item>
 <item>
   <title>geryon</title>
   <dc:creator>Andrew Ghazi</dc:creator>

@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://andrewghazi.github.io/posts/col_pal/col_pal.html</loc>
+    <lastmod>2023-11-30T02:27:52.675Z</lastmod>
+  </url>
+  <url>
     <loc>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</loc>
-    <lastmod>2023-10-17T00:48:37.013Z</lastmod>
+    <lastmod>2023-11-30T02:27:51.979Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
-    <lastmod>2023-10-17T00:48:36.477Z</lastmod>
+    <lastmod>2023-11-30T02:27:51.467Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
-    <lastmod>2023-10-17T00:48:34.925Z</lastmod>
+    <lastmod>2023-11-30T02:27:49.931Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/about.html</loc>
-    <lastmod>2023-10-17T00:48:34.237Z</lastmod>
+    <lastmod>2023-11-30T02:27:49.171Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/index.html</loc>
-    <lastmod>2023-10-17T00:48:34.605Z</lastmod>
+    <lastmod>2023-11-30T02:27:49.611Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
-    <lastmod>2023-10-17T00:48:35.789Z</lastmod>
+    <lastmod>2023-11-30T02:27:50.759Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/geryon/geryon.html</loc>
-    <lastmod>2023-10-17T00:48:36.845Z</lastmod>
+    <lastmod>2023-11-30T02:27:51.823Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/collapse_is_sick/sick.html</loc>
+    <lastmod>2023-11-30T02:27:52.311Z</lastmod>
   </url>
 </urlset>

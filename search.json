@@ -1,5 +1,47 @@
 [
   {
+    "objectID": "posts/col_pal/col_pal.html",
+    "href": "posts/col_pal/col_pal.html",
+    "title": "Effective color palettes",
+    "section": "",
+    "text": "This post reviews how and when I use my favorite color palettes in R.\nCode\nlibrary(tidyverse); theme_set(theme_light())\n\npar(bg = \"#F2F2F2\",\n    mar = c(1,4.5,.5,.5)+.1,\n    col.lab = \"#222222\")\n\npals::pal.bands(pals::viridis, \n                pals::cividis,\n                pals::coolwarm,\n                pals::cols25(n = 25),\n                labels = c(\"General continuous\", \n                           'Centered on zero,\\ndiverging to\\n two categories',\n                           'Centered on zero,\\ndiverging to\\n\"low\" and \"high\"',\n                           \"Categorical\"),\n                n = 250)\n\n\n\n\n\nCode\npreview_palette = function(pal, n = 250) {\n  par(bg = rgb(0,0,0,0),\n    mar = c(0,0,0,0),\n    col.lab = \"#222222\")\n  \n  pals::pal.bands(pal, n = n, labels = \"\")\n}\nThese are all easily available using the excellent pals package by Kevin Wright, whose vignette is great for scrolling through to find case-specific palettes and the pal.bands() function I use throughout this post to preview palettes."
+  },
+  {
+    "objectID": "posts/col_pal/col_pal.html#viridis",
+    "href": "posts/col_pal/col_pal.html#viridis",
+    "title": "Effective color palettes",
+    "section": "Viridis",
+    "text": "Viridis\n\n\nCode\npreview_palette(pals::viridis)\n\n\n\n\n\nEasy to use (see ?ggplot2::scale_color_viridis_c), visually appealing, and apparently pretty good in terms of accessbility. My only qualm with Viridis (sometimes) is that it ends on bright yellow, which can sometimes lead to the deadly sin of “yellow dots on a white background”:\n\n\nCode\np = ggplot(mtcars, aes(disp, mpg)) +\n  geom_point(aes(color = drat))\n\np + scale_color_viridis_c()\n\n\n\n\n\nThankfully, this can be rectified by setting end = .92 to end the scale earlier:\n\n\nCode\np + scale_color_viridis_c(end = .92)\n\n\n\n\n\nOr with a dark background:\n\n\nCode\np + scale_color_viridis_c() + theme_dark()"
+  },
+  {
+    "objectID": "posts/col_pal/col_pal.html#cividis",
+    "href": "posts/col_pal/col_pal.html#cividis",
+    "title": "Effective color palettes",
+    "section": "Cividis",
+    "text": "Cividis\n\n\nCode\npreview_palette(pals::cividis)\n\n\n\n\n\nSome recommend this as the go-to general purpose color palette for continuous variables, and I think it’s okay in that role, but my eyes strongly latch onto the grey “center”, which sometimes isn’t helpful when the center of the data’s range doesn’t have any special meaning over any other quantile. That said, it’s optimized for improved accessibility over viridis. I like to use when a central value diverges into two categories e.g. a map of where foos versus bars live."
+  },
+  {
+    "objectID": "posts/col_pal/col_pal.html#coolwarm",
+    "href": "posts/col_pal/col_pal.html#coolwarm",
+    "title": "Effective color palettes",
+    "section": "coolwarm",
+    "text": "coolwarm\n\n\nCode\npreview_palette(pals::coolwarm)\n\n\n\n\n\nSimilar sort of use-case as cividis for me, but particularly when the two categories have a natural “high” versus “low” interpretation (rather than two unordered categories) e.g. a map of temperatures."
+  },
+  {
+    "objectID": "posts/col_pal/col_pal.html#cols25",
+    "href": "posts/col_pal/col_pal.html#cols25",
+    "title": "Effective color palettes",
+    "section": "cols25",
+    "text": "cols25"
+  },
+  {
+    "objectID": "posts/col_pal/col_pal.html#parula",
+    "href": "posts/col_pal/col_pal.html#parula",
+    "title": "Effective color palettes",
+    "section": "Parula",
+    "text": "Parula\n\n\nCode\npreview_palette(pals::parula)\n\n\n\n\n\nIn my opinion, this is the most visually appealing continuous color scale out there, even over Viridis. Just look at it:\n\n\nCode\nbimod_dat = rbind(MASS::mvrnorm(n = 4000, mu = c(-1, 1), Sigma = diag(2)), \n                  MASS::mvrnorm(n = 4000, mu = c( 1,-1), Sigma = diag(2)))  |&gt; \n  as.data.frame() |&gt; \n  rename(x = V1, y = V2) \n\nbimod_plot = bimod_dat |&gt; \n  ggplot(aes(x,y)) + \n  geom_hex()\n\nbimod_plot + scale_fill_gradientn(colours = pals::parula(n = 200), guide = \"colorbar\")\n\n\n\n\n\nThe downside is that I can never immediately remember the syntax for dropping a custom continuous color palette into ggplot. You have to use scale_*_gradientn(colors = pals::parula(n = 100)). This also involves setting a discrete number of colors for the values to get binned into, which seems reasonable at first, but can sometimes come back to bite you as visually-apparent aliasing if you don’t set n high enough. Setting it too high can create visual artifacts. Finally, this requires a dependency on pals, which isn’t always desirable during package development."
+  },
+  {
     "objectID": "posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
     "href": "posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
     "title": "ezpzmcmcpcpca package",
@@ -214,7 +256,7 @@
     "href": "index.html",
     "title": "andrewghazi.github.io",
     "section": "",
-    "text": "geryon\n\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nOct 9, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nPaste images from clipboard to Quarto/Rmarkdown\n\n\n\n\n\n\n\nQuarto\n\n\nRmarkdown\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nezpzmcmcpcpca package\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\n\n\n\n\n\n\n\n\n\nSep 30, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nTidyverse/data.table translations\n\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nSep 28, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nIntegrated LOO walkthrough\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\nloo\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
+    "text": "collapse is sick\n\n\n\n\n\n\n\nR\n\n\nbenchmark\n\n\n\n\n\n\n\n\n\n\n\nOct 21, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nEffective color palettes\n\n\n\n\n\n\n\nR\n\n\nvisualization\n\n\n\n\n\n\n\n\n\n\n\nOct 21, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\ngeryon\n\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nOct 9, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nPaste images from clipboard to Quarto/Rmarkdown\n\n\n\n\n\n\n\nQuarto\n\n\nRmarkdown\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nezpzmcmcpcpca package\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\n\n\n\n\n\n\n\n\n\nSep 30, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nTidyverse/data.table translations\n\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nSep 28, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\n  \n\n\n\n\nIntegrated LOO walkthrough\n\n\n\n\n\n\n\nR\n\n\nStan\n\n\nloo\n\n\n\n\n\n\n\n\n\n\n\nSep 22, 2023\n\n\nAndrew Ghazi\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/int_loo/integrated_loo.html",
@@ -257,5 +299,33 @@
     "title": "geryon",
     "section": "",
     "text": "Like many R users, I have over time accrued a number of miscellaneous R functions that I put into a little utilities package. It’s called geryon. The readme explains (most) of the functionality, but I’m quite fond of the logo:"
+  },
+  {
+    "objectID": "posts/collapse_is_sick/sick.html",
+    "href": "posts/collapse_is_sick/sick.html",
+    "title": "collapse is sick",
+    "section": "",
+    "text": "I saw an R package I hadn’t heard of called collapse performing well on the duckdb database-like ops benchmark and thought I’d try it out on a little statistical simulation. tl;dr: collapse is sick."
+  },
+  {
+    "objectID": "posts/collapse_is_sick/sick.html#dplyr",
+    "href": "posts/collapse_is_sick/sick.html#dplyr",
+    "title": "collapse is sick",
+    "section": "dplyr",
+    "text": "dplyr\n\n\nCode\ndplyr_soln = function(val_dt) {\n  val_dt |&gt;\n    group_by(g) |&gt;\n    summarise(p = 2 *  pt(abs(mean(x) * sqrt(6) / sd(x)), \n                          5, lower.tail = FALSE))\n}"
+  },
+  {
+    "objectID": "posts/collapse_is_sick/sick.html#data.table-two-ways",
+    "href": "posts/collapse_is_sick/sick.html#data.table-two-ways",
+    "title": "collapse is sick",
+    "section": "data.table two ways",
+    "text": "data.table two ways\nMy first attempt didn’t perform as well as I would have hoped, which turned out because I wasn’t using the GForce-optimized functions for the mean and standard deviation. To use those, the expression in j can ONLY contain the GForce-optimized functions min, max, mean, median, var, sd, sum, prod, first, last, head, tail. base::Arithmetic and stats::pt are not among them!\nTo solve this I used two data.table chained expressions [][]. It’s possible that there’s a more performant way to do it in one pass over the groups (while still using GForce), but I wanted to keep it to within the realm of functions I know how to write intuitively.\n\n\nCode\ndt_soln = function(val_dt) {\n\n  val_dt[,.(p = 2 * pt(abs(mean(x) / (sd(x) / sqrt(6))), \n                       5, lower.tail = FALSE)), \n         by = g]\n}\n\ndt_fast_soln = function(val_dt) {\n  \n  val_dt[,.(m = mean(x),\n            s = sd(x)),\n         by = g][, p := 2 * (1 - pt(abs(m * sqrt(6) / s),\n                                    5, lower.tail = FALSE))]\n}"
+  },
+  {
+    "objectID": "posts/collapse_is_sick/sick.html#collapse",
+    "href": "posts/collapse_is_sick/sick.html#collapse",
+    "title": "collapse is sick",
+    "section": "collapse",
+    "text": "collapse\nI’ll talk about the amazing performance later, but what really impressed me is how easy it was to write. I literally just copy-pasted my dplyr solution (the gold standard of “easy to write” IMO) then typed four “f”s to switch to the collapse version of the dplyr/base functions (e.g. summarise() -&gt; fsummarise()).\nFor me, “easy to write” is a HUGE benefit. Difficult to quantify, but so, so important for the interactive programming I do 80% of the time.\n\n\nCode\ncollapse_soln = function(val_dt) {\n  val_dt |&gt;\n  # V here\n    fgroup_by(g) |&gt;\n  # V here                    V here               V and here\n    fsummarise(p = 2 * pt(abs(fmean(x) * sqrt(6) / fsd(x)), \n                          5, lower.tail = FALSE))\n}"
   }
 ]
