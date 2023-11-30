@@ -179,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#statement-of-values-on-color-palettes" id="toc-statement-of-values-on-color-palettes" class="nav-link active" data-scroll-target="#statement-of-values-on-color-palettes">Statement of values on color palettes</a></li>
+  <li><a href="#what-i-value-in-color-palettes" id="toc-what-i-value-in-color-palettes" class="nav-link active" data-scroll-target="#what-i-value-in-color-palettes">What I value in color palettes</a></li>
   <li><a href="#tour-of-winners" id="toc-tour-of-winners" class="nav-link" data-scroll-target="#tour-of-winners">Tour of winners</a>
   <ul class="collapse">
   <li><a href="#viridis" id="toc-viridis" class="nav-link" data-scroll-target="#viridis">Viridis</a></li>
@@ -235,8 +235,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p>These are all easily available using the excellent <a href="https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html">pals package by Kevin Wright</a>, whose vignette is great for scrolling through to find case-specific palettes and the <code>pal.bands()</code> function I use throughout this post to preview palettes.</p>
-<section id="statement-of-values-on-color-palettes" class="level1">
-<h1>Statement of values on color palettes</h1>
+<section id="what-i-value-in-color-palettes" class="level1">
+<h1>What I value in color palettes</h1>
 <p>It’s worth overviewing the boxes I’d like a candidate color palette to check, which usually aren’t all simultaneously achievable:</p>
 <ul>
 <li>visually appealing</li>
@@ -333,6 +333,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="cols25" class="level2">
 <h2 class="anchored" data-anchor-id="cols25">cols25</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">preview_palette</span>(pals<span class="sc">::</span>cols25, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="col_pal_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>I like that the first two colors are pleasing shades of red and blue, and it’s easy enough to remember how to use.</p>
 </section>
 </section>
 <section id="runner-ups" class="level1">
@@ -343,29 +353,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">preview_palette</span>(pals<span class="sc">::</span>parula)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">preview_palette</span>(pals<span class="sc">::</span>parula)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>In my opinion, this is the most visually appealing continuous color scale out there, even over Viridis. Just look at it:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bimod_dat <span class="ot">=</span> <span class="fu">rbind</span>(MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">4000</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">Sigma =</span> <span class="fu">diag</span>(<span class="dv">2</span>)), </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                  MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">4000</span>, <span class="at">mu =</span> <span class="fu">c</span>( <span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>), <span class="at">Sigma =</span> <span class="fu">diag</span>(<span class="dv">2</span>)))  <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">x =</span> V1, <span class="at">y =</span> V2) </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>bimod_plot <span class="ot">=</span> bimod_dat <span class="sc">|&gt;</span> </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x,y)) <span class="sc">+</span> </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hex</span>()</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>bimod_plot <span class="sc">+</span> <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> pals<span class="sc">::</span><span class="fu">parula</span>(<span class="at">n =</span> <span class="dv">200</span>), <span class="at">guide =</span> <span class="st">"colorbar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bimod_dat <span class="ot">=</span> <span class="fu">rbind</span>(MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">4000</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">Sigma =</span> <span class="fu">diag</span>(<span class="dv">2</span>)), </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                  MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">4000</span>, <span class="at">mu =</span> <span class="fu">c</span>( <span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>), <span class="at">Sigma =</span> <span class="fu">diag</span>(<span class="dv">2</span>)))  <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">x =</span> V1, <span class="at">y =</span> V2) </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>bimod_plot <span class="ot">=</span> bimod_dat <span class="sc">|&gt;</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x,y)) <span class="sc">+</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hex</span>()</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>bimod_plot <span class="sc">+</span> <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> pals<span class="sc">::</span><span class="fu">parula</span>(<span class="at">n =</span> <span class="dv">200</span>), <span class="at">guide =</span> <span class="st">"colorbar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="384"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="384"></p>
 </div>
 </div>
 <p>The downside is that I can never immediately remember the syntax for dropping a custom continuous color palette into ggplot. You have to use <code>scale_*_gradientn(colors = pals::parula(n = 100))</code>. This also involves setting a discrete number of colors for the values to get binned into, which seems reasonable at first, but can sometimes come back to bite you as visually-apparent aliasing if you don’t set <code>n</code> high enough. Setting it too high can create visual artifacts. Finally, this requires a dependency on <code>pals</code>, which isn’t always desirable during package development.</p>

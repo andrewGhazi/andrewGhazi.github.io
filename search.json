@@ -32,7 +32,7 @@
     "href": "posts/col_pal/col_pal.html#cols25",
     "title": "Effective color palettes",
     "section": "cols25",
-    "text": "cols25"
+    "text": "cols25\n\n\nCode\npreview_palette(pals::cols25, n = 10)\n\n\n\n\n\nI like that the first two colors are pleasing shades of red and blue, and it’s easy enough to remember how to use."
   },
   {
     "objectID": "posts/col_pal/col_pal.html#parula",
