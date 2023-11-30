@@ -305,21 +305,21 @@
     "href": "posts/collapse_is_sick/sick.html",
     "title": "collapse is sick",
     "section": "",
-    "text": "I saw an R package I hadn’t heard of called collapse performing well on the duckdb database-like ops benchmark and thought I’d try it out on a little statistical simulation. tl;dr: collapse is sick."
+    "text": "I saw an R package I hadn’t heard of called collapse performing well on the duckdb database-like ops benchmark, and I thought I’d try it out on a little statistical simulation. tl;dr: collapse is sick."
   },
   {
     "objectID": "posts/collapse_is_sick/sick.html#dplyr",
     "href": "posts/collapse_is_sick/sick.html#dplyr",
     "title": "collapse is sick",
     "section": "dplyr",
-    "text": "dplyr\n\n\nCode\ndplyr_soln = function(val_dt) {\n  val_dt |&gt;\n    group_by(g) |&gt;\n    summarise(p = 2 *  pt(abs(mean(x) * sqrt(6) / sd(x)), \n                          5, lower.tail = FALSE))\n}"
+    "text": "dplyr\nSo easy to write, so clean.\n\n\nCode\ndplyr_soln = function(val_dt) {\n  val_dt |&gt;\n    group_by(g) |&gt;\n    summarise(p = 2 * pt(abs(mean(x) * sqrt(6) / sd(x)), \n                         5, lower.tail = FALSE))\n}"
   },
   {
     "objectID": "posts/collapse_is_sick/sick.html#data.table-two-ways",
     "href": "posts/collapse_is_sick/sick.html#data.table-two-ways",
     "title": "collapse is sick",
     "section": "data.table two ways",
-    "text": "data.table two ways\nMy first attempt didn’t perform as well as I would have hoped, which turned out because I wasn’t using the GForce-optimized functions for the mean and standard deviation. To use those, the expression in j can ONLY contain the GForce-optimized functions min, max, mean, median, var, sd, sum, prod, first, last, head, tail. base::Arithmetic and stats::pt are not among them!\nTo solve this I used two data.table chained expressions [][]. It’s possible that there’s a more performant way to do it in one pass over the groups (while still using GForce), but I wanted to keep it to within the realm of functions I know how to write intuitively.\n\n\nCode\ndt_soln = function(val_dt) {\n\n  val_dt[,.(p = 2 * pt(abs(mean(x) / (sd(x) / sqrt(6))), \n                       5, lower.tail = FALSE)), \n         by = g]\n}\n\ndt_fast_soln = function(val_dt) {\n  \n  val_dt[,.(m = mean(x),\n            s = sd(x)),\n         by = g][, p := 2 * (1 - pt(abs(m * sqrt(6) / s),\n                                    5, lower.tail = FALSE))]\n}"
+    "text": "data.table two ways\nMy first attempt didn’t perform as well as I would have hoped, which turned out because I wasn’t using the GForce-optimized functions for the mean and standard deviation. To use those, the expression in j can ONLY contain the GForce-optimized functions min, max, mean, median, var, sd, sum, prod, first, last, head, tail. base::Arithmetic and stats::pt are not among them!\nTo solve this I used two data.table chained expressions [][]. It’s possible that there’s a more performant way to do it in one pass over the groups (while still using GForce), but I wanted to keep it to within the realm of functions I know how to write intuitively.\n\n\nCode\ndt_soln = function(val_dt) {\n  val_dt[,.(p = 2 * pt(abs(mean(x) / (sd(x) / sqrt(6))), \n                       5, lower.tail = FALSE)), \n         by = g]\n}\n\ndt_fast_soln = function(val_dt) {\n  \n  val_dt[,.(m = mean(x),\n            s = sd(x)),\n         by = g][, p := 2 * (1 - pt(abs(m * sqrt(6) / s),\n                                    5, lower.tail = FALSE))]\n}"
   },
   {
     "objectID": "posts/collapse_is_sick/sick.html#collapse",

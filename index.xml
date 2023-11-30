@@ -20,14 +20,14 @@
 
 
 
-<p>I saw an R package I hadn’t heard of called <a href="https://sebkrantz.github.io/collapse/">collapse</a> performing well on <a href="https://duckdblabs.github.io/db-benchmark/">the duckdb database-like ops benchmark</a> and thought I’d try it out on a little statistical simulation. tl;dr: <em>collapse is sick.</em></p>
+<p>I saw an R package I hadn’t heard of called <a href="https://sebkrantz.github.io/collapse/">collapse</a> performing well on <a href="https://duckdblabs.github.io/db-benchmark/">the duckdb database-like ops benchmark</a>, and I thought I’d try it out on a little statistical simulation. tl;dr: <em>collapse is sick.</em></p>
 <section id="context" class="level1">
 <h1>Context</h1>
 <p>I wanted to know the null p-value distribution that you’d get when mis-applying a t-test to non-normally distributed data with a small number of data points. So to simulate this I</p>
 <ul>
 <li>generate 100k groups</li>
 <li>generate 6*100k random t-distributed numbers (df = 3)</li>
-<li>compute the p-value test statistic for each group. In R, this is <code>2*pt(sqrt(6) * abs(mean(x)) / sd(x), 5, lower.tail = FALSE)</code> where <code>x</code> are the random values for the group.
+<li>compute the p-value test statistic for each group. In R, this is <code>2*pt(sqrt(6) * abs(mean(x) / sd(x)), 5, lower.tail = FALSE)</code> where <code>x</code> are the random values for the group.
 <ul>
 <li>This can be done naively with <code>t.test(x)$p.value</code> of course, but that comes with a lot of slow baggage.</li>
 <li>It’s probably also possible to figure out the distribution I’m trying to simulate analytically. Simulating it is easier.</li>
@@ -101,17 +101,17 @@ font-style: inherit;">3</span>))</span>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>              g           x
-      1:      1 -0.74564102
-      2:      1 -0.09775264
-      3:      1  0.49987160
-      4:      1 -2.03793671
-      5:      1  0.33529895
+      1:      1  3.80334060
+      2:      1 -0.01652522
+      3:      1 -0.98015358
+      4:      1 -1.34922462
+      5:      1 -2.36252045
      ---                   
-1799996: 300000  2.45176851
-1799997: 300000  0.16603354
-1799998: 300000  0.48634523
-1799999: 300000 -0.94295726
-1800000: 300000  0.72400245</code></pre>
+1799996: 300000  0.70042953
+1799997: 300000 -1.08753394
+1799998: 300000  0.35327095
+1799999: 300000 -0.17573898
+1800000: 300000  1.92069646</code></pre>
 </div>
 </div>
 </section>
@@ -120,6 +120,7 @@ font-style: inherit;">3</span>))</span>
 <p>We’ll try it in <code>dplyr</code>, <code>data.table</code>, and <code>collapse</code>.</p>
 <section id="dplyr" class="level2">
 <h2 class="anchored" data-anchor-id="dplyr"><code>dplyr</code></h2>
+<p>So easy to write, so clean.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -144,7 +145,7 @@ font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">*</span>  <span class="fu" style="color: #4758AB;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">pt</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -161,7 +162,7 @@ background-color: null;
 font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sd</span>(x)), </span>
-<span id="cb4-5">                          <span class="dv" style="color: #AD0000;
+<span id="cb4-5">                         <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>, <span class="at" style="color: #657422;
 background-color: null;
@@ -184,8 +185,7 @@ background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">function</span>(val_dt) {</span>
-<span id="cb5-2"></span>
-<span id="cb5-3">  val_dt[,.(<span class="at" style="color: #657422;
+<span id="cb5-2">  val_dt[,.(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
@@ -208,35 +208,35 @@ background-color: null;
 font-style: inherit;">sqrt</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">6</span>))), </span>
-<span id="cb5-4">                       <span class="dv" style="color: #AD0000;
+<span id="cb5-3">                       <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">FALSE</span>)), </span>
-<span id="cb5-5">         by <span class="ot" style="color: #003B4F;
+<span id="cb5-4">         by <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> g]</span>
-<span id="cb5-6">}</span>
-<span id="cb5-7"></span>
-<span id="cb5-8">dt_fast_soln <span class="ot" style="color: #003B4F;
+<span id="cb5-5">}</span>
+<span id="cb5-6"></span>
+<span id="cb5-7">dt_fast_soln <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">function</span>(val_dt) {</span>
-<span id="cb5-9">  </span>
-<span id="cb5-10">  val_dt[,.(<span class="at" style="color: #657422;
+<span id="cb5-8">  </span>
+<span id="cb5-9">  val_dt[,.(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">m =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">mean</span>(x),</span>
-<span id="cb5-11">            <span class="at" style="color: #657422;
+<span id="cb5-10">            <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">s =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sd</span>(x)),</span>
-<span id="cb5-12">         by <span class="ot" style="color: #003B4F;
+<span id="cb5-11">         by <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> g][, p <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -263,14 +263,14 @@ background-color: null;
 font-style: inherit;">6</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">/</span> s),</span>
-<span id="cb5-13">                                    <span class="dv" style="color: #AD0000;
+<span id="cb5-12">                                    <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">FALSE</span>))]</span>
-<span id="cb5-14">}</span></code></pre></div>
+<span id="cb5-13">}</span></code></pre></div>
 </details>
 </div>
 </section>
@@ -385,13 +385,13 @@ disabled.</code></pre>
 <pre><code># A tibble: 4 × 6
   expression                 min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;            &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 dplyr_soln(val_dt)       3.74s     3.8s     0.263      50MB    19.5 
-2 dt_soln(val_dt)          3.08s    3.24s     0.309    12.7MB    16.4 
-3 dt_fast_soln(val_dt)  107.72ms 109.71ms     9.14     60.9MB     7.31
-4 collapse_soln(val_dt)  52.46ms  54.26ms    18.1        29MB    10.9 </code></pre>
+1 dplyr_soln(val_dt)       3.79s    3.81s     0.263      50MB    19.6 
+2 dt_soln(val_dt)          3.09s    3.19s     0.314    12.7MB    18.7 
+3 dt_fast_soln(val_dt)   107.3ms 107.66ms     9.19     60.9MB     7.35
+4 collapse_soln(val_dt)  52.44ms  53.41ms    18.4        29MB     9.22</code></pre>
 </div>
 </div>
-<p><code>data.table</code> is about 35x faster than <code>dplyr</code>, and <code>collapse</code> is <em>70x</em> faster.</p>
+<p><code>data.table</code> is about 35x faster than <code>dplyr</code>, and <code>collapse</code> is <strong>70x</strong> faster. It somehow manages to vectorize the group-wise means / sds, but <em>also</em> use those as inputs to a single call to the internally vectorized <code>stats::pt()</code>.</p>
 </section>
 <section id="misc" class="level1">
 <h1>Misc</h1>
@@ -400,7 +400,7 @@ disabled.</code></pre>
 </ul>
 <p>And here’s the distribution I was trying to simulate so I can have a figure on this post. Violating the normality assumptions leads to an incorrect p-value distribution, surprise!</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
 background-color: null;
