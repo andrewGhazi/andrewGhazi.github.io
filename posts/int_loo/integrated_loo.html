@@ -212,10 +212,15 @@ div.csl-indent {
   <li><a href="#integrand-at-one-point-for-one-observation-in-one-draw" id="toc-integrand-at-one-point-for-one-observation-in-one-draw" class="nav-link" data-scroll-target="#integrand-at-one-point-for-one-observation-in-one-draw">Integrand at one point for one observation in one draw</a></li>
   <li><a href="#integral-for-one-observation-in-one-draw" id="toc-integral-for-one-observation-in-one-draw" class="nav-link" data-scroll-target="#integral-for-one-observation-in-one-draw">Integral for one observation in one draw</a></li>
   <li><a href="#integral-for-all-observations-in-one-draw" id="toc-integral-for-all-observations-in-one-draw" class="nav-link" data-scroll-target="#integral-for-all-observations-in-one-draw">Integral for all observations in one draw</a></li>
-  <li><a href="#integral-for-all-observations-for-one-draw" id="toc-integral-for-all-observations-for-one-draw" class="nav-link" data-scroll-target="#integral-for-all-observations-for-one-draw">Integral for all observations, for one draw</a></li>
+  <li><a href="#integral-for-all-observations-across-all-draws" id="toc-integral-for-all-observations-across-all-draws" class="nav-link" data-scroll-target="#integral-for-all-observations-across-all-draws">Integral for all observations across all draws</a></li>
   </ul></li>
   <li><a href="#speed-concerns" id="toc-speed-concerns" class="nav-link" data-scroll-target="#speed-concerns">Speed concerns</a></li>
-  <li><a href="#numerical-accuracy-concerns" id="toc-numerical-accuracy-concerns" class="nav-link" data-scroll-target="#numerical-accuracy-concerns">Numerical accuracy concerns</a></li>
+  <li><a href="#numerical-accuracy-concerns" id="toc-numerical-accuracy-concerns" class="nav-link" data-scroll-target="#numerical-accuracy-concerns">Numerical accuracy concerns</a>
+  <ul class="collapse">
+  <li><a href="#integral-scale" id="toc-integral-scale" class="nav-link" data-scroll-target="#integral-scale">Integral scale</a></li>
+  <li><a href="#woodbury-fuzz" id="toc-woodbury-fuzz" class="nav-link" data-scroll-target="#woodbury-fuzz">Woodbury fuzz</a></li>
+  <li><a href="#adaptive-quadrature-hiccups" id="toc-adaptive-quadrature-hiccups" class="nav-link" data-scroll-target="#adaptive-quadrature-hiccups">Adaptive quadrature hiccups</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -270,9 +275,9 @@ div.csl-indent {
 </div>
 <p>LOO works by looking at the distributions of observation-wise log-likelihoods to assess how strongly each observation influences the overall fit. Low log-likelihood = strong influence on fit.</p>
 <p>Observation-wise log-likelihood values can be unstable when a given observation strongly influences the posterior for a related parameter. Normally you’ll notice this when a Stan model gets through the MCMC stage without any warnings, but the Pareto k diagnostics come out badly when you try to run LOO and warning messages go off.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_a7b885cc5f5c239e717fa32f7e518089">
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_bf47641226528e196e95af699bdf5288">
 <div class="cell-output-display">
-<p><img src="img/diagram.png" class="img-fluid" width="1179"></p>
+<p><img src="img/diagram.png" class="img-fluid" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
 </div>
 </div>
 <p>I’ve come across this twice:</p>
@@ -378,9 +383,9 @@ div.csl-indent {
 <span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_3336824f8c31a82ff1e696f4a08015a4">
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_66d8583634dc214633ef3a670d4b2068">
 <div class="cell-output-display">
-<p><img src="img/integral_comparison2.png" class="img-fluid" width="1050"></p>
+<p><img src="img/integral_comparison2.png" class="img-fluid" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
 </div>
 </div>
 <p>Ignoring the slight shift in the location of the distribution, you should note the much <em>heavier tail</em> without integration. The Pareto k diagnostic for this observation is 1.003 (“very bad”) without integration, so the LOO model comparison to some other model would not be feasible without integration.</p>
@@ -573,10 +578,10 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <p><span class="math display">\[\bar{\boldsymbol{\Sigma}} = \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}\]</span></p>
 <p>Here <span class="math inline">\(\bar{\boldsymbol{\mu}}\)</span> is <code>mu_bar_ij</code> and <span class="math inline">\(\bar{\boldsymbol{\Sigma}}\)</span> (which reduces to a 1x1 matrix) is <code>sigma_bar_ij</code>.</p>
 <p>You can look up the 11 vs 12 vs 22 notation on the wikipedia link but basically <span class="math inline">\(\Sigma\)</span> is rearranged to have the i-th element in the first row/column, then partitioned into the ith vs everything else.</p>
-<p>The tricky part here is <span class="math inline">\(\Sigma_{22}^{-1}\)</span>, which is the inverse of an (n-1) x (n-1) matrix. We’ll do two things to make this computationally feasible in general:</p>
+<p>The tricky part here is <span class="math inline">\(\Sigma_{22}^{-1}\)</span>, which is the inverse of an (n-1) x (n-1) matrix. We can do two things to make this more computationally feasible in general:</p>
 <ul>
 <li>factor out <code>sigma_phylo</code> so we’re working in terms of the correlation matrix <span class="math inline">\(\Omega\)</span>, which doesn’t vary with posterior iteration</li>
-<li>Use the Woodbury matrix identity to get <span class="math inline">\(\Omega_{22}^{-1}\)</span> which together with <code>sigma_phylo[j]</code> can give you the</li>
+<li>Use the Woodbury matrix identity to get <span class="math inline">\(\Omega_{22}^{-1}\)</span> which together with <code>sigma_phylo[j]</code> can give you <span class="math inline">\(\Sigma_{22}^{-1}\)</span> at the cost of only a 2x2 inverse.</li>
 </ul>
 <p>For the sake of brevity I’m not going to use the Woodbury identity and instead just call <code>solve()</code> 150 times. That’s in the next section.</p>
 </section>
@@ -767,8 +772,8 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 </div>
 <p>Fast, reasonable likelihoods!</p>
 </section>
-<section id="integral-for-all-observations-for-one-draw" class="level2">
-<h2 class="anchored" data-anchor-id="integral-for-all-observations-for-one-draw">Integral for all observations, for one draw</h2>
+<section id="integral-for-all-observations-across-all-draws" class="level2">
+<h2 class="anchored" data-anchor-id="integral-for-all-observations-across-all-draws">Integral for all observations across all draws</h2>
 <p>Finally, let’s apply it to every posterior draw. I just remembered that <code>purrr::map()</code> recently introduced a <code>.progress</code> argument, let’s use it. <code>purrr</code> is sick.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/_555e06ce18a628f6137f720ff04c1059">
 <details open="">
@@ -831,12 +836,23 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 </section>
 <section id="numerical-accuracy-concerns" class="level1">
 <h1>Numerical accuracy concerns</h1>
-<p>In tension with the speed concerns we also have numerical accuracy concerns. The integral has to be evaluated on the <em>identity</em> scale, <em>not the log scale</em>. It has to be <span class="math inline">\(log(\int{exp(loglik)d\theta})\)</span>. <span class="math inline">\(\int{loglik d\theta}\)</span> won’t work. This can cause over/underflow issues depending on the model / data.</p>
+<p>In tension with the speed concerns we also have numerical accuracy concerns.</p>
+<section id="integral-scale" class="level2">
+<h2 class="anchored" data-anchor-id="integral-scale">Integral scale</h2>
+<p>The integral has to be evaluated on the <em>identity</em> scale, <em>not the log scale</em>. It has to be <span class="math inline">\(log(\int{exp(loglik)d\theta})\)</span>. <span class="math inline">\(\int{loglik d\theta}\)</span> won’t work. This can cause over/underflow issues depending on the model / data.</p>
 <p>This post is already too long, so I won’t demonstrate it here, but the key to overcoming this is a technique akin to the <a href="https://en.wikipedia.org/wiki/LogSumExp">LogSumExp()</a> trick, kind of like LogIntExp() or something. Optimize the integrand, then use the optimal value as an offset when integrating, then subtract the contribution of that constant off of the integral.</p>
-<p>Also of concern are the integration limits. Sometimes, for very low values of <code>sigma_phylo</code> in this case, the integrand function can be extremely sharp. To <code>stats::integrate()</code> it will look like a flat function at 0, so you’ll get 0. <code>anpan</code> uses some tricks to optimize the integrand, look at the curvature, then go out a reasonable number of SDs in order to capture the body of the spike. Different sorts of problems can also occur if the integrand is extremely flat and you chose a poor offset value.</p>
+</section>
+<section id="woodbury-fuzz" class="level2">
+<h2 class="anchored" data-anchor-id="woodbury-fuzz">Woodbury fuzz</h2>
+<p>The aforementioned <a href="https://en.wikipedia.org/wiki/Woodbury_matrix_identity">Woodbury matrix identity</a> can <em>dramatically</em> speed up the computation of conditional distributions, but it can also add a degree of numerical fuzz. Supposedly the scale of this numerical error is not well understood, and in the case of PGLMMs when the correlation matrix is poorly conditioned the error can induce estimates of standard deviations that are negative. In anpan I check for this and if it appears to happen I use a naive call to <code>solve()</code> as a backup.</p>
+</section>
+<section id="adaptive-quadrature-hiccups" class="level2">
+<h2 class="anchored" data-anchor-id="adaptive-quadrature-hiccups">Adaptive quadrature hiccups</h2>
+<p>Also of concern are the integration limits. Sometimes, for very low values of <code>sigma_phylo</code> in this case, the integrand function can be extremely sharp. To <code>stats::integrate()</code> it will look like a flat function at 0, so you’ll get 0. <code>anpan</code> uses some tricks to optimize the integrand on the log scale, look at the curvature, then go out a reasonable number of SDs in order to capture the body of the spike. Different sorts of problems can also occur if the integrand is extremely flat and you chose a poor offset value.</p>
 
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">

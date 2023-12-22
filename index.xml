@@ -654,7 +654,7 @@ background-color: null;
 font-style: inherit;">250</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" alt="Four horizontal color bands demonstrating the color palettes highlighted in this post. From top to bottom: viridis, cividis, coolwarm, and cols25." width="672"></p>
 </div>
 <details>
 <summary>Code</summary>
@@ -753,7 +753,7 @@ background-color: null;
 font-style: inherit;">::</span>viridis)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" alt="A horizontal color band demonstrating the viridis palette." width="672"></p>
 </div>
 </div>
 <p>Easy to use (see <code>?ggplot2::scale_color_viridis_c</code>), visually appealing, and <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">apparently pretty good in terms of accessbility</a>. My only qualm with Viridis (sometimes) is that it ends on bright yellow, which can sometimes lead to the deadly sin of “yellow dots on a white background”:</p>
@@ -784,7 +784,7 @@ background-color: null;
 font-style: inherit;">scale_color_viridis_c</span>()</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="384"></p>
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
 </div>
 </div>
 <p>Thankfully, this can be rectified by setting <code>end = .92</code> to end the scale earlier:</p>
@@ -802,7 +802,7 @@ background-color: null;
 font-style: inherit;">92</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="384"></p>
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow-green point with the highest drat value is easier to see against the white background compared to the previous example." width="384"></p>
 </div>
 </div>
 <p>Or with a dark background:</p>
@@ -820,7 +820,7 @@ background-color: null;
 font-style: inherit;">theme_dark</span>()</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="384"></p>
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
 </div>
 </div>
 </section>
@@ -1033,7 +1033,7 @@ font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
 
 
 <p>Like many R users, I have over time accrued a number of miscellaneous R functions that I put into a little utilities package. It’s called geryon. <a href="https://github.com/andrewGhazi/geryon">The readme</a> explains (most) of the functionality, but I’m quite fond of the logo:</p>
-<p><img src="https://andrewghazi.github.io/posts/geryon/img/logo.png" class="img-fluid"></p>
+<p><img src="https://andrewghazi.github.io/posts/geryon/img/logo.png" class="img-fluid" alt="The geryon package's hex logo. It shows a winding monster tail inspired by Gustave Doré's woodcut of the monster Geryon in the Divine Comedy."></p>
 
 
 
@@ -1130,7 +1130,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
 
 <p>I made an R implementation of <a href="https://arxiv.org/abs/2012.07977">probabilistic contrastive principal components analysis, aka PCPCA</a>. As the name implies, this method allows you to <em>probabilistically</em> infer <em>contrastive</em> axes between experimental groups. “Contrastive” axes are directions in high dimensional space that help distinguish specified groups, rather than overall variation. More information <a href="https://github.com/andrewGhazi/ezpzmcmcpcpca/tree/main">on GitHub</a>.</p>
 <p>R implementation of PCPCA. PCPCA is the work of Didong Li, Andrew Jones, and Barbara Engelhardt. Original manuscript here: https://arxiv.org/abs/2012.07977 and original Python implementation here: https://github.com/andrewcharlesjones/pcpca</p>
-<p><img src="https://andrewghazi.github.io/posts/ezpzmcmcpcpca/images/bivar_plot.png" class="img-fluid"></p>
+<p><img src="https://andrewghazi.github.io/posts/ezpzmcmcpcpca/images/bivar_plot.png" class="img-fluid" alt="A scatterplot of estimated PC1 against estimated PC2. The points are colored with a bi-variate color palette according to the true values used to simulated them. The color axes roughly align with the cartesian axes, showing that the model has accurately estimated the directions of contrastive variation."></p>
 
 
 
@@ -1151,7 +1151,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://andrewghazi.github.io/posts/tidy_dt/images/who.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="https://andrewghazi.github.io/posts/tidy_dt/images/who.png" class="img-fluid figure-img" style="width:75.0%" alt="A diagram using the ancient Who Would Win? meme format, comparing the verbosity of the tidyverse with the terse data.table package which does many things with one square boi: `[.data.table`"></p>
 </figure>
 </div>
 <p>A list of common tidyverse/data.table commands that do (roughly) the same thing so that you can compare the syntax. Some opinions included.</p>
@@ -1331,50 +1331,11 @@ font-style: inherit;">/</span>cyl]</span></code></pre></div>
 </details>
 </div>
 <p>By default assignment by reference operations don’t print anything. You can tack an empty <code>[]</code> onto the end of that operation to get it to print.</p>
-<p>OR, using the new DT()/let() syntax (requires development version of <code>data.table</code>):</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">mt_dt <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">DT</span>(, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">let</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">disp_per_cyl =</span> disp<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>cyl)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>()</span></code></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>               model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am
-              &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
-1:         Mazda RX4  21.0     6   160   110  3.90 2.620 16.46     0     1
-2:     Mazda RX4 Wag  21.0     6   160   110  3.90 2.875 17.02     0     1
-3:        Datsun 710  22.8     4   108    93  3.85 2.320 18.61     1     1
-4:    Hornet 4 Drive  21.4     6   258   110  3.08 3.215 19.44     1     0
-5: Hornet Sportabout  18.7     8   360   175  3.15 3.440 17.02     0     0
-6:           Valiant  18.1     6   225   105  2.76 3.460 20.22     1     0
-    gear  carb disp_per_cyl
-   &lt;num&gt; &lt;num&gt;        &lt;num&gt;
-1:     4     4     26.66667
-2:     4     4     26.66667
-3:     4     1     27.00000
-4:     3     1     43.00000
-5:     3     2     45.00000
-6:     3     1     37.50000</code></pre>
-</div>
-</div>
 <p>The data.table walrus operator / <code>let()</code> assign by reference, so the <code>disp_per_cyl</code> column is added to <code>mt_dt</code> without using <code>&lt;-</code>. Let’s delete it.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">mt_dt[, disp_per_cyl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">mt_dt[, disp_per_cyl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span><span class="er" style="color: #AD0000;
 background-color: null;
@@ -1389,7 +1350,7 @@ font-style: inherit;">NULL</span>]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1398,7 +1359,7 @@ background-color: null;
 font-style: inherit;">disp_per_cyl =</span> disp <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">/</span> cyl,</span>
-<span id="cb12-2">                 <span class="at" style="color: #657422;
+<span id="cb10-2">                 <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">hp_per_disp  =</span> hp <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1426,7 +1387,7 @@ font-style: inherit;">/</span> disp)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">mt_dt[, <span class="st" style="color: #20794D;
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">mt_dt[, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span><span class="at" style="color: #657422;
 background-color: null;
@@ -1437,70 +1398,25 @@ background-color: null;
 font-style: inherit;">disp_per_cyl =</span> disp <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">/</span> cyl,</span>
-<span id="cb14-2">             <span class="at" style="color: #657422;
+<span id="cb12-2">             <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">hp_per_disp  =</span> hp <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">/</span> disp)]</span>
-<span id="cb14-3"></span>
-<span id="cb14-4"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># OR</span></span>
-<span id="cb14-5"></span>
-<span id="cb14-6">mt_dt <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb14-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">DT</span>(, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">let</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">disp_per_cyl =</span> disp <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> cyl,</span>
-<span id="cb14-8">           <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">hp_per_disp  =</span> hp <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> disp)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb14-9">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>()</span></code></pre></div>
+font-style: inherit;">/</span> disp)]</span></code></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>               model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am
-              &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
-1:         Mazda RX4  21.0     6   160   110  3.90 2.620 16.46     0     1
-2:     Mazda RX4 Wag  21.0     6   160   110  3.90 2.875 17.02     0     1
-3:        Datsun 710  22.8     4   108    93  3.85 2.320 18.61     1     1
-4:    Hornet 4 Drive  21.4     6   258   110  3.08 3.215 19.44     1     0
-5: Hornet Sportabout  18.7     8   360   175  3.15 3.440 17.02     0     0
-6:           Valiant  18.1     6   225   105  2.76 3.460 20.22     1     0
-    gear  carb disp_per_cyl hp_per_disp
-   &lt;num&gt; &lt;num&gt;        &lt;num&gt;       &lt;num&gt;
-1:     4     4     26.66667   0.6875000
-2:     4     4     26.66667   0.6875000
-3:     4     1     27.00000   0.8611111
-4:     3     1     43.00000   0.4263566
-5:     3     2     45.00000   0.4861111
-6:     3     1     37.50000   0.4666667</code></pre>
-</div>
 </div>
 <p>Cleanup:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">mt_dt[,<span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">mt_dt[,<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">let</span>(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">disp_per_cyl =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">NULL</span>,</span>
-<span id="cb16-2">           <span class="at" style="color: #657422;
+<span id="cb13-2">           <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">hp_per_disp  =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
@@ -1516,7 +1432,7 @@ font-style: inherit;">NULL</span>)]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1540,7 +1456,7 @@ font-style: inherit;">450</span>)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">mt_dt[disp <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">mt_dt[disp <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
@@ -1561,7 +1477,7 @@ font-style: inherit;">450</span>]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">mt_dt[, big <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">mt_dt[, big <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span><span class="er" style="color: #AD0000;
 background-color: null;
@@ -1570,8 +1486,8 @@ background-color: null;
 font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">450</span>]</span>
-<span id="cb21-2"></span>
-<span id="cb21-3">mt_dt[(big)]</span></code></pre></div>
+<span id="cb18-2"></span>
+<span id="cb18-3">mt_dt[(big)]</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am
@@ -1585,7 +1501,7 @@ font-style: inherit;">450</span>]</span>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">mt_dt[, big <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">mt_dt[, big <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span><span class="er" style="color: #AD0000;
 background-color: null;
@@ -1605,10 +1521,10 @@ font-style: inherit;">NULL</span>]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
-<span id="cb24-2">  <span class="fu" style="color: #4758AB;
+<span id="cb21-2">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
 background-color: null;
@@ -1634,7 +1550,7 @@ font-style: inherit;">.by =</span> cyl)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">mt_dt[, .(<span class="at" style="color: #657422;
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">mt_dt[, .(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">avg_mpg =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1659,7 +1575,7 @@ font-style: inherit;">=</span> cyl]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1688,7 +1604,7 @@ font-style: inherit;">arrange</span>(mpg)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1">mt_dt[<span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">mt_dt[<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">order</span>(mpg)] <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1727,14 +1643,14 @@ font-style: inherit;">head</span>()</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">inner_join</span>(x,y, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'grp'</span>) </span>
-<span id="cb32-2">Y[X, on <span class="ot" style="color: #003B4F;
+<span id="cb29-2">Y[X, on <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -1762,17 +1678,17 @@ font-style: inherit;">0</span>]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
-<span id="cb33-2">  <span class="fu" style="color: #4758AB;
+<span id="cb30-2">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">transmute</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">across</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">where</span>(is.character), </span>
-<span id="cb33-3">                   <span class="sc" style="color: #5E5E5E;
+<span id="cb30-3">                   <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">~</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1800,17 +1716,17 @@ font-style: inherit;">5</span>)))</span></code></pre></div>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
-<span id="cb35-2">  <span class="fu" style="color: #4758AB;
+<span id="cb32-2">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">summarise</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">across</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">where</span>(is.numeric),</span>
-<span id="cb35-3">                   sum))</span></code></pre></div>
+<span id="cb32-3">                   sum))</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 11
@@ -1831,7 +1747,7 @@ font-style: inherit;">where</span>(is.numeric),</span>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1">num_cols <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1">num_cols <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> mt_dt <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1846,8 +1762,8 @@ background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">names</span>()</span>
-<span id="cb37-2"></span>
-<span id="cb37-3">mt_dt[, (num_cols) <span class="sc" style="color: #5E5E5E;
+<span id="cb34-2"></span>
+<span id="cb34-3">mt_dt[, (num_cols) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span><span class="er" style="color: #AD0000;
 background-color: null;
@@ -1938,7 +1854,7 @@ font-style: inherit;">=</span> num_cols][]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1">df <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1">df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1961,20 +1877,20 @@ font-style: inherit;">"y-z"</span>))</span></code></pre></div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1">N <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1">N <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5e5</span></span>
-<span id="cb40-2"></span>
-<span id="cb40-3">microbenchmark<span class="sc" style="color: #5E5E5E;
+<span id="cb37-2"></span>
+<span id="cb37-3">microbenchmark<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">microbenchmark</span>(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">i =</span> {</span>
-<span id="cb40-4">                                 df <span class="ot" style="color: #003B4F;
+<span id="cb37-4">                                 df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1991,10 +1907,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>), </span>
-<span id="cb40-5">                                                               <span class="st" style="color: #20794D;
+<span id="cb37-5">                                                               <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>, </span>
-<span id="cb40-6">                                                               <span class="fu" style="color: #4758AB;
+<span id="cb37-6">                                                               <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(LETTERS, <span class="at" style="color: #657422;
 background-color: null;
@@ -2003,10 +1919,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)))},</span>
-<span id="cb40-7">                               <span class="at" style="color: #657422;
+<span id="cb37-7">                               <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">i2 =</span> {</span>
-<span id="cb40-8">                                 df <span class="ot" style="color: #003B4F;
+<span id="cb37-8">                                 df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2023,10 +1939,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>), </span>
-<span id="cb40-9">                                                               <span class="st" style="color: #20794D;
+<span id="cb37-9">                                                               <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>, </span>
-<span id="cb40-10">                                                               <span class="fu" style="color: #4758AB;
+<span id="cb37-10">                                                               <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(LETTERS, <span class="at" style="color: #657422;
 background-color: null;
@@ -2035,10 +1951,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)))},</span>
-<span id="cb40-11">                               <span class="at" style="color: #657422;
+<span id="cb37-11">                               <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">separate =</span> {</span>
-<span id="cb40-12">                                 df <span class="ot" style="color: #003B4F;
+<span id="cb37-12">                                 df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2055,10 +1971,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>), </span>
-<span id="cb40-13">                                                            <span class="st" style="color: #20794D;
+<span id="cb37-13">                                                            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>, </span>
-<span id="cb40-14">                                                            <span class="fu" style="color: #4758AB;
+<span id="cb37-14">                                                            <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(LETTERS, <span class="at" style="color: #657422;
 background-color: null;
@@ -2067,7 +1983,7 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)))</span>
-<span id="cb40-15">                                 <span class="fu" style="color: #4758AB;
+<span id="cb37-15">                                 <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">separate</span>(df, x, <span class="at" style="color: #657422;
 background-color: null;
@@ -2082,10 +1998,10 @@ background-color: null;
 font-style: inherit;">sep =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"-"</span>)},</span>
-<span id="cb40-16">                               <span class="at" style="color: #657422;
+<span id="cb37-16">                               <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">separate_wider_delim =</span> {</span>
-<span id="cb40-17">                                 df <span class="ot" style="color: #003B4F;
+<span id="cb37-17">                                 df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2102,10 +2018,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>), </span>
-<span id="cb40-18">                                                            <span class="st" style="color: #20794D;
+<span id="cb37-18">                                                            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>, </span>
-<span id="cb40-19">                                                            <span class="fu" style="color: #4758AB;
+<span id="cb37-19">                                                            <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(LETTERS, <span class="at" style="color: #657422;
 background-color: null;
@@ -2114,7 +2030,7 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)))</span>
-<span id="cb40-20">                                 <span class="fu" style="color: #4758AB;
+<span id="cb37-20">                                 <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">separate_wider_delim</span>(df, x, <span class="at" style="color: #657422;
 background-color: null;
@@ -2129,10 +2045,10 @@ background-color: null;
 font-style: inherit;">"x1"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"x2"</span>))},</span>
-<span id="cb40-21">                               <span class="at" style="color: #657422;
+<span id="cb37-21">                               <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">separate_wider_position =</span> {</span>
-<span id="cb40-22">                                 df <span class="ot" style="color: #003B4F;
+<span id="cb37-22">                                 df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2149,10 +2065,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>), </span>
-<span id="cb40-23">                                                            <span class="st" style="color: #20794D;
+<span id="cb37-23">                                                            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>, </span>
-<span id="cb40-24">                                                            <span class="fu" style="color: #4758AB;
+<span id="cb37-24">                                                            <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(LETTERS, <span class="at" style="color: #657422;
 background-color: null;
@@ -2161,7 +2077,7 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)))</span>
-<span id="cb40-25">                                 <span class="fu" style="color: #4758AB;
+<span id="cb37-25">                                 <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">separate_wider_position</span>(df, x, <span class="at" style="color: #657422;
 background-color: null;
@@ -2178,10 +2094,10 @@ background-color: null;
 font-style: inherit;">x2 =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>))},</span>
-<span id="cb40-26">                               <span class="at" style="color: #657422;
+<span id="cb37-26">                               <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">tstrsplit =</span> {</span>
-<span id="cb40-27">                                 df <span class="ot" style="color: #003B4F;
+<span id="cb37-27">                                 df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2198,10 +2114,10 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>), </span>
-<span id="cb40-28">                                                            <span class="st" style="color: #20794D;
+<span id="cb37-28">                                                            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>, </span>
-<span id="cb40-29">                                                            <span class="fu" style="color: #4758AB;
+<span id="cb37-29">                                                            <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(LETTERS, <span class="at" style="color: #657422;
 background-color: null;
@@ -2210,7 +2126,7 @@ background-color: null;
 font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)))</span>
-<span id="cb40-30">                                 df[, (<span class="fu" style="color: #4758AB;
+<span id="cb37-30">                                 df[, (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
 background-color: null;
@@ -2227,8 +2143,8 @@ background-color: null;
 font-style: inherit;">split =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"-"</span>)]},</span>
-<span id="cb40-31">                               </span>
-<span id="cb40-32">                               <span class="at" style="color: #657422;
+<span id="cb37-31">                               </span>
+<span id="cb37-32">                               <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">times =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
@@ -2237,19 +2153,19 @@ font-style: inherit;">5</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
                     expr        min         lq       mean     median         uq
-                       i   63.96737   64.30023   81.00819   64.36162   66.06541
-                      i2   64.53642   64.72288   67.50833   64.91381   70.61786
-                separate 2919.57025 3057.39715 3067.08865 3060.66249 3122.98067
-    separate_wider_delim  244.09480  307.98958  323.33088  317.76700  325.17817
- separate_wider_position  710.21562  774.00268  834.16832  832.97877  906.67124
-               tstrsplit  186.00963  186.64617  203.94531  190.39219  211.37181
+                       i   64.22688   64.27336   65.58309   64.48059   67.25089
+                      i2   64.45398   64.51453   65.90099   64.65042   64.86134
+                separate 2976.87650 3012.13780 3118.31395 3123.43151 3236.28560
+    separate_wider_delim  314.26449  367.72872  395.97476  428.90685  430.77324
+ separate_wider_position  806.41829  817.97204  833.88904  828.53955  839.60248
+               tstrsplit  191.39410  198.21657  238.52412  248.47853  251.68592
         max neval   cld
-  146.34635     5 ab   
-   72.75069     5 a    
- 3174.83270     5   c  
-  421.62486     5    d 
-  946.97328     5     e
-  245.30674     5  b d </code></pre>
+   67.68372     5 a    
+   71.02470     5 a    
+ 3242.83834     5  b   
+  438.20052     5   c  
+  876.91284     5    d 
+  302.84548     5     e</code></pre>
 </div>
 </div>
 <section id="tidy-5" class="level2">
@@ -2257,17 +2173,17 @@ font-style: inherit;">5</span>)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1">df <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1">df <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
-<span id="cb42-2">  <span class="fu" style="color: #4758AB;
+<span id="cb39-2">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">separate_wider_delim</span>(x, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">delim =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'-'</span>,</span>
-<span id="cb42-3">                       <span class="at" style="color: #657422;
+<span id="cb39-3">                       <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">names =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2281,16 +2197,16 @@ font-style: inherit;">'x2'</span>))</span></code></pre></div>
 <pre><code># A tibble: 500,000 × 2
    x1    x2   
    &lt;chr&gt; &lt;chr&gt;
- 1 x     S    
- 2 p     E    
- 3 a     X    
- 4 n     Y    
- 5 z     F    
- 6 g     B    
- 7 w     P    
- 8 m     T    
- 9 s     F    
-10 b     O    
+ 1 t     I    
+ 2 k     L    
+ 3 c     A    
+ 4 v     V    
+ 5 t     U    
+ 6 g     W    
+ 7 j     D    
+ 8 m     F    
+ 9 u     Q    
+10 t     N    
 # ℹ 499,990 more rows</code></pre>
 </div>
 </div>
@@ -2301,7 +2217,7 @@ font-style: inherit;">'x2'</span>))</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">as.data.table</span>(df)[, (<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2324,17 +2240,17 @@ font-style: inherit;">"-"</span>)][]</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             x     x1     x2
         &lt;char&gt; &lt;char&gt; &lt;char&gt;
-     1:    x-S      x      S
-     2:    p-E      p      E
-     3:    a-X      a      X
-     4:    n-Y      n      Y
-     5:    z-F      z      F
+     1:    t-I      t      I
+     2:    k-L      k      L
+     3:    c-A      c      A
+     4:    v-V      v      V
+     5:    t-U      t      U
     ---                     
-499996:    n-Z      n      Z
-499997:    o-Z      o      Z
-499998:    r-N      r      N
-499999:    l-Z      l      Z
-500000:    m-B      m      B</code></pre>
+499996:    g-V      g      V
+499997:    n-T      n      T
+499998:    h-I      h      I
+499999:    m-Y      m      Y
+500000:    q-B      q      B</code></pre>
 </div>
 </div>
 <p>The <code>tstrsplit()</code> approach is ~10x faster than <code>tidyr::separate()</code>, but only about 1.5x faster than <code>separate_wider_delim()</code>.</p>
@@ -2346,7 +2262,7 @@ font-style: inherit;">"-"</span>)][]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1">df <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb43" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1">df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2359,7 +2275,7 @@ background-color: null;
 font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>],</span>
-<span id="cb46-2">                 <span class="at" style="color: #657422;
+<span id="cb43-2">                 <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">x2 =</span> LETTERS[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -2375,13 +2291,13 @@ font-style: inherit;">5</span>])</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb47" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1">df <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1">df <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">unite</span>(x,</span>
-<span id="cb47-2">            x1, x2,</span>
-<span id="cb47-3">            <span class="at" style="color: #657422;
+<span id="cb44-2">            x1, x2,</span>
+<span id="cb44-3">            <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sep =</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -2402,7 +2318,7 @@ font-style: inherit;">"-"</span>)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb49" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">as.data.table</span>(df)[, x <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2437,7 +2353,7 @@ font-style: inherit;">"-"</span>)][]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb51" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1">mt_tbl[<span class="dv" style="color: #AD0000;
+<div class="sourceCode cell-code" id="cb48" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1">mt_tbl[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2446,29 +2362,29 @@ background-color: null;
 font-style: inherit;">4</span>,] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
-<span id="cb51-2">  <span class="fu" style="color: #4758AB;
+<span id="cb48-2">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">column_to_rownames</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'model'</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb51-3">  <span class="fu" style="color: #4758AB;
+<span id="cb48-3">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">as.matrix</span>() <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb51-4">  <span class="fu" style="color: #4758AB;
+<span id="cb48-4">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">t</span>() <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
-<span id="cb51-5">  <span class="fu" style="color: #4758AB;
+<span id="cb48-5">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">as.data.frame</span>() <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb51-6">  <span class="fu" style="color: #4758AB;
+<span id="cb48-6">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rownames_to_column</span>(<span class="st" style="color: #20794D;
 background-color: null;
@@ -2501,7 +2417,7 @@ font-style: inherit;">as_tibble</span>()</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb53" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1">data.table<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb50" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1">data.table<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2512,14 +2428,14 @@ background-color: null;
 font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">4</span>,],</span>
-<span id="cb53-2">                      <span class="at" style="color: #657422;
+<span id="cb50-2">                      <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">make.names =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'model'</span>, <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># MAKE this variable the new names</span></span>
-<span id="cb53-3">                      <span class="at" style="color: #657422;
+<span id="cb50-3">                      <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">keep.names =</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -2553,7 +2469,7 @@ font-style: inherit;"># KEEP the old names in this variable</span></span></code>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb55" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1">mt_tbl <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb52" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2576,7 +2492,7 @@ font-style: inherit;">.by =</span> cyl)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb57" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1">mt_dt[, .(<span class="at" style="color: #657422;
+<div class="sourceCode cell-code" id="cb54" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1">mt_dt[, .(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">data =</span> .(.SD)), by <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2600,7 +2516,7 @@ font-style: inherit;">=</span> cyl]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb59" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1">nested <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb56" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1">nested <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2609,7 +2525,7 @@ background-color: null;
 font-style: inherit;">nest</span>(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">.by =</span> cyl)</span>
-<span id="cb59-2">nested <span class="sc" style="color: #5E5E5E;
+<span id="cb56-2">nested <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2638,7 +2554,7 @@ font-style: inherit;">unnest</span>(data)</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb61" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1">nested <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb58" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1">nested <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> mt_dt[, .(<span class="at" style="color: #657422;
 background-color: null;
@@ -2647,7 +2563,7 @@ background-color: null;
 font-style: inherit;">list</span>(.SD)), by <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> cyl]</span>
-<span id="cb61-2">nested[, <span class="fu" style="color: #4758AB;
+<span id="cb58-2">nested[, <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rbindlist</span>(data), by <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2680,7 +2596,7 @@ font-style: inherit;">head</span>()</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb63" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1">dt[,<span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb60" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1">dt[,<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">unlist</span>(data), by <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2704,7 +2620,7 @@ font-style: inherit;">=</span> group]</span></code></pre></div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb64" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1">sessioninfo<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb61" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1">sessioninfo<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2713,7 +2629,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
- version  R version 4.3.1 (2023-06-16)
+ version  R version 4.3.2 (2023-10-31)
  os       Pop!_OS 22.04 LTS
  system   x86_64, linux-gnu
  ui       X11
@@ -2721,7 +2637,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
  collate  en_US.UTF-8
  ctype    en_US.UTF-8
  tz       America/New_York
- date     2023-09-30
+ date     2023-12-22
  pandoc   3.1.1 @ /usr/lib/rstudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────
@@ -2729,7 +2645,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
  cli              3.6.1   2023-03-23 [1] CRAN (R 4.3.0)
  codetools        0.2-19  2023-02-01 [4] CRAN (R 4.2.2)
  colorspace       2.1-0   2023-01-23 [1] CRAN (R 4.3.0)
- data.table     * 1.14.9  2023-09-29 [1] local
+ data.table     * 1.14.99 2023-12-22 [1] local
  digest           0.6.33  2023-07-07 [1] CRAN (R 4.3.1)
  dplyr          * 1.1.3   2023-09-03 [1] CRAN (R 4.3.1)
  evaluate         0.21    2023-05-05 [1] CRAN (R 4.3.1)
@@ -2745,12 +2661,12 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
  htmlwidgets      1.6.2   2023-03-17 [1] CRAN (R 4.3.1)
  jsonlite         1.8.7   2023-06-29 [1] CRAN (R 4.3.1)
  knitr            1.43    2023-05-25 [1] CRAN (R 4.3.1)
- lattice          0.21-8  2023-04-05 [4] CRAN (R 4.3.0)
+ lattice          0.22-5  2023-10-24 [4] CRAN (R 4.3.1)
  lifecycle        1.0.3   2022-10-07 [1] CRAN (R 4.3.0)
  lubridate      * 1.9.2   2023-02-10 [1] CRAN (R 4.3.0)
  magrittr         2.0.3   2022-03-30 [1] CRAN (R 4.3.0)
  MASS             7.3-60  2023-05-04 [4] CRAN (R 4.3.1)
- Matrix           1.6-0   2023-07-08 [4] CRAN (R 4.3.1)
+ Matrix           1.6-3   2023-11-14 [4] CRAN (R 4.3.2)
  microbenchmark   1.4.10  2023-04-28 [1] CRAN (R 4.3.1)
  multcomp         1.4-25  2023-06-20 [1] CRAN (R 4.3.1)
  munsell          0.5.0   2018-06-12 [1] CRAN (R 4.3.0)
@@ -2768,7 +2684,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
  sessioninfo      1.2.2   2021-12-06 [1] CRAN (R 4.3.1)
  stringi          1.7.12  2023-01-11 [1] CRAN (R 4.3.0)
  stringr        * 1.5.0   2022-12-02 [1] CRAN (R 4.3.0)
- survival         3.5-5   2023-03-12 [4] CRAN (R 4.3.1)
+ survival         3.5-7   2023-08-14 [4] CRAN (R 4.3.1)
  TH.data          1.1-2   2023-04-17 [1] CRAN (R 4.3.1)
  tibble         * 3.2.1   2023-03-20 [1] CRAN (R 4.3.0)
  tidyr          * 1.3.0   2023-01-24 [1] CRAN (R 4.3.0)
@@ -2878,9 +2794,9 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 </div>
 <p>LOO works by looking at the distributions of observation-wise log-likelihoods to assess how strongly each observation influences the overall fit. Low log-likelihood = strong influence on fit.</p>
 <p>Observation-wise log-likelihood values can be unstable when a given observation strongly influences the posterior for a related parameter. Normally you’ll notice this when a Stan model gets through the MCMC stage without any warnings, but the Pareto k diagnostics come out badly when you try to run LOO and warning messages go off.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_a7b885cc5f5c239e717fa32f7e518089">
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_bf47641226528e196e95af699bdf5288">
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/int_loo/img/diagram.png" class="img-fluid" width="1179"></p>
+<p><img src="https://andrewghazi.github.io/posts/int_loo/img/diagram.png" class="img-fluid" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
 </div>
 </div>
 <p>I’ve come across this twice:</p>
@@ -3270,9 +3186,9 @@ font-style: inherit;">"grey75"</span>)</span>
 <span id="cb4-91">    )</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_3336824f8c31a82ff1e696f4a08015a4">
+<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_66d8583634dc214633ef3a670d4b2068">
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/int_loo/img/integral_comparison2.png" class="img-fluid" width="1050"></p>
+<p><img src="https://andrewghazi.github.io/posts/int_loo/img/integral_comparison2.png" class="img-fluid" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
 </div>
 </div>
 <p>Ignoring the slight shift in the location of the distribution, you should note the much <em>heavier tail</em> without integration. The Pareto k diagnostic for this observation is 1.003 (“very bad”) without integration, so the LOO model comparison to some other model would not be feasible without integration.</p>
@@ -3757,10 +3673,10 @@ font-style: inherit;">return</span>(res)</span>
 <p><img src="https://latex.codecogs.com/png.latex?%5Cbar%7B%5Cboldsymbol%7B%5CSigma%7D%7D%20=%20%5Cboldsymbol%7B%5CSigma%7D_%7B11%7D%20-%20%5Cboldsymbol%7B%5CSigma%7D_%7B12%7D%20%5Cboldsymbol%7B%5CSigma%7D_%7B22%7D%5E%7B-1%7D%20%5Cboldsymbol%7B%5CSigma%7D_%7B21%7D"></p>
 <p>Here <img src="https://latex.codecogs.com/png.latex?%5Cbar%7B%5Cboldsymbol%7B%5Cmu%7D%7D"> is <code>mu_bar_ij</code> and <img src="https://latex.codecogs.com/png.latex?%5Cbar%7B%5Cboldsymbol%7B%5CSigma%7D%7D"> (which reduces to a 1x1 matrix) is <code>sigma_bar_ij</code>.</p>
 <p>You can look up the 11 vs 12 vs 22 notation on the wikipedia link but basically <img src="https://latex.codecogs.com/png.latex?%5CSigma"> is rearranged to have the i-th element in the first row/column, then partitioned into the ith vs everything else.</p>
-<p>The tricky part here is <img src="https://latex.codecogs.com/png.latex?%5CSigma_%7B22%7D%5E%7B-1%7D">, which is the inverse of an (n-1) x (n-1) matrix. We’ll do two things to make this computationally feasible in general:</p>
+<p>The tricky part here is <img src="https://latex.codecogs.com/png.latex?%5CSigma_%7B22%7D%5E%7B-1%7D">, which is the inverse of an (n-1) x (n-1) matrix. We can do two things to make this more computationally feasible in general:</p>
 <ul>
 <li>factor out <code>sigma_phylo</code> so we’re working in terms of the correlation matrix <img src="https://latex.codecogs.com/png.latex?%5COmega">, which doesn’t vary with posterior iteration</li>
-<li>Use the Woodbury matrix identity to get <img src="https://latex.codecogs.com/png.latex?%5COmega_%7B22%7D%5E%7B-1%7D"> which together with <code>sigma_phylo[j]</code> can give you the</li>
+<li>Use the Woodbury matrix identity to get <img src="https://latex.codecogs.com/png.latex?%5COmega_%7B22%7D%5E%7B-1%7D"> which together with <code>sigma_phylo[j]</code> can give you <img src="https://latex.codecogs.com/png.latex?%5CSigma_%7B22%7D%5E%7B-1%7D"> at the cost of only a 2x2 inverse.</li>
 </ul>
 <p>For the sake of brevity I’m not going to use the Woodbury identity and instead just call <code>solve()</code> 150 times. That’s in the next section.</p>
 </section>
@@ -4277,8 +4193,8 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 </div>
 <p>Fast, reasonable likelihoods!</p>
 </section>
-<section id="integral-for-all-observations-for-one-draw" class="level2">
-<h2 class="anchored" data-anchor-id="integral-for-all-observations-for-one-draw">Integral for all observations, for one draw</h2>
+<section id="integral-for-all-observations-across-all-draws" class="level2">
+<h2 class="anchored" data-anchor-id="integral-for-all-observations-across-all-draws">Integral for all observations across all draws</h2>
 <p>Finally, let’s apply it to every posterior draw. I just remembered that <code>purrr::map()</code> recently introduced a <code>.progress</code> argument, let’s use it. <code>purrr</code> is sick.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/_555e06ce18a628f6137f720ff04c1059">
 <details open="">
@@ -4379,12 +4295,23 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 </section>
 <section id="numerical-accuracy-concerns" class="level1">
 <h1>Numerical accuracy concerns</h1>
-<p>In tension with the speed concerns we also have numerical accuracy concerns. The integral has to be evaluated on the <em>identity</em> scale, <em>not the log scale</em>. It has to be <img src="https://latex.codecogs.com/png.latex?log(%5Cint%7Bexp(loglik)d%5Ctheta%7D)">. <img src="https://latex.codecogs.com/png.latex?%5Cint%7Bloglik%20d%5Ctheta%7D"> won’t work. This can cause over/underflow issues depending on the model / data.</p>
+<p>In tension with the speed concerns we also have numerical accuracy concerns.</p>
+<section id="integral-scale" class="level2">
+<h2 class="anchored" data-anchor-id="integral-scale">Integral scale</h2>
+<p>The integral has to be evaluated on the <em>identity</em> scale, <em>not the log scale</em>. It has to be <img src="https://latex.codecogs.com/png.latex?log(%5Cint%7Bexp(loglik)d%5Ctheta%7D)">. <img src="https://latex.codecogs.com/png.latex?%5Cint%7Bloglik%20d%5Ctheta%7D"> won’t work. This can cause over/underflow issues depending on the model / data.</p>
 <p>This post is already too long, so I won’t demonstrate it here, but the key to overcoming this is a technique akin to the <a href="https://en.wikipedia.org/wiki/LogSumExp">LogSumExp()</a> trick, kind of like LogIntExp() or something. Optimize the integrand, then use the optimal value as an offset when integrating, then subtract the contribution of that constant off of the integral.</p>
-<p>Also of concern are the integration limits. Sometimes, for very low values of <code>sigma_phylo</code> in this case, the integrand function can be extremely sharp. To <code>stats::integrate()</code> it will look like a flat function at 0, so you’ll get 0. <code>anpan</code> uses some tricks to optimize the integrand, look at the curvature, then go out a reasonable number of SDs in order to capture the body of the spike. Different sorts of problems can also occur if the integrand is extremely flat and you chose a poor offset value.</p>
+</section>
+<section id="woodbury-fuzz" class="level2">
+<h2 class="anchored" data-anchor-id="woodbury-fuzz">Woodbury fuzz</h2>
+<p>The aforementioned <a href="https://en.wikipedia.org/wiki/Woodbury_matrix_identity">Woodbury matrix identity</a> can <em>dramatically</em> speed up the computation of conditional distributions, but it can also add a degree of numerical fuzz. Supposedly the scale of this numerical error is not well understood, and in the case of PGLMMs when the correlation matrix is poorly conditioned the error can induce estimates of standard deviations that are negative. In anpan I check for this and if it appears to happen I use a naive call to <code>solve()</code> as a backup.</p>
+</section>
+<section id="adaptive-quadrature-hiccups" class="level2">
+<h2 class="anchored" data-anchor-id="adaptive-quadrature-hiccups">Adaptive quadrature hiccups</h2>
+<p>Also of concern are the integration limits. Sometimes, for very low values of <code>sigma_phylo</code> in this case, the integrand function can be extremely sharp. To <code>stats::integrate()</code> it will look like a flat function at 0, so you’ll get 0. <code>anpan</code> uses some tricks to optimize the integrand on the log scale, look at the curvature, then go out a reasonable number of SDs in order to capture the body of the spike. Different sorts of problems can also occur if the integrand is extremely flat and you chose a poor offset value.</p>
 
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent">

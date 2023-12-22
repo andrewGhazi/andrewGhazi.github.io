@@ -221,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">250</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" alt="Four horizontal color bands demonstrating the color palettes highlighted in this post. From top to bottom: viridis, cividis, coolwarm, and cols25." width="672"></p>
 </div>
 <details>
 <summary>Code</summary>
@@ -268,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">preview_palette</span>(pals<span class="sc">::</span>viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" alt="A horizontal color band demonstrating the viridis palette." width="672"></p>
 </div>
 </div>
 <p>Easy to use (see <code>?ggplot2::scale_color_viridis_c</code>), visually appealing, and <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">apparently pretty good in terms of accessbility</a>. My only qualm with Viridis (sometimes) is that it ends on bright yellow, which can sometimes lead to the deadly sin of “yellow dots on a white background”:</p>
@@ -281,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="384"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
 </div>
 </div>
 <p>Thankfully, this can be rectified by setting <code>end = .92</code> to end the scale earlier:</p>
@@ -291,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">scale_color_viridis_c</span>(<span class="at">end =</span> .<span class="dv">92</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="384"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow-green point with the highest drat value is easier to see against the white background compared to the previous example." width="384"></p>
 </div>
 </div>
 <p>Or with a dark background:</p>
@@ -301,7 +301,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">scale_color_viridis_c</span>() <span class="sc">+</span> <span class="fu">theme_dark</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="384"></p>
+<p><img src="col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
 </div>
 </div>
 </section>
