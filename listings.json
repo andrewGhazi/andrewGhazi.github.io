@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/rstudio_setup/rstudio_setup.html",
       "/posts/collapse_is_sick/sick.html",
       "/posts/col_pal/col_pal.html",
       "/posts/geryon/geryon.html",

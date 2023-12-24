@@ -2,38 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://andrewghazi.github.io/posts/col_pal/col_pal.html</loc>
-    <lastmod>2023-12-22T05:46:34.035Z</lastmod>
+    <lastmod>2023-12-24T03:28:08.009Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</loc>
-    <lastmod>2023-12-22T05:46:33.335Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
-    <lastmod>2023-12-22T05:46:32.819Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
-    <lastmod>2023-12-22T05:46:31.251Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/about.html</loc>
-    <lastmod>2023-12-22T05:46:30.443Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/index.html</loc>
-    <lastmod>2023-12-22T05:46:30.915Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
-    <lastmod>2023-12-22T05:46:32.131Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</loc>
+    <lastmod>2023-12-24T03:28:07.313Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/geryon/geryon.html</loc>
-    <lastmod>2023-12-22T05:46:33.171Z</lastmod>
+    <lastmod>2023-12-24T03:28:06.901Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
+    <lastmod>2023-12-24T03:28:05.861Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/index.html</loc>
+    <lastmod>2023-12-24T03:28:04.693Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/about.html</loc>
+    <lastmod>2023-12-24T03:28:04.233Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
+    <lastmod>2023-12-24T03:28:05.001Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
+    <lastmod>2023-12-24T03:28:06.557Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</loc>
+    <lastmod>2023-12-24T03:28:07.057Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/collapse_is_sick/sick.html</loc>
-    <lastmod>2023-12-22T05:46:33.679Z</lastmod>
+    <lastmod>2023-12-24T03:28:07.645Z</lastmod>
   </url>
 </urlset>

@@ -10,7 +10,117 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 29 Nov 2023 05:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 23 Dec 2023 05:00:00 GMT</lastBuildDate>
+<item>
+  <title>Setting up and using RStudio effectively</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Some tips on how to get the most out of RStudio.</p>
+<p>I don’t like the default look of RStudio:</p>
+<p><img src="https://andrewghazi.github.io/posts/rstudio_setup/images/Screenshot from 2023-12-23 20-58-23.png" class="img-fluid" alt="A screenshot of RStudio with the default appearance."></p>
+<p>(Right click &gt; Open image in new tab to see fine details)</p>
+<p>On several occasions when showing people something on my computer, they’ve remarked that they liked the various tweaks I’ve made to the look. So I thought I would write those down so that I can refer people to this when needed and refresh my memory next time I’m setting up a new computer. The end result looks more like this:</p>
+<p><img src="https://andrewghazi.github.io/posts/rstudio_setup/images/Screenshot from 2023-12-23 16-58-24.png" class="img-fluid" alt="A screenshot of RStudio with the modifications outlined in this post. This includes a dark theme, programming font, and rainbow parentheses."></p>
+<p>For reference, you can <a href="https://posit.co/download/rstudio-desktop/">download RStudio from the Posit website</a>. Sometimes Posit makes interesting posts about updates to the RStudio IDE on <a href="https://posit.co/blog/">their blog</a> to show off new features.</p>
+<section id="pane-layout" class="level1">
+<h1>Pane layout</h1>
+<ul>
+<li>Top left: Source</li>
+<li>Top right: Console</li>
+<li>Bottom left: History (minimize this for maximum source space)</li>
+<li>Bottom right: everything else that I commonly use (Environment, Files, Plots, Packages, Help, VCS, Viewer)</li>
+</ul>
+<p>The first two changes make the <code>Ctrl+1</code> &amp; <code>Ctrl+2</code> keyboard shortcuts align with the position of the panes as well.</p>
+</section>
+<section id="font" class="level1">
+<h1>Font</h1>
+<p>There are many good programming fonts out there, but my favorite is <a href="https://github.com/tonsky/FiraCode">Fira Code</a>. I particularly like the ligatures, especially the one that changes the base R pipe from separate <code>|</code> and <code>&gt;</code> characters into a clean triangle (see second screenshot above).</p>
+</section>
+<section id="options" class="level1">
+<h1>Options</h1>
+<p>On the menu bar, navigate to Tools &gt; Global Options. This is a list of changes I make to the defaults:</p>
+<ul>
+<li>General
+<ul>
+<li>Uncheck Basic &gt; Workspace &gt; Restore .RData into workspace at startup
+<ul>
+<li>Relying on saved workspaces generally bad practice. Save things explicitly.</li>
+</ul></li>
+<li>Uncheck Basic &gt; Other &gt; “Send automated crash reports to RStudio”</li>
+<li>Set “Save workspace to .RData on exit” to “Never”</li>
+<li>Graphics &gt; Graphics Device &gt; Backend / Antialiasing
+<ul>
+<li>On some OS’s it can sometimes be helpful to change the backend to AGG or alter the antialiasing setting to revent blurriness in the Plots panel when using display scaling on a high esolution monitor. The defaults work perfectly on my 2160p monitor on Linux Mint / PopOS.</li>
+</ul></li>
+<li>Advanced &gt; Other &gt; Check “Show .Last.value in environment listing”
+<ul>
+<li>If you ever evaluate a long-running expression, then curse because you forgot to assign the result to something, you can still access it with this special variable (but only if you don’t run any other expressions afterwards!).</li>
+</ul></li>
+</ul></li>
+<li>Code
+<ul>
+<li>Check “Use native pipe operator”</li>
+<li>I usually disable Snippets &gt; Enable code snippets</li>
+<li>Display &gt; Syntax &gt; Check “Use rainbow parentheses” (see screenshot above)</li>
+<li>Saving &gt; General &gt; Check “Ensure that source files end with newline”</li>
+<li>Experiment with Display &gt; Indentation guides &gt; Gray lines</li>
+</ul></li>
+<li>Appearance
+<ul>
+<li>Editor font: “Fira Code”</li>
+<li>Editor theme: “Idle Fingers” (this is the One True Theme)</li>
+</ul></li>
+<li>Pane Layout: see above</li>
+<li>R Markdown
+<ul>
+<li>Basic &gt; R Markdown &gt; “Show output preview in:” Set to “None”
+<ul>
+<li>Basic &gt; R Markdown &gt; Uncheck Show output inline for all R Markdown documents</li>
+<li>Basic &gt; R Markdown &gt; “Show equation and image previews:” Set to “Never”</li>
+</ul></li>
+<li>I’m just now noticing a citations section that one can seemingly point to a Zotero library. This seems promising, I should look into how that works. One of my goals in life is to never use EndNote again.</li>
+</ul></li>
+<li>Accessibility
+<ul>
+<li>General &gt; Other &gt; Check “Reduce user interface animations”</li>
+<li>General &gt; Other &gt; Check “Highlight focused panel”
+<ul>
+<li>(That’s the dotted line around the Console panel in the second screenshot.)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="keyboard-shortcuts" class="level1">
+<h1>Keyboard shortcuts</h1>
+<p>I think one of the best ways for new people to start feeling more comfortable programming in R is to get the RStudio keyboard shortcuts into your muscle memory. When you’re trying to learn the academic part of statistics, you don’t want to be simultaneously dealing with the physical annoyance of having having to constantly move the mouse around. Keep your hands on the keyboard as much as possible.</p>
+<p>This is the one keyboard shortcut to rule them all:</p>
+<p><img src="https://andrewghazi.github.io/posts/rstudio_setup/images/ash_nazg.jpg" class="img-fluid"></p>
+<p><code>Alt+Shift+K</code> on superior operating systems, <code>Option+Shift+K</code> on MacOS. This brings up the quick reference list of all shortcuts. Glance over them, pick out one or two that seem the most useful, and be mindful about using them in your next few sessions. Once they become second nature, pick another. Don’t worry about memorizing them all. There’s a ton and many aren’t very useful. Some of my favorites:</p>
+<ul>
+<li><code>Ctrl+Enter</code> : Run current selection / line</li>
+<li><code>Ctrl+1</code> and <code>Ctrl+2</code>: move the cursor to Source or Console panes, respectively (see above tip on pane layout).</li>
+<li><code>Ctrl+A</code>, <code>Ctrl+C</code>, <code>Ctrl+V</code>: select all, copy, paste</li>
+<li><code>Ctrl+Tab</code> and <code>Ctrl+Shift+Tab</code>: cycle back and forth through source tabs.
+<ul>
+<li>Also works in Firefox!</li>
+</ul></li>
+</ul>
+<p>You can set custom shortcuts (or modify the existing set) by navigating to Tools &gt; Modify Keyboard Shortcuts. I set Insert Chunk to <code>Ctrl+Alt+U</code> (<code>Ctrl+Alt+I</code> is bound to <a href="https://github.com/zoltanp/xrandr-invert-colors">xrandr-invert-colors</a> on my systems) and <code>Ctrl+Shift+-</code> to my <a href="https://andrewghazi.github.io/posts/paste_image/paste_image.html">Quarto image paste script</a>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>RStudio</category>
+  <guid>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</guid>
+  <pubDate>Sat, 23 Dec 2023 05:00:00 GMT</pubDate>
+  <media:content url="https://andrewghazi.github.io/posts/rstudio_setup/images/ash_nazg.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>collapse is sick</title>
   <dc:creator>Andrew Ghazi</dc:creator>
