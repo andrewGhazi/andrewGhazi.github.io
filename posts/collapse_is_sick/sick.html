@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I saw an R package I hadn’t heard of called <a href="https://sebkrantz.github.io/collapse/">collapse</a> performing well on <a href="https://duckdblabs.github.io/db-benchmark/">the duckdb database-like ops benchmark</a>, and I thought I’d try it out on a little statistical simulation. tl;dr: <em>collapse is sick.</em></p>
 <section id="context" class="level1">
 <h1>Context</h1>
-<p>I wanted to know the null p-value distribution that you’d get when mis-applying a t-test to non-normally distributed data with a small number of data points. So to simulate this I</p>
+<p>I wanted to know the null p-value distribution that you’d get when mis-applying a t-test to non-normally distributed data with a small number of data points. So to simulate this I:</p>
 <ul>
 <li>generate 100k groups</li>
 <li>generate 6*100k random t-distributed numbers (df = 3)</li>
@@ -231,19 +231,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>val_dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>              g          x
-          &lt;int&gt;      &lt;num&gt;
-      1:      1 -0.8293276
-      2:      1  0.5453873
-      3:      1  0.4535513
-      4:      1  0.7541095
-      5:      1  4.0125492
-     ---                  
-1799996: 300000 -2.7378186
-1799997: 300000 -0.2597018
-1799998: 300000 -1.0422079
-1799999: 300000 -0.7761390
-1800000: 300000  3.7017714</code></pre>
+<pre><code>              g           x
+          &lt;int&gt;       &lt;num&gt;
+      1:      1 -3.48409676
+      2:      1  0.15042095
+      3:      1  1.13387276
+      4:      1  0.49418580
+      5:      1 -2.32011785
+     ---                   
+1799996: 300000 -1.63776731
+1799997: 300000  0.04093387
+1799998: 300000 -0.52113228
+1799999: 300000 -0.88467284
+1800000: 300000 -0.91563773</code></pre>
 </div>
 </div>
 </section>
@@ -332,10 +332,10 @@ disabled.</code></pre>
 <pre><code># A tibble: 4 × 5
   expression                 min   median `itr/sec` mem_alloc
   &lt;bch:expr&gt;            &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;
-1 dplyr_soln(val_dt)       3.62s    3.68s     0.272      50MB
-2 dt_soln(val_dt)          2.96s    3.14s     0.319    12.7MB
-3 dt_fast_soln(val_dt)   83.19ms  83.56ms    11.8      60.9MB
-4 collapse_soln(val_dt)  52.14ms  53.11ms    18.7        29MB</code></pre>
+1 dplyr_soln(val_dt)       3.68s    3.74s     0.267      50MB
+2 dt_soln(val_dt)          3.02s    3.21s     0.311    12.7MB
+3 dt_fast_soln(val_dt)   84.27ms  84.65ms    11.6      60.9MB
+4 collapse_soln(val_dt)  52.74ms  53.71ms    18.5        29MB</code></pre>
 </div>
 </div>
 <p><code>data.table</code> is about 35x faster than <code>dplyr</code>, and <code>collapse</code> is <strong>70x</strong> faster. It somehow manages to vectorize the group-wise means / sds, but <em>also</em> use those as inputs to a single call to the internally vectorized <code>stats::pt()</code>.</p>
