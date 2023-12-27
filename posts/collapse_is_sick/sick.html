@@ -231,18 +231,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>val_dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>              g           x
-      1:      1  1.57832991
-      2:      1  0.82991027
-      3:      1  0.37623160
-      4:      1  0.74914277
-      5:      1 -1.34526013
-     ---                   
-1799996: 300000  0.11979158
-1799997: 300000 -0.02435893
-1799998: 300000 -0.28745133
-1799999: 300000  1.16550449
-1800000: 300000 -1.18974355</code></pre>
+<pre><code>              g          x
+          &lt;int&gt;      &lt;num&gt;
+      1:      1 -0.8293276
+      2:      1  0.5453873
+      3:      1  0.4535513
+      4:      1  0.7541095
+      5:      1  4.0125492
+     ---                  
+1799996: 300000 -2.7378186
+1799997: 300000 -0.2597018
+1799998: 300000 -1.0422079
+1799999: 300000 -0.7761390
+1800000: 300000  3.7017714</code></pre>
 </div>
 </div>
 </section>
@@ -331,10 +332,10 @@ disabled.</code></pre>
 <pre><code># A tibble: 4 × 5
   expression                 min   median `itr/sec` mem_alloc
   &lt;bch:expr&gt;            &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;
-1 dplyr_soln(val_dt)       3.78s    3.82s     0.262      50MB
-2 dt_soln(val_dt)          3.16s    3.26s     0.306    12.7MB
-3 dt_fast_soln(val_dt)  106.83ms 107.07ms     9.32     60.9MB
-4 collapse_soln(val_dt)  52.37ms  54.37ms    18.4        29MB</code></pre>
+1 dplyr_soln(val_dt)       3.62s    3.68s     0.272      50MB
+2 dt_soln(val_dt)          2.96s    3.14s     0.319    12.7MB
+3 dt_fast_soln(val_dt)   83.19ms  83.56ms    11.8      60.9MB
+4 collapse_soln(val_dt)  52.14ms  53.11ms    18.7        29MB</code></pre>
 </div>
 </div>
 <p><code>data.table</code> is about 35x faster than <code>dplyr</code>, and <code>collapse</code> is <strong>70x</strong> faster. It somehow manages to vectorize the group-wise means / sds, but <em>also</em> use those as inputs to a single call to the internally vectorized <code>stats::pt()</code>.</p>
@@ -342,7 +343,7 @@ disabled.</code></pre>
 <section id="misc" class="level1">
 <h1>Misc</h1>
 <ul>
-<li>I also tried it in <code>r-polars</code>, and it was tied with collapse in terms of speed IF you don’t count the conversion to the <code>pl$DataFrame()</code> class. But the syntax was <em>horrifying</em>.</li>
+<li>I also tried it in <code>r-polars</code>, which tied with collapse in terms of speed IF you don’t count the conversion to the <code>pl$DataFrame()</code> class. The syntax was <em>horrifying</em>. Plus, the conversion to the conversion to the <code>pl$DataFrame()</code> class renders many R functions inoperable from what I can tell. It’s almost like you’re not writing R anymore, it feels more like writing in a separate language with an R interface.</li>
 </ul>
 <p>And here’s the distribution I was trying to simulate so I can have a figure on this post. Violating the normality assumptions leads to an incorrect p-value distribution, surprise!</p>
 <div class="cell">
@@ -361,10 +362,11 @@ disabled.</code></pre>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey75"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey75"</span>)) <span class="sc">+</span> </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"This distribution is not uniform!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="sick_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="sick_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" alt="A histogram of simulated p-values from the distribution. The distribution is non-uniform (depleted near 0 and 1 with a mode around 0.3), indicating the t-test assumptions are violated." width="672"></p>
 </div>
 </div>
 
