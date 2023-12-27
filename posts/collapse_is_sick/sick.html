@@ -203,11 +203,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I wanted to know the null p-value distribution that you’d get when mis-applying a t-test to non-normally distributed data with a small number of data points. So to simulate this I:</p>
 <ul>
 <li>generate 100k groups</li>
-<li>generate 6*100k random t-distributed numbers (df = 3)</li>
-<li>compute the p-value test statistic for each group. In R, this is <code>2*pt(sqrt(6) * abs(mean(x) / sd(x)), 5, lower.tail = FALSE)</code> where <code>x</code> are the random values for the group.
+<li>generate 6*100k random t-distributed (df = 3) synthetic observations</li>
+<li>compute the p-value test statistic for each group. In R, this is <code>2*pt(sqrt(6) * abs(mean(x) / sd(x)), 5, lower.tail = FALSE)</code> where <code>x</code> are the random observations for the group.
 <ul>
 <li>This can be done naively with <code>t.test(x)$p.value</code> of course, but that comes with a lot of slow baggage.</li>
-<li>It’s probably also possible to figure out the distribution I’m trying to simulate analytically. Simulating it is easier.</li>
+<li>It’s probably possible to figure out the distribution I’m trying to simulate analytically. Simulating it is easier.</li>
 </ul></li>
 </ul>
 <p>We’ll try it in <code>dplyr</code>, <code>data.table</code>, and <code>collapse</code>, making sure to use a single thread on the latter two:</p>
@@ -233,17 +233,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>              g           x
           &lt;int&gt;       &lt;num&gt;
-      1:      1 -3.48409676
-      2:      1  0.15042095
-      3:      1  1.13387276
-      4:      1  0.49418580
-      5:      1 -2.32011785
+      1:      1 -0.73444564
+      2:      1  0.36597911
+      3:      1 -0.27794500
+      4:      1  0.64412979
+      5:      1 -0.03793993
      ---                   
-1799996: 300000 -1.63776731
-1799997: 300000  0.04093387
-1799998: 300000 -0.52113228
-1799999: 300000 -0.88467284
-1800000: 300000 -0.91563773</code></pre>
+1799996: 300000  0.89369762
+1799997: 300000  0.32863263
+1799998: 300000  0.50397917
+1799999: 300000  0.89890535
+1800000: 300000  0.19279528</code></pre>
 </div>
 </div>
 </section>
@@ -316,54 +316,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the all.equal() check fails because dplyr returns a tibble. That's the only difference,</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># but it necessitates setting check = FALSE.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(<span class="fu">dplyr_soln</span>(val_dt),</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">dt_soln</span>(val_dt),</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">dt_fast_soln</span>(val_dt),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">collapse_soln</span>(val_dt),</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">check =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_iterations =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fselect</span>(expression<span class="sc">:</span>mem_alloc, n_itr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bench_res <span class="ot">=</span> bench<span class="sc">::</span><span class="fu">mark</span>(<span class="at">dplyr =</span> <span class="fu">dplyr_soln</span>(val_dt),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">dt_slow =</span> <span class="fu">dt_soln</span>(val_dt),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">dt_fast =</span> <span class="fu">dt_fast_soln</span>(val_dt),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">collapse =</span> <span class="fu">collapse_soln</span>(val_dt),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">check =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">min_iterations =</span> <span class="dv">2</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>bench_res <span class="sc">|&gt;</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fselect</span>(expression<span class="sc">:</span>mem_alloc, n_itr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
-disabled.</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 5
-  expression                 min   median `itr/sec` mem_alloc
-  &lt;bch:expr&gt;            &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;
-1 dplyr_soln(val_dt)       3.68s    3.74s     0.267      50MB
-2 dt_soln(val_dt)          3.02s    3.21s     0.311    12.7MB
-3 dt_fast_soln(val_dt)   84.27ms  84.65ms    11.6      60.9MB
-4 collapse_soln(val_dt)  52.74ms  53.71ms    18.5        29MB</code></pre>
+  expression      min   median `itr/sec` mem_alloc
+  &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;
+1 dplyr         3.67s    3.72s     0.269      50MB
+2 dt_slow       3.02s    3.21s     0.312    12.7MB
+3 dt_fast     83.15ms  83.25ms    11.8      60.9MB
+4 collapse    52.02ms  53.21ms    18.7        29MB</code></pre>
 </div>
 </div>
-<p><code>data.table</code> is about 35x faster than <code>dplyr</code>, and <code>collapse</code> is <strong>70x</strong> faster. It somehow manages to vectorize the group-wise means / sds, but <em>also</em> use those as inputs to a single call to the internally vectorized <code>stats::pt()</code>.</p>
+<p><code>data.table</code> is about 44.7 times faster than <code>dplyr</code>, and <code>collapse</code> is <code>round(as.numeric( bench_res$median[1] / bench_res$median[4]), digits = 1)</code> faster. It somehow manages to vectorize the group-wise means / sds, but <em>also</em> use those as inputs to a single call to the internally vectorized <code>stats::pt()</code>.</p>
 </section>
 <section id="misc" class="level1">
 <h1>Misc</h1>
 <ul>
 <li>I also tried it in <code>r-polars</code>, which tied with collapse in terms of speed IF you don’t count the conversion to the <code>pl$DataFrame()</code> class. The syntax was <em>horrifying</em>. Plus, the conversion to the conversion to the <code>pl$DataFrame()</code> class renders many R functions inoperable from what I can tell. It’s almost like you’re not writing R anymore, it feels more like writing in a separate language with an R interface.</li>
 </ul>
-<p>And here’s the distribution I was trying to simulate so I can have a figure on this post. Violating the normality assumptions leads to an incorrect p-value distribution, surprise!</p>
+<p>And here’s the distribution I was trying to simulate so I can have a figure on this post. Violating the normality assumptions leads to a non-uniform p-value distribution and miscalibrated statistics, surprise!</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">collapse_soln</span>(val_dt) <span class="sc">|&gt;</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p)) <span class="sc">+</span> </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">boundary =</span> <span class="dv">0</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">'grey60'</span>) <span class="sc">+</span> </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">'grey10'</span>) <span class="sc">+</span> </span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span> </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey75"</span>)) <span class="sc">+</span> </span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"This distribution is not uniform!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">collapse_soln</span>(val_dt) <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p)) <span class="sc">+</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">boundary =</span> <span class="dv">0</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">'grey60'</span>) <span class="sc">+</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">'grey10'</span>) <span class="sc">+</span> </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey10"</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"grey95"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>),</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey75"</span>)) <span class="sc">+</span> </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"This distribution is not uniform!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="sick_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" alt="A histogram of simulated p-values from the distribution. The distribution is non-uniform (depleted near 0 and 1 with a mode around 0.3), indicating the t-test assumptions are violated." width="672"></p>
