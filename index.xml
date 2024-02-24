@@ -1187,6 +1187,14 @@ font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
 
 
 
+<p>Edit 2/23/2024: I’ve added an improved version of this functionality to my geryon package (<a href="https://github.com/andrewGhazi/geryon?tab=readme-ov-file#insert_img_link">Github link</a>). This version has some added advantages:</p>
+<ul>
+<li>It uses the <a href="https://rstudio.github.io/rstudioapi/"><code>rstudioapi</code> package</a> to intelligently look for an <code>images/</code> directory in the same directory as the current source document.</li>
+<li>The keyboard shortcut is isolated to RStudio and not system wide.</li>
+<li>It’s a little faster.</li>
+</ul>
+<section id="original-post" class="level1">
+<h1>Original post</h1>
 <p>A colleague asked if there was a way to paste an image from the clipboard to Rmd without having to manually save the image to a file and type out the file path. There’s no native way to do that as far as I can tell, but I came up with a bash script that:</p>
 <ol type="1">
 <li>saves the image from the clipboard to a specified file in my screenshots directory</li>
@@ -1248,6 +1256,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
 <p>But my colleague is on macOS, which has neither xclip nor xdotool nor a non-terrible way to add custom keyboard shortcuts. Oh well…</p>
 
 
+</section>
 
  ]]></description>
   <category>Quarto</category>
