@@ -332,14 +332,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 1 finished in 12.8 seconds.
-Chain 3 finished in 12.9 seconds.
-Chain 4 finished in 13.7 seconds.
-Chain 2 finished in 14.1 seconds.
+Chain 2 finished in 10.1 seconds.
+Chain 1 finished in 10.4 seconds.
+Chain 3 finished in 10.5 seconds.
+Chain 4 finished in 11.0 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 13.4 seconds.
-Total execution time: 14.3 seconds.</code></pre>
+Mean chain execution time: 10.5 seconds.
+Total execution time: 11.1 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -351,13 +351,13 @@ Total execution time: 14.3 seconds.</code></pre>
 <pre><code># A tibble: 7 × 8
   variable              mean        sd       q5      q95  rhat ess_bulk ess_tail
   &lt;chr&gt;                &lt;num&gt;     &lt;num&gt;    &lt;num&gt;    &lt;num&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;
-1 oc_intercept     35.4      0.227      3.51e+1  3.58e+1  1.00    3797.    2532.
-2 oc_coef         -13.9      0.465     -1.47e+1 -1.32e+1  1.00    4020.    3037.
-3 tr_coef[1]        0.000749 0.0000849  6.10e-4  8.89e-4  1.00    4128.    2522.
-4 tr_coef[2]       -0.0273   0.00224   -3.09e-2 -2.36e-2  1.00    3023.    2519.
-5 tr_coef[3]        0.00409  0.00103    2.35e-3  5.78e-3  1.00    4430.    2523.
-6 tr_intercept_id  -0.723    0.0854    -8.65e-1 -5.85e-1  1.00    3372.    2594.
-7 sigma            13.2      0.164      1.30e+1  1.35e+1  1.00    4151.    2212.</code></pre>
+1 oc_intercept     35.4      0.225      3.51e+1  3.58e+1  1.00    4446.    2824.
+2 oc_coef         -13.9      0.485     -1.47e+1 -1.31e+1  1.00    4532.    3078.
+3 tr_coef[1]        0.000751 0.0000816  6.16e-4  8.84e-4  1.00    3853.    2778.
+4 tr_coef[2]       -0.0274   0.00222   -3.10e-2 -2.37e-2  1.00    3546.    2771.
+5 tr_coef[3]        0.00408  0.000980   2.49e-3  5.68e-3  1.00    4121.    2518.
+6 tr_intercept_id  -0.720    0.0852    -8.63e-1 -5.80e-1  1.00    3714.    2516.
+7 sigma            13.2      0.164      1.30e+1  1.35e+1  1.00    4341.    2674.</code></pre>
 </div>
 </div>
 <p>Notably, we get slightly different estimates:</p>
@@ -366,7 +366,7 @@ Total execution time: 14.3 seconds.</code></pre>
 <li>a lower (more negative) estimate of the effect of nets on malaria risk (<code>oc_coef</code>). It’s now about -14 instead of -10.</li>
 <li>and a slightly lower estimate of baseline malaria risk (<code>oc_intercept</code>). -35 instead of -39.</li>
 </ul>
-<p>I haven’t done a deep dive into understanding these differences, but it’s good that they’re consistent. Apparently the “right answer” from the original simulation is about -10, so I may be making some mistake here. My best guess at the moment is that the priors on the treatment model are comparatively stronger than those on the outcome model, so when estimating them simultaneously it’s easier to shift the posterior toward lower treatment model coefficients which are made up for by a higher coefficient in the outcome model. But that’s just a guess. More to dig in on in the future maybe, but that’s all for now!</p>
+<p>I haven’t done a deep dive into understanding these differences, but it’s good that they’re consistent. Apparently the true right answer from the original simulation is about -10, so I may be making some mistake here. My best guess at the moment is that the weights on the outcome model sort of puts those observations on a higher scale, so the joint posterior tends to shift toward whatever yields the strongest fit on the outcome model. But that’s just a guess. More to dig in on in the future maybe, but that’s all for now!</p>
 <p><img src="images/2024-03-02_15:21:27.png" title="A medical diagram of a knee joint so I can have a figure on this post." class="img-fluid" alt="A medical diagram of a knee joint so I can have a figure on this post."></p>
 
 
