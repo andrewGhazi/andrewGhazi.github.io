@@ -2,42 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://andrewghazi.github.io/posts/col_pal/col_pal.html</loc>
-    <lastmod>2024-02-24T04:24:46.988Z</lastmod>
+    <lastmod>2024-03-02T20:32:06.343Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</loc>
-    <lastmod>2024-02-24T04:24:46.224Z</lastmod>
+    <lastmod>2024-03-02T20:32:05.343Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/geryon/geryon.html</loc>
-    <lastmod>2024-02-24T04:24:45.756Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
-    <lastmod>2024-02-24T04:24:44.656Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/index.html</loc>
-    <lastmod>2024-02-24T04:24:43.400Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/about.html</loc>
-    <lastmod>2024-02-24T04:24:42.904Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
-    <lastmod>2024-02-24T04:24:43.744Z</lastmod>
+    <lastmod>2024-03-02T20:32:04.639Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
-    <lastmod>2024-02-24T04:24:45.372Z</lastmod>
+    <lastmod>2024-03-02T20:32:03.575Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
+    <lastmod>2024-03-02T20:32:01.111Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/about.html</loc>
+    <lastmod>2024-03-02T20:31:59.747Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/index.html</loc>
+    <lastmod>2024-03-02T20:32:00.635Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
+    <lastmod>2024-03-02T20:32:02.559Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andrewghazi.github.io/posts/joint_ipw/joint_ipw.html</loc>
+    <lastmod>2024-03-02T20:32:04.391Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</loc>
-    <lastmod>2024-02-24T04:24:45.940Z</lastmod>
+    <lastmod>2024-03-02T20:32:04.891Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/collapse_is_sick/sick.html</loc>
-    <lastmod>2024-02-24T04:24:46.608Z</lastmod>
+    <lastmod>2024-03-02T20:32:05.831Z</lastmod>
   </url>
 </urlset>

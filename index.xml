@@ -10,7 +10,482 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 23 Dec 2023 05:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 02 Mar 2024 05:00:00 GMT</lastBuildDate>
+<item>
+  <title>Joint IPW</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/joint_ipw/joint_ipw.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I have been learning a bit about inverse probability weights (IPW) from <a href="https://www.andrewheiss.com/blog/2021/12/18/bayesian-propensity-scores-weights/">two</a> <a href="https://www.andrewheiss.com/blog/2021/12/20/fully-bayesian-ate-iptw/">posts</a> by Andrew Heiss. I tried a few changes to simplify / improve upon the method he uses in his post, so I thought I would write them up here.</p>
+<p>IPW uses <em>two</em> models to account for confounders that affect both the probability of receiving a treatment and the distribution of an outcome variable that is influenced by the treatment. The first model (the treatment model) produces a set of weights that are applied to each observation in the second model (the outcome model). This is done to up-weight observations that are “surprising” to the treatment model. For a more thorough explanation, see the posts linked above. They’re good.</p>
+<p>In the latter post, Dr.&nbsp;Heiss tries to take a fully Bayesian that uses a <em>distribution</em> of weights rather than a fixed value for each observation. This is good, but (I think) we can do better. I see two related spots with room for improvement:</p>
+<ul>
+<li>Don’t bother with the custom C++ counter injection business. This is over-complicated and un-Stannic (is that the right adjectival?). You’re already at the “writing raw Stan” party, so you might as well just estimate the weights in the Stan program.</li>
+<li>Estimate the treatment model (and hence the weights) <em>simultaneously</em> with the outcome model. This means calculating the weights in the <code>transformed parameters</code> block. When they are treated as data you’re behaving as if the treatment model posterior as “fixed”. Generally I prefer to get a full joint distribution of the entire system.
+<ul>
+<li>This also has the potential to change the results since the joint distribution of weights and coefficients need not have the same marginals.</li>
+<li>One could argue that you don’t want the outcome model to influence the treatment model estimates. I’m on the fence about that. If that bothers you you could in principle add priors to diminish that effect.</li>
+</ul></li>
+</ul>
+<p>So let’s try it. We’ll use the same (synthetic) dataset and models:</p>
+<ul>
+<li>Treatment model: <code>net ~ income + temperature + health</code></li>
+<li>Outcome model: <code>malaria_risk ~ net</code> with weights.</li>
+</ul>
+<p>This is what the data looks like:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(fastverse)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(brms)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(cmdstanr)</span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">options</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">digits =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># nets &lt;- data.table::fread("https://evalf21.classes.andrewheiss.com/data/mosquito_nets.csv")</span></span>
+<span id="cb1-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># save(nets, file = "data/nets.RData")</span></span>
+<span id="cb1-9"></span>
+<span id="cb1-10"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">load</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data/nets.RData"</span>)</span>
+<span id="cb1-11"></span>
+<span id="cb1-12">nets <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb1-13">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">slt</span>(net, malaria_risk, income, temperature, health)</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         net malaria_risk income temperature health
+      &lt;lgcl&gt;        &lt;int&gt;  &lt;int&gt;       &lt;num&gt;  &lt;int&gt;
+   1:   TRUE           33    781          21     56
+   2:  FALSE           42    974          26     57
+   3:  FALSE           80    502          26     15
+   4:   TRUE           34    671          21     20
+   5:  FALSE           44    728          19     17
+  ---                                              
+1748:   TRUE           18    961          22     27
+1749:  FALSE           49    906          31     49
+1750:  FALSE           17   1325          21     92
+1751:  FALSE           46    879          27     33
+1752:   TRUE           13   1339          28     77</code></pre>
+</div>
+</div>
+<p>So let’s prepare the data:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">data_list <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">N =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(nets),</span>
+<span id="cb3-2">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">net      =</span> nets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>net,</span>
+<span id="cb3-3">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">net_real =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.numeric</span>(nets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>net),</span>
+<span id="cb3-4">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(nets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>income, nets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>temperature, nets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>health),</span>
+<span id="cb3-5">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">malaria_risk =</span> nets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>malaria_risk)</span></code></pre></div>
+</details>
+</div>
+<p>and run it through the Stan model below. It looks like a lot, but it’s really just a lightly adapted form of the same brms starting points as the original posts. The new addition here is the <code>transformed parameters</code> block:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">data</span> {</span>
+<span id="cb4-2">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span>&lt;<span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>&gt; N;</span>
+<span id="cb4-3">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">array</span>[N] <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span>  net;</span>
+<span id="cb4-4">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[N] net_real;</span>
+<span id="cb4-5">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">matrix</span>[N,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>] X;</span>
+<span id="cb4-6">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[N] malaria_risk;</span>
+<span id="cb4-7">}</span>
+<span id="cb4-8"></span>
+<span id="cb4-9"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">transformed data</span> {</span>
+<span id="cb4-10">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">real</span> mx;</span>
+<span id="cb4-11">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[N] cent_net;</span>
+<span id="cb4-12">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> Kc = <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>;</span>
+<span id="cb4-13">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">matrix</span>[N, Kc] Xc;  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// centered version of X without an intercept</span></span>
+<span id="cb4-14">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[Kc] means_X;  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// column means of X before centering</span></span>
+<span id="cb4-15">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">matrix</span>[N, Kc] XQ;</span>
+<span id="cb4-16">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">matrix</span>[Kc, Kc] XR;</span>
+<span id="cb4-17">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">matrix</span>[Kc, Kc] XR_inv;</span>
+<span id="cb4-18"></span>
+<span id="cb4-19">  mx = mean(net_real);</span>
+<span id="cb4-20">  cent_net = net_real - mx;</span>
+<span id="cb4-21"></span>
+<span id="cb4-22">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>) {</span>
+<span id="cb4-23">    means_X[i] = mean(X[, i]);</span>
+<span id="cb4-24">    Xc[, i] = X[, i] - means_X[i];</span>
+<span id="cb4-25">  }</span>
+<span id="cb4-26">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// compute and scale QR decomposition</span></span>
+<span id="cb4-27">  XQ = qr_thin_Q(Xc) * sqrt(N - <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>);</span>
+<span id="cb4-28">  XR = qr_thin_R(Xc) / sqrt(N - <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>);</span>
+<span id="cb4-29">  XR_inv = inverse(XR);</span>
+<span id="cb4-30">}</span>
+<span id="cb4-31"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">parameters</span> {</span>
+<span id="cb4-32">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// parameters for the treatment model</span></span>
+<span id="cb4-33">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">real</span> tr_intercept_cent; <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// treatment intercept for centered X</span></span>
+<span id="cb4-34">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[Kc] tr_coef_qr; <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// treatment coefs on QR scale</span></span>
+<span id="cb4-35"></span>
+<span id="cb4-36">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// parameters for the outcome model</span></span>
+<span id="cb4-37">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">real</span> oc_intercept; <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// intercept of malaria_risk ~ net</span></span>
+<span id="cb4-38">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">real</span> oc_coef; <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// coef of malaria_risk ~ net</span></span>
+<span id="cb4-39">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">real</span>&lt;<span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>&gt; sigma;</span>
+<span id="cb4-40">}</span>
+<span id="cb4-41"></span>
+<span id="cb4-42"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">transformed parameters</span> {</span>
+<span id="cb4-43">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[Kc] tr_coef = XR_inv * tr_coef_qr;</span>
+<span id="cb4-44">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[N] prop_scores;</span>
+<span id="cb4-45">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vector</span>[N] weights;</span>
+<span id="cb4-46"></span>
+<span id="cb4-47">  prop_scores = inv_logit(X * tr_coef + tr_intercept_cent);</span>
+<span id="cb4-48">  weights = net_real ./ prop_scores + (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>-net_real) ./ (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>-prop_scores);</span>
+<span id="cb4-49">}</span>
+<span id="cb4-50"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">model</span> {</span>
+<span id="cb4-51">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// likelihood for the treatment model</span></span>
+<span id="cb4-52">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> bernoulli_logit_glm_lpmf(net | XQ, tr_intercept_cent, tr_coef_qr);</span>
+<span id="cb4-53"></span>
+<span id="cb4-54">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// likelihood for the outcome model</span></span>
+<span id="cb4-55">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (n <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:N) {</span>
+<span id="cb4-56">      <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> weights[n] * normal_lpdf(malaria_risk[n] | oc_coef * cent_net[n] + oc_intercept, sigma);</span>
+<span id="cb4-57">  }</span>
+<span id="cb4-58">  </span>
+<span id="cb4-59">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// priors for the outcome model</span></span>
+<span id="cb4-60">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> normal_lpdf(oc_coef | <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>);</span>
+<span id="cb4-61">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> student_t_lpdf(oc_intercept | <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>);</span>
+<span id="cb4-62">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> student_t_lpdf(sigma | <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14.8</span>)</span>
+<span id="cb4-63">              - <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> * student_t_lccdf(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span> | <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14.8</span>);</span>
+<span id="cb4-64"></span>
+<span id="cb4-65">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// priors for the treatment model</span></span>
+<span id="cb4-66">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> student_t_lpdf(tr_intercept_cent | <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.5</span>);</span>
+<span id="cb4-67">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">target +=</span> normal_lpdf(tr_coef_qr | <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>);</span>
+<span id="cb4-68">}</span>
+<span id="cb4-69"></span>
+<span id="cb4-70"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">generated quantities</span> {</span>
+<span id="cb4-71">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">real</span> tr_intercept_id = tr_intercept_cent - dot_product(means_X, tr_coef);</span>
+<span id="cb4-72"></span>
+<span id="cb4-73">}</span></code></pre></div>
+<p>Let’s run it and see what we get:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">mal_mod <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cmdstan_model</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"stan/malaria.stan"</span>)</span>
+<span id="cb5-2"></span>
+<span id="cb5-3">mal_fit <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> mal_mod<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(data_list, </span>
+<span id="cb5-4">                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">parallel_chains =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, </span>
+<span id="cb5-5">                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">refresh =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">interactive</span>())</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 parallel chains...
+
+Chain 1 finished in 12.8 seconds.
+Chain 3 finished in 12.9 seconds.
+Chain 4 finished in 13.7 seconds.
+Chain 2 finished in 14.1 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 13.4 seconds.
+Total execution time: 14.3 seconds.</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">mal_fit<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"oc_intercept"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"oc_coef"</span>, </span>
+<span id="cb7-2">                  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tr_coef"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tr_intercept_id"</span>,</span>
+<span id="cb7-3">                  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sigma"</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">slt</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>median, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>mad)</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 8
+  variable              mean        sd       q5      q95  rhat ess_bulk ess_tail
+  &lt;chr&gt;                &lt;num&gt;     &lt;num&gt;    &lt;num&gt;    &lt;num&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;
+1 oc_intercept     35.4      0.227      3.51e+1  3.58e+1  1.00    3797.    2532.
+2 oc_coef         -13.9      0.465     -1.47e+1 -1.32e+1  1.00    4020.    3037.
+3 tr_coef[1]        0.000749 0.0000849  6.10e-4  8.89e-4  1.00    4128.    2522.
+4 tr_coef[2]       -0.0273   0.00224   -3.09e-2 -2.36e-2  1.00    3023.    2519.
+5 tr_coef[3]        0.00409  0.00103    2.35e-3  5.78e-3  1.00    4430.    2523.
+6 tr_intercept_id  -0.723    0.0854    -8.65e-1 -5.85e-1  1.00    3372.    2594.
+7 sigma            13.2      0.164      1.30e+1  1.35e+1  1.00    4151.    2212.</code></pre>
+</div>
+</div>
+<p>Notably, we get slightly different estimates:</p>
+<ul>
+<li>The treatment model coefficients are consistent in sign and relative magnitude, but slightly smaller than before.</li>
+<li>a lower (more negative) estimate of the effect of nets on malaria risk (<code>oc_coef</code>). It’s now about -14 instead of -10.</li>
+<li>and a slightly lower estimate of baseline malaria risk (<code>oc_intercept</code>). -35 instead of -39.</li>
+</ul>
+<p>I haven’t done a deep dive into understanding these differences, but it’s good that they’re consistent. Apparently the “right answer” from the original simulation is about -10, so I may be making some mistake here. My best guess at the moment is that the priors on the treatment model are comparatively stronger than those on the outcome model, so when estimating them simultaneously it’s easier to shift the posterior toward lower treatment model coefficients which are made up for by a higher coefficient in the outcome model. But that’s just a guess. More to dig in on in the future maybe, but that’s all for now!</p>
+<p><img src="https://andrewghazi.github.io/posts/joint_ipw/images/2024-03-02_15:21:27.png" title="A medical diagram of a knee joint so I can have a figure on this post." class="img-fluid" alt="A medical diagram of a knee joint so I can have a figure on this post."></p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <category>Stan</category>
+  <category>Probability</category>
+  <guid>https://andrewghazi.github.io/posts/joint_ipw/joint_ipw.html</guid>
+  <pubDate>Sat, 02 Mar 2024 05:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Setting up and using RStudio effectively</title>
   <dc:creator>Andrew Ghazi</dc:creator>
@@ -1190,7 +1665,7 @@ font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
 <p>Edit 2/23/2024: I’ve added an improved version of this functionality to my <a href="https://andrewghazi.github.io/posts/geryon/geryon.html"><code>geryon</code> package</a> (<a href="https://github.com/andrewGhazi/geryon?tab=readme-ov-file#insert_img_link">Github link</a>). This version has some added advantages:</p>
 <ul>
 <li>It uses the <a href="https://rstudio.github.io/rstudioapi/"><code>rstudioapi</code> package</a> to intelligently look for an <code>images/</code> directory in the same directory as the current source document.</li>
-<li>The keyboard shortcut is isolated to RStudio and not system wide.</li>
+<li>The keyboard shortcut is isolated to RStudio and not system-wide.</li>
 <li>It’s a little faster.</li>
 </ul>
 <section id="original-post" class="level1">
@@ -1282,6 +1757,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
  ]]></description>
   <category>R</category>
   <category>Stan</category>
+  <category>Probability</category>
   <guid>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</guid>
   <pubDate>Sat, 30 Sep 2023 04:00:00 GMT</pubDate>
 </item>
@@ -4470,6 +4946,7 @@ Vehtari, Aki, Tommi Mononen, Ville Tolvanen, Tuomas Sivula, and Ole Winther. 201
   <category>R</category>
   <category>Stan</category>
   <category>loo</category>
+  <category>Probability</category>
   <guid>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</guid>
   <pubDate>Fri, 22 Sep 2023 04:00:00 GMT</pubDate>
 </item>
