@@ -192,13 +192,12 @@ font-style: inherit;">qDT</span>()</span></code></pre></div>
 </section>
 <section id="mc.cores-4" class="level1">
 <h1><code>mc.cores = 4</code></h1>
-<p>I think most people have at least 4 CPU cores these days. Use them.</p>
+<p>I think most people have at least 4 CPU cores these days. Use them. If a function tries to detect a user-set option to enable parallelization, this is usually it.</p>
 <p>Why 4?</p>
 <ul>
 <li>It’s a power of 2.</li>
 <li>I’d bet that the average R user has at least four cores, I wouldn’t bet that they have eight or more.</li>
 <li>It’s still in the range where you’re getting big gains from each additional core, but not you’re not dying from the overhead of managing all the resultant pieces.</li>
-<li>If a package tries to detect a user-set option for parallelization, this is usually it.</li>
 <li>Stan defaults to four chains, and <code>brms</code> uses this option for its <code>cores</code> argument.</li>
 </ul>
 <p>Compare:</p>
@@ -227,7 +226,7 @@ font-style: inherit;">mclapply</span>(d, sqrt)})</span>
 <span id="cb10-4">t1</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-   33.9     7.7    26.9 </code></pre>
+   33.8     7.3    26.5 </code></pre>
 </div>
 </div>
 <p>Versus:</p>
@@ -377,52 +376,97 @@ font-style: inherit;">"fits/cmdstanr_sleep"</span>)</span>
 </div>
 <p>Look at how much faster both the compilation and sampling is:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">rstan_time</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   user  system elapsed 
-   51.8     4.5   179.9 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">cmdstanr_time</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   user  system elapsed 
-  277.4     2.9    84.6 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">rstan_mod<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">rstan_samp_time <span class="ot" style="color: #003B4F;
 background-color: null;
-font-style: inherit;">$</span>fit    <span class="sc" style="color: #5E5E5E;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">|&gt;</span> rstan<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">max</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rowSums</span>(rstan<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">get_elapsed_time</span>()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>        warmup sample
-chain:1     80     40
-chain:2     84     40
-chain:3     83     40
-chain:4     80     40</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">cmdstanr_mod<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">get_elapsed_time</span>(rstan_mod<span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">$</span>fit <span class="sc" style="color: #5E5E5E;
+font-style: inherit;">$</span>fit)))</span>
+<span id="cb16-2">cmdstanr_samp_time <span class="ot" style="color: #003B4F;
 background-color: null;
-font-style: inherit;">|&gt;</span> rstan<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">=</span>  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">max</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rowSums</span>(rstan<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">get_elapsed_time</span>()</span></code></pre></div>
+font-style: inherit;">get_elapsed_time</span>(cmdstanr_mod<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>fit))) </span>
+<span id="cb16-3"></span>
+<span id="cb16-4">rstan_comp_time <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> rstan_time[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"elapsed"</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> rstan_samp_time</span>
+<span id="cb16-5">cmdstanr_comp_time <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> cmdstanr_time[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"elapsed"</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> cmdstanr_samp_time</span>
+<span id="cb16-6"></span>
+<span id="cb16-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.table</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">backend =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rstan"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cmdstanr"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">each =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb16-8">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"compiling"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sampling"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">times =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb16-9">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">t =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(rstan_comp_time, rstan_samp_time, cmdstanr_comp_time, cmdstanr_samp_time))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        warmup sample
-chain:1     44     22
-chain:2     44     23
-chain:3     42     22
-chain:4     44     22</code></pre>
+<pre><code>    backend      type     t
+     &lt;char&gt;    &lt;char&gt; &lt;num&gt;
+1:    rstan compiling    55
+2:    rstan  sampling   122
+3: cmdstanr compiling    18
+4: cmdstanr  sampling    66</code></pre>
 </div>
 </div>
 <p>The fit object even uses less space:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">fs<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">fs<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -432,7 +476,7 @@ font-style: inherit;">"fits/rstan_sleep.rds"</span>) </span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>48M</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">fs<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">fs<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
