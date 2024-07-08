@@ -6,10 +6,10 @@
       version="2.0">
 <channel>
 <title>andrewghazi.github.io</title>
-<link>https://andrewghazi.github.io/index.html</link>
+<link>https://andrewghazi.github.io/</link>
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.3.450</generator>
+<generator>quarto-1.5.53</generator>
 <lastBuildDate>Sat, 08 Jun 2024 04:00:00 GMT</lastBuildDate>
 <item>
   <title>Use options()</title>
@@ -20,9 +20,10 @@
 
 
 
+
 <p><code>options()</code> that I use and should use more.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -510,6 +511,7 @@ font-style: inherit;">"fits/cmdstanr_sleep.rds"</span>) </span></code></pre></di
 
 
 
+
 <p>I have been learning a bit about inverse probability weights (IPW) from <a href="https://www.andrewheiss.com/blog/2021/12/18/bayesian-propensity-scores-weights/">two</a> <a href="https://www.andrewheiss.com/blog/2021/12/20/fully-bayesian-ate-iptw/">posts</a> by Andrew Heiss. I tried a few changes to simplify / improve upon the method he uses in his post, so I thought I would write them up here.</p>
 <p>IPW uses <em>two</em> models to account for confounders that affect both the probability of receiving a treatment and the distribution of an outcome variable that is influenced by the treatment. The first model (the treatment model) produces a set of weights that are applied to each observation in the second model (the outcome model). This is done to up-weight observations that are “surprising” to the treatment model. For a more thorough explanation, see the posts linked above. They’re good.</p>
 <p>In the latter post, Dr.&nbsp;Heiss tries to take a fully Bayesian approach that uses a <em>distribution</em> of weights rather than a fixed value for each observation. This is good, but (I think) we can do better. I see two related spots with room for improvement:</p>
@@ -528,7 +530,7 @@ font-style: inherit;">"fits/cmdstanr_sleep.rds"</span>) </span></code></pre></di
 </ul>
 <p>This is what the data looks like:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -586,7 +588,7 @@ font-style: inherit;">slt</span>(net, malaria_risk, income, temperature, health)
 </div>
 <p>So let’s prepare the data:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">data_list <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -630,11 +632,13 @@ font-style: inherit;">$</span>malaria_risk)</span></code></pre></div>
 <p>and run it through the Stan model below. It looks like a lot, but it’s really just a lightly adapted form of the same brms starting points as the original posts. The new addition here is the <code>transformed parameters</code> block:</p>
 <div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">data</span> {</span>
 <span id="cb4-2">  <span class="dt" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">int</span>&lt;<span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>&gt; N;</span>
@@ -658,6 +662,7 @@ font-style: inherit;">vector</span>[N] malaria_risk;</span>
 <span id="cb4-8"></span>
 <span id="cb4-9"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">transformed data</span> {</span>
 <span id="cb4-10">  <span class="dt" style="color: #AD0000;
 background-color: null;
@@ -695,8 +700,10 @@ font-style: inherit;">matrix</span>[Kc, Kc] XR_inv;</span>
 <span id="cb4-21"></span>
 <span id="cb4-22">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:<span class="dv" style="color: #AD0000;
@@ -718,6 +725,7 @@ font-style: inherit;">1</span>);</span>
 <span id="cb4-30">}</span>
 <span id="cb4-31"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">parameters</span> {</span>
 <span id="cb4-32">  <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -750,6 +758,7 @@ font-style: inherit;">// coef of malaria_risk ~ net</span></span>
 background-color: null;
 font-style: inherit;">real</span>&lt;<span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>&gt; sigma;</span>
@@ -757,6 +766,7 @@ font-style: inherit;">0</span>&gt; sigma;</span>
 <span id="cb4-41"></span>
 <span id="cb4-42"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">transformed parameters</span> {</span>
 <span id="cb4-43">  <span class="dt" style="color: #AD0000;
 background-color: null;
@@ -777,12 +787,14 @@ font-style: inherit;">1</span>-prop_scores);</span>
 <span id="cb4-49">}</span>
 <span id="cb4-50"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">model</span> {</span>
 <span id="cb4-51">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">// likelihood for the treatment model</span></span>
 <span id="cb4-52">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> bernoulli_logit_glm_lpmf(net | XQ, tr_intercept_cent, tr_coef_qr);</span>
 <span id="cb4-53"></span>
 <span id="cb4-54">  <span class="co" style="color: #5E5E5E;
@@ -790,13 +802,16 @@ background-color: null;
 font-style: inherit;">// likelihood for the outcome model</span></span>
 <span id="cb4-55">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (n <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:N) {</span>
 <span id="cb4-56">      <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> weights[n] * normal_lpdf(malaria_risk[n] | oc_coef * cent_net[n] + oc_intercept, sigma);</span>
 <span id="cb4-57">  }</span>
 <span id="cb4-58">  </span>
@@ -805,6 +820,7 @@ background-color: null;
 font-style: inherit;">// priors for the outcome model</span></span>
 <span id="cb4-60">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> normal_lpdf(oc_coef | <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
@@ -812,6 +828,7 @@ background-color: null;
 font-style: inherit;">10</span>);</span>
 <span id="cb4-61">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> student_t_lpdf(oc_intercept | <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
@@ -821,6 +838,7 @@ background-color: null;
 font-style: inherit;">5</span>);</span>
 <span id="cb4-62">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> student_t_lpdf(sigma | <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
@@ -845,6 +863,7 @@ background-color: null;
 font-style: inherit;">// priors for the treatment model</span></span>
 <span id="cb4-66">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> student_t_lpdf(tr_intercept_cent | <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
@@ -854,6 +873,7 @@ background-color: null;
 font-style: inherit;">2.5</span>);</span>
 <span id="cb4-67">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> normal_lpdf(tr_coef_qr | <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
@@ -863,6 +883,7 @@ font-style: inherit;">3</span>);</span>
 <span id="cb4-69"></span>
 <span id="cb4-70"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">generated quantities</span> {</span>
 <span id="cb4-71">  <span class="dt" style="color: #AD0000;
 background-color: null;
@@ -871,7 +892,7 @@ font-style: inherit;">real</span> tr_intercept_id = tr_intercept_cent - dot_prod
 <span id="cb4-73">}</span></code></pre></div>
 <p>Let’s run it and see what we get:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">mal_mod <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -915,7 +936,7 @@ All 4 chains finished successfully.
 Mean chain execution time: 10.7 seconds.
 Total execution time: 11.3 seconds.</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">mal_fit<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -981,6 +1002,7 @@ font-style: inherit;">-</span>mad)</span></code></pre></div>
   <dc:creator>Andrew Ghazi</dc:creator>
   <link>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1099,6 +1121,7 @@ font-style: inherit;">-</span>mad)</span></code></pre></div>
 
 
 
+
 <p>I saw an R package I hadn’t heard of called <a href="https://sebkrantz.github.io/collapse/">collapse</a> performing well on <a href="https://duckdblabs.github.io/db-benchmark/">the duckdb database-like ops benchmark</a>, and I thought I’d try it out on a little statistical simulation. tl;dr: <em>collapse is sick.</em></p>
 <section id="context" class="level1">
 <h1>Context</h1>
@@ -1114,7 +1137,7 @@ font-style: inherit;">-</span>mad)</span></code></pre></div>
 </ul>
 <p>We’ll try it in <code>dplyr</code>, <code>data.table</code>, and <code>collapse</code>, making sure to use a single thread on the latter two:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1139,7 +1162,7 @@ font-style: inherit;">1</span>)</span></code></pre></div>
 </div>
 <p>And generate a synthetic dataset. We’ll use 300k groups just so we can get a really smooth histogram with a large number of bins:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">n <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -1202,12 +1225,13 @@ font-style: inherit;">3</span>))</span>
 <h2 class="anchored" data-anchor-id="dplyr"><code>dplyr</code></h2>
 <p>So easy to write, so clean.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">dplyr_soln <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(val_dt) {</span>
 <span id="cb4-2">  val_dt <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1258,12 +1282,13 @@ font-style: inherit;">FALSE</span>))</span>
 <p>My first attempt didn’t perform as well as I would have hoped, which turned out because I wasn’t using the <a href="https://rdatatable.gitlab.io/data.table/reference/datatable-optimize.html">GForce-optimized functions</a> for the mean and standard deviation. To use those, the expression in <code>j</code> can ONLY contain the GForce-optimized functions <code>min, max, mean, median, var, sd, sum, prod, first, last, head, tail</code>. <code>base::Arithmetic</code> and <code>stats::pt</code> are not among them!</p>
 <p>To solve this I used two data.table chained expressions <code>[][]</code>. It’s possible that there’s a more performant way to do it in one pass over the groups (while still using GForce), but I wanted to keep it to within the realm of functions I know how to write intuitively.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">dt_soln <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(val_dt) {</span>
 <span id="cb5-2">  val_dt[,.(<span class="at" style="color: #657422;
 background-color: null;
@@ -1304,6 +1329,7 @@ font-style: inherit;">=</span> g]</span>
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(val_dt) {</span>
 <span id="cb5-8">  </span>
 <span id="cb5-9">  val_dt[,.(<span class="at" style="color: #657422;
@@ -1359,12 +1385,13 @@ font-style: inherit;">FALSE</span>))]</span>
 <p>I’ll talk about the amazing performance later, but what really impressed me is how easy it was to write. I literally just copy-pasted my dplyr solution (the gold standard of “easy to write” IMO) then typed four “f”s to switch to the <code>collapse</code> version of the dplyr/base functions (e.g.&nbsp;<code>summarise() -&gt; fsummarise()</code>).</p>
 <p>For me, “easy to write” is a <em>HUGE</em> benefit. Difficult to quantify, but so, so important for the interactive programming I do 80% of the time.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">collapse_soln <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(val_dt) {</span>
 <span id="cb6-2">  val_dt <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1421,7 +1448,7 @@ font-style: inherit;">FALSE</span>))</span>
 <h1>Benchmark</h1>
 <p>I tried to follow the guidelines on the <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-benchmarking.html#inside-a-loop-prefer-setdt-instead-of-data-table">data.table benchmarking guidance page</a>, though my iterations are well under the 1 second mark recommended. I wanted to test my realistic use case, not something that’s artificially huge :shrug: .</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -1496,7 +1523,7 @@ font-style: inherit;">:</span>mem_alloc, n_itr)</span></code></pre></div>
 </ul>
 <p>And here’s the distribution I was trying to simulate so I can have a figure on this post. Violating the normality assumptions leads to a non-uniform p-value distribution and miscalibrated statistics, surprise!</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1631,7 +1658,11 @@ background-color: null;
 font-style: inherit;">"This distribution is not uniform!"</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/collapse_is_sick/sick_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" alt="A histogram of simulated p-values from the distribution. The distribution is non-uniform (depleted near 0 and 1 with a mode around 0.3), indicating the t-test assumptions are violated." width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/collapse_is_sick/sick_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" alt="A histogram of simulated p-values from the distribution. The distribution is non-uniform (depleted near 0 and 1 with a mode around 0.3), indicating the t-test assumptions are violated." width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 
@@ -1653,9 +1684,10 @@ font-style: inherit;">"This distribution is not uniform!"</span>)</span></code><
 
 
 
+
 <p>This post reviews how and when I use my favorite color palettes in R.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1756,14 +1788,19 @@ background-color: null;
 font-style: inherit;">250</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" alt="Four horizontal color bands demonstrating the color palettes highlighted in this post. From top to bottom: viridis, cividis, coolwarm, and cols25." width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" alt="Four horizontal color bands demonstrating the color palettes highlighted in this post. From top to bottom: viridis, cividis, coolwarm, and cols25." width="672"></p>
+</figure>
 </div>
-<details>
+</div>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">preview_palette <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(pal, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
@@ -1846,7 +1883,7 @@ font-style: inherit;">""</span>)</span>
 <section id="viridis" class="level2">
 <h2 class="anchored" data-anchor-id="viridis">Viridis</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1855,12 +1892,16 @@ background-color: null;
 font-style: inherit;">::</span>viridis)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" alt="A horizontal color band demonstrating the viridis palette." width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="A horizontal color band demonstrating the viridis palette." width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Easy to use (see <code>?ggplot2::scale_color_viridis_c</code>), visually appealing, and <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">apparently pretty good in terms of accessbility</a>. My only qualm with Viridis (sometimes) is that it ends on bright yellow, which can sometimes lead to the deadly sin of “yellow dots on a white background”:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">p <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -1886,12 +1927,16 @@ background-color: null;
 font-style: inherit;">scale_color_viridis_c</span>()</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Thankfully, this can be rectified by setting <code>end = .92</code> to end the scale earlier:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">p <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1904,12 +1949,16 @@ background-color: null;
 font-style: inherit;">92</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow-green point with the highest drat value is easier to see against the white background compared to the previous example." width="384"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow-green point with the highest drat value is easier to see against the white background compared to the previous example." width="384"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Or with a dark background:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">p <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1922,14 +1971,18 @@ background-color: null;
 font-style: inherit;">theme_dark</span>()</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" alt="A scatterplot of the displacement against mpg in the mtcars dataset, with points colored according to the drat variable. The yellow point with the highest drat value is hard to see against the white background." width="384"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="cividis" class="level2">
 <h2 class="anchored" data-anchor-id="cividis">Cividis</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1938,7 +1991,11 @@ background-color: null;
 font-style: inherit;">::</span>cividis)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Some recommend this as the go-to general purpose color palette for continuous variables, and I think it’s okay in that role, but my eyes strongly latch onto the grey “center”, which sometimes isn’t helpful when the center of the data’s range doesn’t have any special meaning over any other quantile. That said, it’s <a href="https://arxiv.org/ftp/arxiv/papers/1712/1712.01662.pdf">optimized for improved accessibility over viridis</a>. I like to use when a central value diverges into two categories e.g.&nbsp;a map of where foos versus bars live.</p>
@@ -1946,7 +2003,7 @@ font-style: inherit;">::</span>cividis)</span></code></pre></div>
 <section id="coolwarm" class="level2">
 <h2 class="anchored" data-anchor-id="coolwarm">coolwarm</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1955,7 +2012,11 @@ background-color: null;
 font-style: inherit;">::</span>coolwarm)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Similar sort of use-case as cividis for me, but particularly when the two categories have a natural “high” versus “low” interpretation (rather than two unordered categories) e.g.&nbsp;a map of temperatures.</p>
@@ -1963,7 +2024,7 @@ font-style: inherit;">::</span>coolwarm)</span></code></pre></div>
 <section id="cols25" class="level2">
 <h2 class="anchored" data-anchor-id="cols25">cols25</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1976,7 +2037,11 @@ background-color: null;
 font-style: inherit;">10</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>I like that the first two colors are pleasing shades of red and blue, and it’s easy enough to remember how to use.</p>
@@ -1988,7 +2053,7 @@ font-style: inherit;">10</span>)</span></code></pre></div>
 <section id="parula" class="level2">
 <h2 class="anchored" data-anchor-id="parula">Parula</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1997,12 +2062,16 @@ background-color: null;
 font-style: inherit;">::</span>parula)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In my opinion, this is the most visually appealing continuous color scale out there, even over Viridis. Just look at it:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">bimod_dat <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2110,7 +2179,11 @@ background-color: null;
 font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="384"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/col_pal/col_pal_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="384"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The downside is that I can never immediately remember the syntax for dropping a custom continuous color palette into ggplot. You have to use <code>scale_*_gradientn(colors = pals::parula(n = 100))</code>. This also involves setting a discrete number of colors for the values to get binned into, which seems reasonable at first, but can sometimes come back to bite you as visually-apparent aliasing if you don’t set <code>n</code> high enough. Setting it too high can create visual artifacts. Finally, this requires a dependency on <code>pals</code>, which isn’t always desirable during package development.</p>
@@ -2134,6 +2207,7 @@ font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
 
 
 
+
 <p>Like many R users, I have over time accrued a number of miscellaneous R functions that I put into a little utilities package. It’s called geryon. <a href="https://github.com/andrewGhazi/geryon">The readme</a> explains (most) of the functionality, but I’m quite fond of the logo:</p>
 <p><img src="https://andrewghazi.github.io/posts/geryon/img/logo.png" class="img-fluid" alt="The geryon package's hex logo. It shows a winding monster tail inspired by Gustave Doré's woodcut of the monster Geryon in the Divine Comedy."></p>
 
@@ -2149,6 +2223,7 @@ font-style: inherit;">"colorbar"</span>)</span></code></pre></div>
   <dc:creator>Andrew Ghazi</dc:creator>
   <link>https://andrewghazi.github.io/posts/paste_image/paste_image.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2239,6 +2314,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
 
 
 
+
 <p>I made an R implementation of <a href="https://arxiv.org/abs/2012.07977">probabilistic contrastive principal components analysis, aka PCPCA</a>. As the name implies, this method allows you to <em>probabilistically</em> infer <em>contrastive</em> axes between experimental groups. “Contrastive” axes are directions in high dimensional space that help distinguish specified groups, rather than overall variation. More information <a href="https://github.com/andrewGhazi/ezpzmcmcpcpca/tree/main">on GitHub</a>.</p>
 <p>R implementation of PCPCA. PCPCA is the work of Didong Li, Andrew Jones, and Barbara Engelhardt. Original manuscript here: https://arxiv.org/abs/2012.07977 and original Python implementation here: https://github.com/andrewcharlesjones/pcpca</p>
 <p><img src="https://andrewghazi.github.io/posts/ezpzmcmcpcpca/images/bivar_plot.png" class="img-fluid" alt="A scatterplot of estimated PC1 against estimated PC2. The points are colored with a bi-variate color palette according to the true values used to simulated them. The color axes roughly align with the cartesian axes, showing that the model has accurately estimated the directions of contrastive variation."></p>
@@ -2261,9 +2337,10 @@ font-style: inherit;">')'</span></span></code></pre></div>
 
 
 
+
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://andrewghazi.github.io/posts/tidy_dt/images/who.png" class="img-fluid figure-img" style="width:75.0%" alt="A diagram using the ancient Who Would Win? meme format, comparing the verbosity of the tidyverse with the terse data.table package which does many things with one square boi: `[.data.table`"></p>
+<p><img src="https://andrewghazi.github.io/posts/tidy_dt/images/who.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%" alt="A diagram using the ancient Who Would Win? meme format, comparing the verbosity of the tidyverse with the terse data.table package which does many things with one square boi: `[.data.table`"></p>
 </figure>
 </div>
 <p>A list of common tidyverse/data.table commands that do (roughly) the same thing so that you can compare the syntax. Some opinions included.</p>
@@ -2318,7 +2395,7 @@ font-style: inherit;">')'</span></span></code></pre></div>
 <section id="setup" class="level1">
 <h1>Setup</h1>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2336,7 +2413,7 @@ font-style: inherit;">library</span>(tidyverse)</span></code></pre></div>
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2362,7 +2439,7 @@ The following object is masked from 'package:purrr':
 </div>
 <p>We’ll edit the <code>mtcars</code> data frame as the example input.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">mtcars <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2397,7 +2474,7 @@ font-style: inherit;">as.data.table</span>()</span></code></pre></div>
 <section id="tidy" class="level2">
 <h2 class="anchored" data-anchor-id="tidy">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2431,7 +2508,7 @@ font-style: inherit;">/</span> cyl)</span></code></pre></div>
 <section id="data.table-1" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-1">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">mt_dt[, disp_per_cyl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2445,7 +2522,7 @@ font-style: inherit;">/</span>cyl]</span></code></pre></div>
 <p>By default assignment by reference operations don’t print anything. You can tack an empty <code>[]</code> onto the end of that operation to get it to print.</p>
 <p>The data.table walrus operator / <code>let()</code> assign by reference, so the <code>disp_per_cyl</code> column is added to <code>mt_dt</code> without using <code>&lt;-</code>. Let’s delete it.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">mt_dt[, disp_per_cyl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2460,7 +2537,7 @@ font-style: inherit;">NULL</span>]</span></code></pre></div>
 <section id="multiple-columns" class="level2">
 <h2 class="anchored" data-anchor-id="multiple-columns">Multiple columns</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2497,7 +2574,7 @@ font-style: inherit;">/</span> disp)</span></code></pre></div>
 </div>
 <p>versus</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">mt_dt[, <span class="st" style="color: #20794D;
 background-color: null;
@@ -2519,7 +2596,7 @@ font-style: inherit;">/</span> disp)]</span></code></pre></div>
 </div>
 <p>Cleanup:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">mt_dt[,<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2542,7 +2619,7 @@ font-style: inherit;">NULL</span>)]</span></code></pre></div>
 <section id="tidy-1" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-1">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2566,7 +2643,7 @@ font-style: inherit;">450</span>)</span></code></pre></div>
 <section id="data.table-2" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-2">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">mt_dt[disp <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2587,7 +2664,7 @@ font-style: inherit;">450</span>]</span></code></pre></div>
 </div>
 <p>If the condition is a pre-existing column, enclose it in parentheses:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">mt_dt[, big <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2611,7 +2688,7 @@ font-style: inherit;">450</span>]</span>
 1:     3     4   TRUE
 2:     3     4   TRUE</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">mt_dt[, big <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2631,7 +2708,7 @@ font-style: inherit;">NULL</span>]</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="tidy-2">tidy</h2>
 <p>They recently introduced <code>.by</code> arguments in <code>dplyr 1.1.0</code>, which to me is much cleaner than a separate call to <code>group_by()</code></p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2660,7 +2737,7 @@ font-style: inherit;">.by =</span> cyl)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="data.table-3">data.table</h2>
 <p>We use the data.table <code>.()</code> alias for <code>list()</code></p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">mt_dt[, .(<span class="at" style="color: #657422;
 background-color: null;
@@ -2685,7 +2762,7 @@ font-style: inherit;">=</span> cyl]</span></code></pre></div>
 <section id="tidy-3" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-3">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2714,7 +2791,7 @@ font-style: inherit;">arrange</span>(mpg)</span></code></pre></div>
 <section id="data.table-4" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-4">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">mt_dt[<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2753,7 +2830,7 @@ font-style: inherit;">head</span>()</span></code></pre></div>
 <section id="inner" class="level2">
 <h2 class="anchored" data-anchor-id="inner">Inner</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2788,7 +2865,7 @@ font-style: inherit;">0</span>]</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="tidy-4">tidy</h2>
 <p>across() + where()</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2826,7 +2903,7 @@ font-style: inherit;">5</span>)))</span></code></pre></div>
 10 "Merc "
 # ℹ 22 more rows</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2857,7 +2934,7 @@ font-style: inherit;">where</span>(is.numeric),</span>
 <li>Use the special variable <code>.SD</code> and argument <code>.SDcols</code></li>
 </ul>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1">num_cols <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2964,7 +3041,7 @@ font-style: inherit;">=</span> num_cols][]</span></code></pre></div>
 <h1>Separate</h1>
 <p>Useful for splitting <code>g__Eschericia.s__Eschericia_coli</code> type identifiers.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1">df <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2987,7 +3064,7 @@ font-style: inherit;">"y-z"</span>))</span></code></pre></div>
 </div>
 <p>benchmark:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1">N <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -3283,7 +3360,7 @@ font-style: inherit;">5</span>)</span></code></pre></div>
 <section id="tidy-5" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-5">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1">df <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3327,7 +3404,7 @@ font-style: inherit;">'x2'</span>))</span></code></pre></div>
 <section id="data.table-6" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-6">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3372,7 +3449,7 @@ font-style: inherit;">"-"</span>)][]</span></code></pre></div>
 <h1>Unite</h1>
 <p>Inverse operation of separate.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1">df <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -3401,7 +3478,7 @@ font-style: inherit;">5</span>])</span></code></pre></div>
 <section id="tidy-6" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-6">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1">df <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3428,7 +3505,7 @@ font-style: inherit;">"-"</span>)</span></code></pre></div>
 <section id="data.table-7" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-7">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3463,7 +3540,7 @@ font-style: inherit;">"-"</span>)][]</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="tidy-7">tidy</h2>
 <p>Try <code>input_tbl |&gt; as.matrix() |&gt; t() |&gt; as_tibble()</code> if your variable types work, otherwise try <code>input_tbl |&gt; pivot_longer() |&gt; pivot_wider()</code> as needed.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1">mt_tbl[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -3527,7 +3604,7 @@ font-style: inherit;">as_tibble</span>()</span></code></pre></div>
 <section id="data.table-8" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-8">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb50" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1">data.table<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3579,7 +3656,7 @@ font-style: inherit;"># KEEP the old names in this variable</span></span></code>
 <section id="tidy-8" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-8">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb52" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1">mt_tbl <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3602,7 +3679,7 @@ font-style: inherit;">.by =</span> cyl)</span></code></pre></div>
 <section id="data.table-9" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-9">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb54" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1">mt_dt[, .(<span class="at" style="color: #657422;
 background-color: null;
@@ -3626,7 +3703,7 @@ font-style: inherit;">=</span> cyl]</span></code></pre></div>
 <section id="tidy-9" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-9">tidy</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb56" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1">nested <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -3664,7 +3741,7 @@ font-style: inherit;">unnest</span>(data)</span></code></pre></div>
 <section id="data.table-10" class="level2">
 <h2 class="anchored" data-anchor-id="data.table-10">data.table</h2>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb58" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1">nested <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -3706,7 +3783,7 @@ font-style: inherit;">head</span>()</span></code></pre></div>
 </div>
 <p>If there’s only one column in the nested column:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb60" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1">dt[,<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3730,7 +3807,7 @@ font-style: inherit;">=</span> group]</span></code></pre></div>
 <section id="session-info" class="level1">
 <h1>session info</h1>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb61" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1">sessioninfo<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3839,6 +3916,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
 
 
 
+
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from <span class="citation" data-cites="vehtari_bayesian">(Vehtari et al. 2016)</span>. I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:</p>
@@ -3851,7 +3929,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
 </ul>
 <p>Load some setup libraries:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-1_adb1fa5edb404d74bfe907a4ee1e69d4">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3863,7 +3941,7 @@ font-style: inherit;">library</span>(cmdstanr)</span></code></pre></div>
 <h1>Why use integrated LOO?</h1>
 <p>The LOO method as implemented in the <code>loo</code> package requires an array of log-likelihood values for every observation at every iteration in the MCMC chains. There are some addtional complications around extensions like k-fold LOO and leave-one-group-out, but I’m going to ignore those. There’s a built in example in the <code>loo</code> package from a model fit with 32 observations - here’s the first 3 of 1000 rows (i.e.&nbsp;the MCMC chain took 1000 draws):</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-2_e2701638a8a927b9bcee14f27de2e2dc">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3908,7 +3986,11 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 <p>Observation-wise log-likelihood values can be unstable when a given observation strongly influences the posterior for a related parameter. Normally you’ll notice this when a Stan model gets through the MCMC stage without any warnings, but the Pareto k diagnostics come out badly when you try to run LOO and warning messages go off.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_bf47641226528e196e95af699bdf5288">
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/int_loo/img/diagram.png" class="img-fluid" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/int_loo/img/diagram.png" class="img-fluid figure-img" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>I’ve come across this twice:</p>
@@ -3919,7 +4001,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 <p>Why are unstable log-likehood values problematic? Because it makes estimating that observation’s contribution to the model fit challenging. When the log-likelihood values are unstable, the importance ratios can have high or infinite variance <span class="citation" data-cites="vehtari_practical_2017">(Vehtari, Gelman, and Gabry 2017)</span>. The loo package automatically performs <em>Pareto smoothed</em> importance sampling to smooth the importance weights. This estimates a generalized Pareto distribution to the tail of each log-likelihood distribution. The k parameter of this Pareto distribution is used as a diagnostic to assess whether or not the leave-one-out distribution for the observation in question has been accurately characterized by the log-likelihood values from the MCMC fit.</p>
 <p>The example below compares log-likelihood values for a single observation over two long MCMC chains evaluated with and without integration.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-4_27e6cef21460f6a0b5747d4288ffb8db">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r fold-hide code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -3987,6 +4069,7 @@ font-style: inherit;"># THIS IS NOT INTEGRATED!!!</span></span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(effect_j,</span>
 <span id="cb4-20">    mu_bar_j, sigma_bar_j, <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -4300,7 +4383,11 @@ font-style: inherit;">"grey75"</span>)</span>
 </div>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_66d8583634dc214633ef3a670d4b2068">
 <div class="cell-output-display">
-<p><img src="https://andrewghazi.github.io/posts/int_loo/img/integral_comparison2.png" class="img-fluid" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/int_loo/img/integral_comparison2.png" class="img-fluid figure-img" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Ignoring the slight shift in the location of the distribution, you should note the much <em>heavier tail</em> without integration. The Pareto k diagnostic for this observation is 1.003 (“very bad”) without integration, so the LOO model comparison to some other model would not be feasible without integration.</p>
@@ -4312,8 +4399,10 @@ background-color: null;
 font-style: inherit;">vector</span>[N] log_lik;</span>
 <span id="cb5-3">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:N) log_lik[i] = normal_lpdf(y[i] | mu, sigma);</span>
@@ -4326,8 +4415,10 @@ background-color: null;
 font-style: inherit;">vector</span>[N] log_lik;</span>
 <span id="cb6-3">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:N) log_lik[i] = normal_lpdf(y[i] | observation_mu[i], sigma);</span>
@@ -4346,7 +4437,7 @@ font-style: inherit;">1</span>:N) log_lik[i] = normal_lpdf(y[i] | observation_mu
 <h1>Simulated pathological example</h1>
 <p>I’ll work with a simplified version of the PGLMM example (no intercepts, covariates, etc). Here’s a tiny data simulation with sigma_phylo = 1 and sigma_resid = 0.5:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-6_9f016c224d7ef0d1cd49c010679fccc2">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -4434,11 +4525,13 @@ font-style: inherit;">t</span>()</span></code></pre></div>
 <p>This is the Stan model. It’s essentially just a continuous outcome with phylogenetically-distributed and normally-distributed error. The model needs to assess how much variation to ascribe to residual variance versus phylogenetic variance according to the pre-established phylogenetic structure (passed in as a Cholesky factor <code>Lcov</code>). I also include the <em>unstable</em> log-likelihood calculations in the generated quantities:</p>
 <div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb9-1"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">data</span> {</span>
 <span id="cb9-2">  <span class="dt" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">int</span>&lt;<span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>&gt; N;  <span class="co" style="color: #5E5E5E;
@@ -4458,11 +4551,13 @@ font-style: inherit;">// cholesky factor of known covariance matrix</span></span
 <span id="cb9-6"></span>
 <span id="cb9-7"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">parameters</span> {</span>
 <span id="cb9-8"> <span class="dt" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">real</span>&lt;<span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>&gt; sigma_resid;  <span class="co" style="color: #5E5E5E;
@@ -4472,6 +4567,7 @@ font-style: inherit;">// residual variation</span></span>
 background-color: null;
 font-style: inherit;">real</span>&lt;<span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">lower</span>=<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>&gt; sigma_phylo;  <span class="co" style="color: #5E5E5E;
@@ -4484,6 +4580,7 @@ font-style: inherit;">vector</span>[N] std_phylo_effects;</span>
 <span id="cb9-12"></span>
 <span id="cb9-13"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">transformed parameters</span> {</span>
 <span id="cb9-14">  <span class="dt" style="color: #AD0000;
 background-color: null;
@@ -4494,18 +4591,22 @@ font-style: inherit;">real</span> phylo_effects;</span>
 <span id="cb9-16">}</span>
 <span id="cb9-17"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">model</span> {</span>
 <span id="cb9-18">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">// likelihood</span></span>
 <span id="cb9-19">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:N) <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> normal_lpdf(Y[i] | phylo_effects[i], sigma_resid);</span>
 <span id="cb9-20"></span>
 <span id="cb9-21">  <span class="co" style="color: #5E5E5E;
@@ -4513,6 +4614,7 @@ background-color: null;
 font-style: inherit;">// priors</span></span>
 <span id="cb9-22">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> std_normal_lpdf(sigma_resid) - normal_lccdf(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span> | <span class="dv" style="color: #AD0000;
@@ -4523,6 +4625,7 @@ font-style: inherit;">1</span>);</span>
 <span id="cb9-23"></span>
 <span id="cb9-24">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> std_normal_lpdf(sigma_phylo) - normal_lccdf(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span> | <span class="dv" style="color: #AD0000;
@@ -4533,10 +4636,12 @@ font-style: inherit;">1</span>);</span>
 <span id="cb9-25"></span>
 <span id="cb9-26">  <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">target +=</span> std_normal_lpdf(std_phylo_effects);</span>
 <span id="cb9-27">}</span>
 <span id="cb9-28"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">generated quantities</span> {</span>
 <span id="cb9-29">  <span class="dt" style="color: #AD0000;
 background-color: null;
@@ -4547,8 +4652,10 @@ background-color: null;
 font-style: inherit;">// This will yield unstable log-likelihood values:</span></span>
 <span id="cb9-32">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:N){</span>
@@ -4557,18 +4664,20 @@ font-style: inherit;">1</span>:N){</span>
 <span id="cb9-35">}</span></code></pre></div>
 <p>Let’s run it:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/stanfit_f2ef98389e345beafb9eda7059645e8b">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">dir_prefix <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">interactive</span>()) <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"~/miscR/qmd/"</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">else</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
@@ -4656,7 +4765,7 @@ See https://mc-stan.org/misc/warnings for details.</code></pre>
 </div>
 <p>It samples fine, but the loo results are not good:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/naiveloo_1f931b29a33184310a87a79ffa3aa3aa">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">pglmm_fit<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -4703,12 +4812,13 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <li>and the term from the fit to the observation <code>y[i]</code></li>
 </ul>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-7_0bcadfcedd464c4146df4f4004ebe4fe">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">vec_integrand <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(phylo_effect_vec,</span>
 <span id="cb15-2">    mu_bar_ij, sigma_bar_ij,</span>
 <span id="cb15-3">    sigma_resid_j, yi,</span>
@@ -4766,6 +4876,7 @@ font-style: inherit;">+</span> fit_term</span>
 <span id="cb15-19"></span>
 <span id="cb15-20">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">!</span>log) res <span class="ot" style="color: #003B4F;
@@ -4796,12 +4907,13 @@ font-style: inherit;">return</span>(res)</span>
 <h1>Get the inputs</h1>
 <p>This code chunk does a lot of the book-keeping to prepare lists of correlation matrix products and format the posterior draws into a nice <code>draw_list</code>.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/inverses_9ca3116c3f8fcc117bfdba06653dbbf4">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">get_corr_mat_minus_i_inv <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(i, cor_mat, n) {</span>
 <span id="cb16-2">    cor_mat[<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -4922,6 +5034,7 @@ font-style: inherit;">t</span>(corr_12_list[[i]])</span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(sigma_phylo, corr_minus_i_list,</span>
 <span id="cb16-34">    corr_12_list) {</span>
 <span id="cb16-35">    <span class="co" style="color: #5E5E5E;
@@ -4942,6 +5055,7 @@ font-style: inherit;">*</span> corr_11_i_list)</span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(a) {</span>
 <span id="cb16-40">    <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -5069,7 +5183,7 @@ font-style: inherit;"># one list element per draw</span></span></code></pre></di
 <h1>Evaluate the integral</h1>
 <p>So using one draw from the <code>draw_list</code> we prepared in the previous section, along with the functions <code>get_mu_bar_ij()</code> and <code>get_sigma_bar_ij()</code>, we can get the set of <code>mu_bar_ij</code> and <code>sigma_bar_ij</code> for each observation for this one draw:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-8_ea9ce275ca7414e5d5b4a3a088d4bd4f">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">mu_bar_i1 <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -5104,7 +5218,7 @@ font-style: inherit;">get_sigma_bar_ij</span>(</span>
 <h2 class="anchored" data-anchor-id="integrand-at-one-point-for-one-observation-in-one-draw">Integrand at one point for one observation in one draw</h2>
 <p>Let’s evaluate the integrand for an (arbitrarily selected) phylogenetic effect of 0.333 for the fifth observation on the first draw:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-9_2535432966cd3aab92b48f2ff34e1a7c">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5144,7 +5258,7 @@ font-style: inherit;">5</span>]</span>
 <p>The R function <code>stats::integrate()</code> uses adaptive quadrature to numerically integrate functions. I don’t know much about how it works, but it internally calls C code for the heavy lifting, so it’s pretty fast. It would be interesting to benchmark it against Stan’s <code>integrate_1d()</code>.</p>
 <p>Anyway, you just hand <code>stats::integrate()</code> the function, the integration range, and other needed arguments.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-10_832b194957314d7760a763a9953c1299">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5192,12 +5306,13 @@ font-style: inherit;">5</span>]</span>
 <h2 class="anchored" data-anchor-id="integral-for-all-observations-in-one-draw">Integral for all observations in one draw</h2>
 <p>Going further, let’s write a couple functions to evaluate the integral for all observations in a given draw:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-11_1671498397dd2a584fa05713e10cdac9">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">integrate_one_obs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(mu_bar_ij, sigma_bar_ij, Y,</span>
 <span id="cb22-2">    sigma_resid) {</span>
 <span id="cb22-3">    <span class="fu" style="color: #4758AB;
@@ -5222,6 +5337,7 @@ font-style: inherit;">$</span>value</span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(draw_j) {</span>
 <span id="cb22-12">    mu_bar_ij <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -5278,7 +5394,7 @@ font-style: inherit;">42</span>]])</span>
 <pre><code>   user  system elapsed 
    0.02    0.00    0.02 </code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">draw42_integrals <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -5309,7 +5425,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="integral-for-all-observations-across-all-draws">Integral for all observations across all draws</h2>
 <p>Finally, let’s apply it to every posterior draw. I just remembered that <code>purrr::map()</code> recently introduced a <code>.progress</code> argument, let’s use it. <code>purrr</code> is sick.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/_555e06ce18a628f6137f720ff04c1059">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">lik_mat <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -5337,7 +5453,7 @@ font-style: inherit;">reduce</span>(rbind)</span></code></pre></div>
 <p>It only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That <code>purrr::map()</code> call is embarassingly parallelizable.</p>
 <p>Finally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-12_24c38faff93c98006050f379e040e3ed">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -5426,7 +5542,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0">
 <div id="ref-vehtari_practical_2017" class="csl-entry">
 Vehtari, Aki, Andrew Gelman, and Jonah Gabry. 2017. <span>“Practical <span>Bayesian</span> Model Evaluation Using Leave-One-Out Cross-Validation and <span>WAIC</span>.”</span> <em>Statistics and Computing</em> 27 (5): 1413–32. <a href="https://doi.org/10.1007/s11222-016-9696-4">https://doi.org/10.1007/s11222-016-9696-4</a>.
 </div>

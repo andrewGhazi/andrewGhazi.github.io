@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.53">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Andrew Ghazi">
 <meta name="dcterms.date" content="2023-09-22">
 
-<title>andrewghazi.github.io - Integrated LOO walkthrough</title>
+<title>Integrated LOO walkthrough – andrewghazi.github.io</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -100,7 +101,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -109,14 +116,42 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -124,38 +159,38 @@ div.csl-indent {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">andrewghazi.github.io</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/andrewGhazi" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/andrewGhazi"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -230,6 +265,7 @@ div.csl-indent {
 
 
 
+
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>This is a guide/walkthrough on how to use the “Integrated Importance Sampling” aka “Integrated LOO” technique from <span class="citation" data-cites="vehtari_bayesian">(<a href="#ref-vehtari_bayesian" role="doc-biblioref">Vehtari et al. 2016</a>)</span>. I’ve found myself needing to do this a couple times now, so I’m writing this walkthrough to:</p>
@@ -242,7 +278,7 @@ div.csl-indent {
 </ul>
 <p>Load some setup libraries:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-1_adb1fa5edb404d74bfe907a4ee1e69d4">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cmdstanr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -252,7 +288,7 @@ div.csl-indent {
 <h1>Why use integrated LOO?</h1>
 <p>The LOO method as implemented in the <code>loo</code> package requires an array of log-likelihood values for every observation at every iteration in the MCMC chains. There are some addtional complications around extensions like k-fold LOO and leave-one-group-out, but I’m going to ignore those. There’s a built in example in the <code>loo</code> package from a model fit with 32 observations - here’s the first 3 of 1000 rows (i.e.&nbsp;the MCMC chain took 1000 draws):</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-2_e2701638a8a927b9bcee14f27de2e2dc">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loo<span class="sc">::</span><span class="fu">example_loglik_matrix</span>() <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
@@ -277,7 +313,11 @@ div.csl-indent {
 <p>Observation-wise log-likelihood values can be unstable when a given observation strongly influences the posterior for a related parameter. Normally you’ll notice this when a Stan model gets through the MCMC stage without any warnings, but the Pareto k diagnostics come out badly when you try to run LOO and warning messages go off.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_bf47641226528e196e95af699bdf5288">
 <div class="cell-output-display">
-<p><img src="img/diagram.png" class="img-fluid" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
+<div>
+<figure class="figure">
+<p><img src="img/diagram.png" class="img-fluid figure-img" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>I’ve come across this twice:</p>
@@ -288,7 +328,7 @@ div.csl-indent {
 <p>Why are unstable log-likehood values problematic? Because it makes estimating that observation’s contribution to the model fit challenging. When the log-likelihood values are unstable, the importance ratios can have high or infinite variance <span class="citation" data-cites="vehtari_practical_2017">(<a href="#ref-vehtari_practical_2017" role="doc-biblioref">Vehtari, Gelman, and Gabry 2017</a>)</span>. The loo package automatically performs <em>Pareto smoothed</em> importance sampling to smooth the importance weights. This estimates a generalized Pareto distribution to the tail of each log-likelihood distribution. The k parameter of this Pareto distribution is used as a diagnostic to assess whether or not the leave-one-out distribution for the observation in question has been accurately characterized by the log-likelihood values from the MCMC fit.</p>
 <p>The example below compares log-likelihood values for a single observation over two long MCMC chains evaluated with and without integration.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-4_27e6cef21460f6a0b5747d4288ffb8db">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r fold-hide code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Result of the anpan tutorial example with n = 300</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"~/misc/output/result_with_int_n300.RData"</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
@@ -385,7 +425,11 @@ div.csl-indent {
 </div>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_66d8583634dc214633ef3a670d4b2068">
 <div class="cell-output-display">
-<p><img src="img/integral_comparison2.png" class="img-fluid" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
+<div>
+<figure class="figure">
+<p><img src="img/integral_comparison2.png" class="img-fluid figure-img" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Ignoring the slight shift in the location of the distribution, you should note the much <em>heavier tail</em> without integration. The Pareto k diagnostic for this observation is 1.003 (“very bad”) without integration, so the LOO model comparison to some other model would not be feasible without integration.</p>
@@ -415,7 +459,7 @@ div.csl-indent {
 <h1>Simulated pathological example</h1>
 <p>I’ll work with a simplified version of the PGLMM example (no intercepts, covariates, etc). Here’s a tiny data simulation with sigma_phylo = 1 and sigma_resid = 0.5:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-6_9f016c224d7ef0d1cd49c010679fccc2">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -472,7 +516,7 @@ div.csl-indent {
 <span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Let’s run it:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/stanfit_f2ef98389e345beafb9eda7059645e8b">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dir_prefix <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">interactive</span>()) <span class="st">"~/miscR/qmd/"</span> <span class="cf">else</span> <span class="st">""</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -503,7 +547,7 @@ See https://mc-stan.org/misc/warnings for details.</code></pre>
 </div>
 <p>It samples fine, but the loo results are not good:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/naiveloo_1f931b29a33184310a87a79ffa3aa3aa">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pglmm_fit<span class="sc">$</span><span class="fu">loo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -546,7 +590,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <li>and the term from the fit to the observation <code>y[i]</code></li>
 </ul>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-7_0bcadfcedd464c4146df4f4004ebe4fe">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>vec_integrand <span class="ot">&lt;-</span> <span class="cf">function</span>(phylo_effect_vec,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    mu_bar_ij, sigma_bar_ij,</span>
@@ -589,7 +633,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <h1>Get the inputs</h1>
 <p>This code chunk does a lot of the book-keeping to prepare lists of correlation matrix products and format the posterior draws into a nice <code>draw_list</code>.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/inverses_9ca3116c3f8fcc117bfdba06653dbbf4">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>get_corr_mat_minus_i_inv <span class="ot">&lt;-</span> <span class="cf">function</span>(i, cor_mat, n) {</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    cor_mat[<span class="sc">-</span>i, <span class="sc">-</span>i] <span class="sc">|&gt;</span></span>
@@ -664,7 +708,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <h1>Evaluate the integral</h1>
 <p>So using one draw from the <code>draw_list</code> we prepared in the previous section, along with the functions <code>get_mu_bar_ij()</code> and <code>get_sigma_bar_ij()</code>, we can get the set of <code>mu_bar_ij</code> and <code>sigma_bar_ij</code> for each observation for this one draw:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-8_ea9ce275ca7414e5d5b4a3a088d4bd4f">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mu_bar_i1 <span class="ot">&lt;-</span> draw_list[[<span class="dv">1</span>]]<span class="sc">$</span>phylo_effect_vectors[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> <span class="fu">get_mu_bar_ij</span>()</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>sigma_bar_i1 <span class="ot">&lt;-</span> draw_list[[<span class="dv">1</span>]]<span class="sc">$</span>sigma_phylo <span class="sc">|&gt;</span> <span class="fu">get_sigma_bar_ij</span>(</span>
@@ -677,7 +721,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <h2 class="anchored" data-anchor-id="integrand-at-one-point-for-one-observation-in-one-draw">Integrand at one point for one observation in one draw</h2>
 <p>Let’s evaluate the integrand for an (arbitrarily selected) phylogenetic effect of 0.333 for the fifth observation on the first draw:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-9_2535432966cd3aab92b48f2ff34e1a7c">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_integrand</span>(<span class="fl">0.333</span>,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    mu_bar_i1[<span class="dv">5</span>],</span>
@@ -699,7 +743,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <p>The R function <code>stats::integrate()</code> uses adaptive quadrature to numerically integrate functions. I don’t know much about how it works, but it internally calls C code for the heavy lifting, so it’s pretty fast. It would be interesting to benchmark it against Stan’s <code>integrate_1d()</code>.</p>
 <p>Anyway, you just hand <code>stats::integrate()</code> the function, the integration range, and other needed arguments.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-10_832b194957314d7760a763a9953c1299">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integrate</span>(vec_integrand,</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>,</span>
@@ -719,7 +763,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <h2 class="anchored" data-anchor-id="integral-for-all-observations-in-one-draw">Integral for all observations in one draw</h2>
 <p>Going further, let’s write a couple functions to evaluate the integral for all observations in a given draw:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-11_1671498397dd2a584fa05713e10cdac9">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>integrate_one_obs <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_bar_ij, sigma_bar_ij, Y,</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    sigma_resid) {</span>
@@ -753,7 +797,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <pre><code>   user  system elapsed 
    0.02    0.00    0.02 </code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>draw42_integrals <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -776,7 +820,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <h2 class="anchored" data-anchor-id="integral-for-all-observations-across-all-draws">Integral for all observations across all draws</h2>
 <p>Finally, let’s apply it to every posterior draw. I just remembered that <code>purrr::map()</code> recently introduced a <code>.progress</code> argument, let’s use it. <code>purrr</code> is sick.</p>
 <div class="cell" data-hash="integrated_loo_cache/html/_555e06ce18a628f6137f720ff04c1059">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>lik_mat <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map</span>(draw_list,</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    integrate_all_obs,</span>
@@ -788,7 +832,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <p>It only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That <code>purrr::map()</code> call is embarassingly parallelizable.</p>
 <p>Finally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:</p>
 <div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-12_24c38faff93c98006050f379e040e3ed">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>loo<span class="sc">::</span><span class="fu">loo</span>(<span class="fu">log</span>(lik_mat),</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">r_eff =</span> loo<span class="sc">::</span><span class="fu">relative_eff</span>(lik_mat,</span>
@@ -855,7 +899,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-vehtari_practical_2017" class="csl-entry" role="listitem">
 Vehtari, Aki, Andrew Gelman, and Jonah Gabry. 2017. <span>“Practical <span>Bayesian</span> Model Evaluation Using Leave-One-Out Cross-Validation and <span>WAIC</span>.”</span> <em>Statistics and Computing</em> 27 (5): 1413–32. <a href="https://doi.org/10.1007/s11222-016-9696-4">https://doi.org/10.1007/s11222-016-9696-4</a>.
 </div>
@@ -898,18 +942,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -941,11 +974,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/andrewghazi\.github\.io");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -955,8 +1027,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -968,7 +1049,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1012,6 +1216,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1037,6 +1242,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1097,6 +1328,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
