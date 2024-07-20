@@ -399,10 +399,10 @@
     "text": "Parallelization\nI’ve attempted a more deeply parallelized version of my function using furrr, but so far I haven’t been able to get substantial improvements over increasing the .cores argument to summarise_draws(). I think I’m not setting up the parallel workers efficiently. My vectorized convergence metric functions aren’t as embarassingly parallel as the split-apply-combine approach in summarise_draws(), so I don’t think it will be possible to gain as much from parallelization as summarise_draws() does. Not sure if I’ll get around to this, but what I have is here if you’re curious."
   },
   {
-    "objectID": "posts/fsummary/fsummary.html#tests-and-professionalization",
-    "href": "posts/fsummary/fsummary.html#tests-and-professionalization",
+    "objectID": "posts/fsummary/fsummary.html#tests-cran-professionalism",
+    "href": "posts/fsummary/fsummary.html#tests-cran-professionalism",
     "title": "Fast cmdstanr summary function",
-    "section": "Tests and professionalization",
-    "text": "Tests and professionalization\nI’m too lazy…"
+    "section": "Tests, CRAN, professionalism",
+    "text": "Tests, CRAN, professionalism\nI’m too lazy…"
   }
 ]

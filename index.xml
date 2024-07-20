@@ -90,8 +90,8 @@
 <h2 class="anchored" data-anchor-id="parallelization">Parallelization</h2>
 <p>I’ve attempted a more deeply parallelized version of my function using <code>furrr</code>, but so far I haven’t been able to get substantial improvements over increasing the <code>.cores</code> argument to <code>summarise_draws()</code>. I think I’m not setting up the parallel workers efficiently. My vectorized convergence metric functions aren’t as embarassingly parallel as the split-apply-combine approach in <code>summarise_draws()</code>, so I don’t think it will be possible to gain as much from parallelization as <code>summarise_draws()</code> does. Not sure if I’ll get around to this, but what I have is <a href="https://github.com/andrewGhazi/fsummary/blob/main/inst/fsummary_par.R#L184">here</a> if you’re curious.</p>
 </section>
-<section id="tests-and-professionalization" class="level2">
-<h2 class="anchored" data-anchor-id="tests-and-professionalization">Tests and professionalization</h2>
+<section id="tests-cran-professionalism" class="level2">
+<h2 class="anchored" data-anchor-id="tests-cran-professionalism">Tests, CRAN, professionalism</h2>
 <p>I’m too lazy…</p>
 <p><img src="https://andrewghazi.github.io/posts/fsummary/images/emoji_u1f6cc2.png" class="img-fluid" style="width:25.0%"></p>
 
