@@ -84,7 +84,7 @@
 </section>
 <section id="faster-autocovariance" class="level2">
 <h2 class="anchored" data-anchor-id="faster-autocovariance">Faster autocovariance</h2>
-<p><code>summarise_draws()</code> computes a full-length autocovariance for each chain of each parameter with <code>posterior::autocovariance()</code>, which is one of the major time sinks in the effective sample size calculations. <code>posterior::autocovariance()</code> is actually amazingly fast for what it does through a FFT-based approach, but I wonder if the whole thing is actually needed. Later in the calculations there’s a while-loop scan over the <code>.iteration</code> dimension that could theoretically go through the whole length of the array, but in my tests stops usually before the 100th loop.</p>
+<p><code>summarise_draws()</code> computes a full-length autocovariance for each chain of each parameter with <code>posterior::autocovariance()</code>, which is one of the major time sinks in the effective sample size calculations. <code>posterior::autocovariance()</code> is actually amazingly fast for what it does through a FFT-based approach, but I wonder if the whole thing is actually needed. Later in the calculations there’s a while-loop scan over the <code>.iteration</code> dimension that could theoretically go through the whole length of the array, but in my tests usually that loop stops before getting through the 100th iteration. Not having to compute the whole thing would be a big time save, but maybe you’d lose the numerical equivalence with <code>summarise_draws()</code>.</p>
 </section>
 <section id="parallelization" class="level2">
 <h2 class="anchored" data-anchor-id="parallelization">Parallelization</h2>

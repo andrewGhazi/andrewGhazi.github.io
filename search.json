@@ -389,7 +389,7 @@
     "href": "posts/fsummary/fsummary.html#faster-autocovariance",
     "title": "Fast cmdstanr summary function",
     "section": "Faster autocovariance",
-    "text": "Faster autocovariance\nsummarise_draws() computes a full-length autocovariance for each chain of each parameter with posterior::autocovariance(), which is one of the major time sinks in the effective sample size calculations. posterior::autocovariance() is actually amazingly fast for what it does through a FFT-based approach, but I wonder if the whole thing is actually needed. Later in the calculations there’s a while-loop scan over the .iteration dimension that could theoretically go through the whole length of the array, but in my tests stops usually before the 100th loop."
+    "text": "Faster autocovariance\nsummarise_draws() computes a full-length autocovariance for each chain of each parameter with posterior::autocovariance(), which is one of the major time sinks in the effective sample size calculations. posterior::autocovariance() is actually amazingly fast for what it does through a FFT-based approach, but I wonder if the whole thing is actually needed. Later in the calculations there’s a while-loop scan over the .iteration dimension that could theoretically go through the whole length of the array, but in my tests usually that loop stops before getting through the 100th iteration. Not having to compute the whole thing would be a big time save, but maybe you’d lose the numerical equivalence with summarise_draws()."
   },
   {
     "objectID": "posts/fsummary/fsummary.html#parallelization",
