@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/fsummary/fsummary.html",
       "/posts/use_options/options.html",
       "/posts/joint_ipw/joint_ipw.html",
       "/posts/rstudio_setup/rstudio_setup.html",

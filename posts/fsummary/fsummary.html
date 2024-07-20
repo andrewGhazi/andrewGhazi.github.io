@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Andrew Ghazi">
-<meta name="dcterms.date" content="2023-07-07">
+<meta name="dcterms.date" content="2024-07-20">
 
-<title>dyingforacup – andrewghazi.github.io</title>
+<title>Fast cmdstanr summary function – andrewghazi.github.io</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -115,11 +115,11 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">dyingforacup</h1>
+      <h1 class="title">Fast cmdstanr summary function</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">R</div>
                 <div class="quarto-category">Stan</div>
-                <div class="quarto-category">Coffee</div>
+                <div class="quarto-category">performance</div>
               </div>
                   </div>
   </div>
@@ -137,7 +137,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">July 7, 2023</p>
+        <p class="date">July 20, 2024</p>
       </div>
     </div>
     
@@ -148,7 +148,24 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#simple-summary-measures" id="toc-simple-summary-measures" class="nav-link" data-scroll-target="#simple-summary-measures">Simple: Summary measures</a></li>
+  <li><a href="#hard-convergence-measures" id="toc-hard-convergence-measures" class="nav-link" data-scroll-target="#hard-convergence-measures">Hard: Convergence measures</a></li>
+  <li><a href="#future-directions" id="toc-future-directions" class="nav-link" data-scroll-target="#future-directions">Future directions</a>
+  <ul class="collapse">
+  <li><a href="#faster-int" id="toc-faster-int" class="nav-link" data-scroll-target="#faster-int">Faster INT</a></li>
+  <li><a href="#faster-autocovariance" id="toc-faster-autocovariance" class="nav-link" data-scroll-target="#faster-autocovariance">Faster autocovariance</a></li>
+  <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization">Parallelization</a></li>
+  <li><a href="#tests-and-professionalization" id="toc-tests-and-professionalization" class="nav-link" data-scroll-target="#tests-and-professionalization">Tests and professionalization</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -156,9 +173,83 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-{{&lt; https://www.youtube.com/watch?v=RurFeg7cxGQ  &gt;}}
+<p><code>fsummary</code>: speeding up posterior summaries with <code>collapse</code> and vectorization.</p>
+<section id="intro" class="level1">
+<h1>Intro</h1>
+<p>I was getting annoyed with the performance of <code>posterior::summarise_draws()</code> for large fits from <a href="https://github.com/andrewGhazi/dyingforacup"><code>dyingforacup</code></a>, so I took a look at the source code and thought I’d try speeding it up. The result is in an R package on github <a href="https://github.com/andrewGhazi/fsummary">here</a>. I combined a variety of strategies to speed things up:</p>
+<ul>
+<li>Use the <a href="https://sebkrantz.github.io/collapse/reference/index.html#fast-statistical-functions">fast statistical functions</a> from <code>collapse</code>.</li>
+<li>Avoiding re-shaping the input as much as possible</li>
+<li>Vectorize over parameters</li>
+<li>Other <code>data.table</code> performance tricks like assignment by reference and so on</li>
+</ul>
+<p>I’m just doing this for fun, so I don’t need it to be as generic and extensible as <code>summarise_draws()</code>. So I limited the problem in two ways:</p>
+<ul>
+<li>Only recapitulate the default parameter summary statistics of <code>summarise_draws()</code>
+<ul>
+<li>These are: mean, median, sd, mad, 5th &amp; 95th quantiles, rhat, and ess_bulk &amp; ess_tail.</li>
+<li>But the results should be identical up to numerical error. No approximations that they aren’t using already.</li>
+</ul></li>
+<li>Only take in <code>draws_df</code> objects. No matrices/arrays/lists.</li>
+</ul>
+<p>I ended up getting about 5x faster without convergence metrics and 1.9x faster with. So pretty good for cases when you have &gt;1k parameters. Two small benchmarks, with and without convergence metrics on a <code>draws_df</code> with dimensions 12000 x 1788:</p>
+<p>Without convergence metrics:</p>
+<pre><code>Unit: milliseconds
+                                            expr  min   lq mean median   uq  max neval
+{summarise_draws(x, default_summary_measures())} 5026 5076 5119   5127 5165 5203     3
+ {fsummary(x, conv_metrics = FALSE, .cores = 1)}  975 1014 1062   1054 1106 1158     3</code></pre>
+<p>With:</p>
+<pre><code>Unit: seconds
+                            expr  min   lq mean median   uq  max neval
+            {summarise_draws(x)} 28.5 28.5 28.6   28.6 28.6 28.7     3
+       {fsummary(x, .cores = 1)} 15.1 15.1 15.2   15.1 15.2 15.3     3</code></pre>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fsummary_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="simple-summary-measures" class="level1">
+<h1>Simple: Summary measures</h1>
+<p>The default summary measurements could be replaced simply with their <code>collapse</code> counterparts, <code>fmean()</code>, <code>fsd()</code>, <code>fquantile()</code> and so on. I checked with <code>waldo::compare()</code> and these never result in any differences before the 12th digit or so.</p>
+</section>
+<section id="hard-convergence-measures" class="level1">
+<h1>Hard: Convergence measures</h1>
+<p>The majority of time spent on posterior summaries actually goes toward computing convergence metrics. This makes sense as you have to check behavior between chains and along the course of each chain. For situations where you already know your chains will converge well, you can set the <code>conv_metrics</code> argument to <code>fsummary()</code> to <code>FALSE</code> and it will skip then.</p>
+<p>The main improvements in the fast rhat function came from using grouped data.tables and <code>collapse</code>’s fast statistical functions.</p>
+<p>The hardest part of this project by far (and likely the area with the most performance still left on the table) is the effective sample size calculations. The main improvements here came from scanning over all parameters in a matrix once rather than running through each parameter’s chains one at a time. This involves some annoying index fiddling, but ultimately comes out faster since there’s no split-apply-combine.</p>
+</section>
+<section id="future-directions" class="level1">
+<h1>Future directions</h1>
+<section id="faster-int" class="level2">
+<h2 class="anchored" data-anchor-id="faster-int">Faster INT</h2>
+<p>One of the major time sinks in the convergence metrics is computing the rank normalization of the parameters. There are several avenues where I think there’s room for performance improvements over <code>posterior::z_scale()</code>.</p>
+<ul>
+<li>Faster ranking - I use <code>data.table::frank()</code> when chains are longer than 3e4, but honestly that’s pretty rare.</li>
+<li>Faster normal quantiles - I tried <code>mnorm::qnormFast()</code> but it was only ~10% faster in my test cases, while also introducing a dependency and some minor approximation error that made it harder to test for consistency with <code>summarise_draws()</code>.</li>
+</ul>
+<p>Combining both steps into a vectorized C++ function would probably be way faster, but I’m not experienced enough to implement something like that.</p>
+</section>
+<section id="faster-autocovariance" class="level2">
+<h2 class="anchored" data-anchor-id="faster-autocovariance">Faster autocovariance</h2>
+<p><code>summarise_draws()</code> computes a full-length autocovariance for each chain of each parameter with <code>posterior::autocovariance()</code>, which is one of the major time sinks in the effective sample size calculations. <code>posterior::autocovariance()</code> is actually amazingly fast for what it does through a FFT-based approach, but I wonder if the whole thing is actually needed. Later in the calculations there’s a while-loop scan over the <code>.iteration</code> dimension that could theoretically go through the whole length of the array, but in my tests stops usually before the 100th loop.</p>
+</section>
+<section id="parallelization" class="level2">
+<h2 class="anchored" data-anchor-id="parallelization">Parallelization</h2>
+<p>I’ve attempted a more deeply parallelized version of my function using <code>furrr</code>, but so far I haven’t been able to get substantial improvements over increasing the <code>.cores</code> argument to <code>summarise_draws()</code>. I think I’m not setting up the parallel workers efficiently. My vectorized convergence metric functions aren’t as embarassingly parallel as the split-apply-combine approach in <code>summarise_draws()</code>, so I don’t think it will be possible to gain as much from parallelization as <code>summarise_draws()</code> does. Not sure if I’ll get around to this, but what I have is <a href="https://github.com/andrewGhazi/fsummary/blob/main/inst/fsummary_par.R#L184">here</a> if you’re curious.</p>
+</section>
+<section id="tests-and-professionalization" class="level2">
+<h2 class="anchored" data-anchor-id="tests-and-professionalization">Tests and professionalization</h2>
+<p>I’m too lazy…</p>
+<p><img src="images/emoji_u1f6cc2.png" class="img-fluid" style="width:25.0%"></p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
