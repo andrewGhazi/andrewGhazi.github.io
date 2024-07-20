@@ -40,7 +40,7 @@
 </ul></li>
 <li>Only take in <code>draws_df</code> objects. No matrices/arrays/lists.</li>
 </ul>
-<p>I ended up getting about 5x faster without convergence metrics and 1.9x faster with. So pretty good for cases when you have &gt;1k parameters. Two small benchmarks, with and without convergence metrics on a <code>draws_df</code> with dimensions 12000 x 1788:</p>
+<p>I ended up getting about 5x faster without convergence metrics and 1.9x faster with. So pretty good for cases when you have &gt;1k parameters. The only differences <code>waldo::compare()</code> reports are that the result is a data.table instead of a tibble and that there are a numerical differences way out past the 10th decimal place. Here are two small benchmarks, with and without convergence metrics on a <code>draws_df</code> with dimensions 12000 x 1788:</p>
 <p>Without convergence metrics:</p>
 <pre><code>Unit: milliseconds
                                             expr  min   lq mean median   uq  max neval
