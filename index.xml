@@ -40,17 +40,17 @@
 </ul></li>
 <li>Only take in <code>draws_df</code> objects. No matrices/arrays/lists.</li>
 </ul>
-<p>I ended up getting about 5x faster without convergence metrics and 1.9x faster with. So pretty good for cases when you have &gt;1k parameters. The only differences <code>waldo::compare()</code> reports are that the result is a data.table instead of a tibble and that there are a numerical differences way out past the 10th decimal place. Here are two small benchmarks, with and without convergence metrics on a <code>draws_df</code> with dimensions 12000 x 1788:</p>
+<p>I ended up getting about 5x faster without convergence metrics and 1.9x faster with. So pretty good for cases when you have &gt;1k parameters. The only differences <code>waldo::compare()</code> reports are that the result is a data.table instead of a tibble and that there are some numerical differences way out past the 10th decimal place. Here are two small benchmarks, with and without convergence metrics on a <code>draws_df</code> with dimensions 12000 x 1788:</p>
 <p>Without convergence metrics:</p>
 <pre><code>Unit: milliseconds
-                                            expr  min   lq mean median   uq  max neval
-{summarise_draws(x, default_summary_measures())} 5026 5076 5119   5127 5165 5203     3
- {fsummary(x, conv_metrics = FALSE, .cores = 1)}  975 1014 1062   1054 1106 1158     3</code></pre>
+                                               expr  min   lq mean median   uq  max neval
+{summarise_draws(ddf, default_summary_measures()) } 4949 4983 5057   5049 5104 5197    10
+ {fsummary(ddf, .cores = 1, conv_metrics = FALSE) }  948  951  956    957  958  969    10</code></pre>
 <p>With:</p>
 <pre><code>Unit: seconds
-                            expr  min   lq mean median   uq  max neval
-            {summarise_draws(x)} 28.5 28.5 28.6   28.6 28.6 28.7     3
-       {fsummary(x, .cores = 1)} 15.1 15.1 15.2   15.1 15.2 15.3     3</code></pre>
+                              expr  min   lq mean median   uq  max neval
+      {     summarise_draws(ddf) } 28.7 28.7 28.8   28.9 28.9 29.0    10
+ {     fsummary(ddf, .cores = 1) } 14.8 14.9 15.0   15.0 15.1 15.2    10</code></pre>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -69,7 +69,8 @@
 <h1>Hard: Convergence measures</h1>
 <p>The majority of time spent on posterior summaries actually goes toward computing convergence metrics. This makes sense as you have to check behavior between chains and along the course of each chain. For situations where you already know your chains will converge well, you can set the <code>conv_metrics</code> argument to <code>fsummary()</code> to <code>FALSE</code> and it will skip them. This is generally an unsafe thing to do, so don’t blame me if the posterior mean you calculated super quickly</p>
 <p>The main improvements in the fast rhat function came from using grouped data.tables and <code>collapse</code>’s fast statistical functions.</p>
-<p>The hardest part of this project by far (and likely the area with the most performance still left on the table) is the effective sample size calculations. The main improvements here came from scanning over all parameters in a matrix once rather than running through each parameter’s chains one at a time. This involves some annoying index fiddling, but ultimately comes out a bit faster since there’s no split-apply-combine. I think my ESS functions could still be improved a lot, they’re still only about 1.25x faster than <code>summarise_draws(x, ess_bulk, ess_tail)</code>.</p>
+<p>The hardest part of this project by far (and likely the area with the most performance still left on the table) is the effective sample size calculations. The main improvements here came from scanning over all parameters in a matrix once rather than running through each parameter’s chains one at a time. This involves some annoying index fiddling, but ultimately comes out a bit faster since there’s no split-apply-combine. There will probably also be some benefit from <code>data.table::frank()</code> for the extremely long chains (&gt;6e4) where it is used.</p>
+<p>I think my ESS functions could still be improved a lot, they’re still only about 1.25x faster than <code>summarise_draws(x, ess_bulk, ess_tail)</code>.</p>
 </section>
 <section id="future-directions" class="level1">
 <h1>Future directions</h1>
