@@ -71,6 +71,343 @@
 <p>The main improvements in the fast rhat function came from using grouped data.tables and <code>collapse</code>’s fast statistical functions.</p>
 <p>The hardest part of this project by far (and likely the area with the most performance still left on the table) is the effective sample size calculations. The main improvements here came from scanning over all parameters in a matrix once rather than running through each parameter’s chains one at a time. This involves some annoying index fiddling, but ultimately comes out a bit faster since there’s no split-apply-combine. There will probably also be some benefit from <code>data.table::frank()</code> for the extremely long chains (&gt;6e4) where it is used.</p>
 <p>I think my ESS functions could still be improved a lot, they’re still only about 1.25x faster than <code>summarise_draws(x, ess_bulk, ess_tail)</code>.</p>
+<section id="autocovariance-note" class="level2">
+<h2 class="anchored" data-anchor-id="autocovariance-note">Autocovariance note</h2>
+<p>Fun fact: the FFTs necessary to compute the ESS will be substantially faster if the length of your chains are a power of 2 (or more specifically when it has many factors). You can set <code>iter_sampling = 1024</code> and have a decent chance of saving more time on the ESS calculation than it takes to collect the extra 24 samples (1000 -&gt; 6 factors, 1024 -&gt; 10 factors). I also adaptively switch to <code>fftw::FFT</code> over <code>base::fft</code> if the length of the chains is in the right range. This is what I get on my CPU anyway:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(fastverse)</span>
+<span id="cb3-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(fftw)</span>
+<span id="cb3-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(microbenchmark)</span>
+<span id="cb3-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">mb <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> microbenchmark</span>
+<span id="cb3-7"></span>
+<span id="cb3-8">fft_f_l <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(fft, FFT)</span>
+<span id="cb3-9"></span>
+<span id="cb3-10">avg_mb <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(mbr){</span>
+<span id="cb3-11">  mbr <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-12">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">qDT</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-13">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gby</span>(expr) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-14">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fmedian</span>()</span>
+<span id="cb3-15">}</span>
+<span id="cb3-16"></span>
+<span id="cb3-17">d <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.table</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">floor</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">by =</span> .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>))) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-18">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtt</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(n, rnorm),</span>
+<span id="cb3-19">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mb_res =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(x,</span>
+<span id="cb3-20">                      \(y) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mb</span>({<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fft</span>(y)},</span>
+<span id="cb3-21">                              {<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FFT</span>(y)},</span>
+<span id="cb3-22">                              <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">times =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>))) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-23">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtt</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">res_summ =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(mb_res, avg_mb)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-24">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">slt</span>(n, res_summ)</span>
+<span id="cb3-25"></span>
+<span id="cb3-26">d2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.table</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">floor</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">by =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-27">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtt</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(n, rnorm),</span>
+<span id="cb3-28">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mb_res =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(x,</span>
+<span id="cb3-29">                      \(y) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mb</span>({<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fft</span>(y)},</span>
+<span id="cb3-30">                              {<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FFT</span>(y)},</span>
+<span id="cb3-31">                              <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">times =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>))) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-32">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtt</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">res_summ =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(mb_res, avg_mb)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-33">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">slt</span>(n, res_summ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-34">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtt</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pwrs =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2"</span>)</span>
+<span id="cb3-35"></span>
+<span id="cb3-36">d[,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbindlist</span>(res_summ), by <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> n] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-37">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtt</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pwrs =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"10"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-38">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbind</span>(d2[,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbindlist</span>(res_summ), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">by =</span> .(n, pwrs)]) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-39">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(n, time)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-40">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> expr)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-41">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_line</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> expr,</span>
+<span id="cb3-42">                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lty =</span> pwrs)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-43">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_x_log10</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-44">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_y_log10</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb3-45">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_bw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb3-46">   <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">panel.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>,</span>
+<span id="cb3-47">                                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>),</span>
+<span id="cb3-48">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">plot.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>,</span>
+<span id="cb3-49">                                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>),</span>
+<span id="cb3-50">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">legend.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>,</span>
+<span id="cb3-51">                                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#F2F2F2"</span>),</span>
+<span id="cb3-52">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#222222"</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> </span>
+<span id="cb3-53">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fft time (ms)"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sequence length"</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/fsummary/fsummary_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="A chart comparing sequence length to fft computation time for base::fft() and fftw::FFT(). The latter is faster for n > 10^3.75 and n < 1e6. Both are faster when computed at powers of 2 over powers of 10." width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In my test case, 12 chains for 1788 variables with 1000 vs 1024 draws takes about 1.5 seconds longer for the extra 24 samples, but saves about the same amount when computing the summary.</p>
+</section>
 </section>
 <section id="future-directions" class="level1">
 <h1>Future directions</h1>

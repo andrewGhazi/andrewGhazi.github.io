@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -155,7 +189,10 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
   <li><a href="#simple-summary-measures" id="toc-simple-summary-measures" class="nav-link" data-scroll-target="#simple-summary-measures">Simple: Summary measures</a></li>
-  <li><a href="#hard-convergence-measures" id="toc-hard-convergence-measures" class="nav-link" data-scroll-target="#hard-convergence-measures">Hard: Convergence measures</a></li>
+  <li><a href="#hard-convergence-measures" id="toc-hard-convergence-measures" class="nav-link" data-scroll-target="#hard-convergence-measures">Hard: Convergence measures</a>
+  <ul class="collapse">
+  <li><a href="#autocovariance-note" id="toc-autocovariance-note" class="nav-link" data-scroll-target="#autocovariance-note">Autocovariance note</a></li>
+  </ul></li>
   <li><a href="#future-directions" id="toc-future-directions" class="nav-link" data-scroll-target="#future-directions">Future directions</a>
   <ul class="collapse">
   <li><a href="#faster-int" id="toc-faster-int" class="nav-link" data-scroll-target="#faster-int">Faster INT</a></li>
@@ -224,6 +261,76 @@ ul.task-list li input[type="checkbox"] {
 <p>The main improvements in the fast rhat function came from using grouped data.tables and <code>collapse</code>’s fast statistical functions.</p>
 <p>The hardest part of this project by far (and likely the area with the most performance still left on the table) is the effective sample size calculations. The main improvements here came from scanning over all parameters in a matrix once rather than running through each parameter’s chains one at a time. This involves some annoying index fiddling, but ultimately comes out a bit faster since there’s no split-apply-combine. There will probably also be some benefit from <code>data.table::frank()</code> for the extremely long chains (&gt;6e4) where it is used.</p>
 <p>I think my ESS functions could still be improved a lot, they’re still only about 1.25x faster than <code>summarise_draws(x, ess_bulk, ess_tail)</code>.</p>
+<section id="autocovariance-note" class="level2">
+<h2 class="anchored" data-anchor-id="autocovariance-note">Autocovariance note</h2>
+<p>Fun fact: the FFTs necessary to compute the ESS will be substantially faster if the length of your chains are a power of 2 (or more specifically when it has many factors). You can set <code>iter_sampling = 1024</code> and have a decent chance of saving more time on the ESS calculation than it takes to collect the extra 24 samples (1000 -&gt; 6 factors, 1024 -&gt; 10 factors). I also adaptively switch to <code>fftw::FFT</code> over <code>base::fft</code> if the length of the chains is in the right range. This is what I get on my CPU anyway:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fftw)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microbenchmark)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>mb <span class="ot">=</span> microbenchmark</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>fft_f_l <span class="ot">=</span> <span class="fu">list</span>(fft, FFT)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>avg_mb <span class="ot">=</span> <span class="cf">function</span>(mbr){</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  mbr <span class="sc">|&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">qDT</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gby</span>(expr) <span class="sc">|&gt;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmedian</span>()</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">n =</span> <span class="fu">floor</span>(<span class="dv">10</span><span class="sc">**</span><span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">6</span>, <span class="at">by =</span> .<span class="dv">5</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtt</span>(<span class="at">x =</span> <span class="fu">lapply</span>(n, rnorm),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">mb_res =</span> <span class="fu">lapply</span>(x,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                      \(y) <span class="fu">mb</span>({<span class="fu">fft</span>(y)},</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                              {<span class="fu">FFT</span>(y)},</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                              <span class="at">times =</span> <span class="dv">3</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtt</span>(<span class="at">res_summ =</span> <span class="fu">lapply</span>(mb_res, avg_mb)) <span class="sc">|&gt;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slt</span>(n, res_summ)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">n =</span> <span class="fu">floor</span>(<span class="dv">2</span><span class="sc">**</span><span class="fu">seq</span>(<span class="dv">7</span>, <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">1</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtt</span>(<span class="at">x =</span> <span class="fu">lapply</span>(n, rnorm),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">mb_res =</span> <span class="fu">lapply</span>(x,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                      \(y) <span class="fu">mb</span>({<span class="fu">fft</span>(y)},</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                              {<span class="fu">FFT</span>(y)},</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                              <span class="at">times =</span> <span class="dv">3</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtt</span>(<span class="at">res_summ =</span> <span class="fu">lapply</span>(mb_res, avg_mb)) <span class="sc">|&gt;</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slt</span>(n, res_summ) <span class="sc">|&gt;</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtt</span>(<span class="at">pwrs =</span> <span class="st">"2"</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>d[,<span class="fu">rbindlist</span>(res_summ), by <span class="ot">=</span> n] <span class="sc">|&gt;</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtt</span>(<span class="at">pwrs =</span> <span class="st">"10"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(d2[,<span class="fu">rbindlist</span>(res_summ), <span class="at">by =</span> .(n, pwrs)]) <span class="sc">|&gt;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n, time)) <span class="sc">+</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> expr)) <span class="sc">+</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> expr,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                <span class="at">lty =</span> pwrs)) <span class="sc">+</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span> </span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#F2F2F2"</span>,</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">color =</span> <span class="st">"#F2F2F2"</span>),</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#F2F2F2"</span>,</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">color =</span> <span class="st">"#F2F2F2"</span>),</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#F2F2F2"</span>,</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">color =</span> <span class="st">"#F2F2F2"</span>),</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#222222"</span>)) <span class="sc">+</span> </span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"fft time (ms)"</span>, <span class="at">x =</span> <span class="st">"sequence length"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fsummary_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="A chart comparing sequence length to fft computation time for base::fft() and fftw::FFT(). The latter is faster for n > 10^3.75 and n < 1e6. Both are faster when computed at powers of 2 over powers of 10." width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In my test case, 12 chains for 1788 variables with 1000 vs 1024 draws takes about 1.5 seconds longer for the extra 24 samples, but saves about the same amount when computing the summary.</p>
+</section>
 </section>
 <section id="future-directions" class="level1">
 <h1>Future directions</h1>
