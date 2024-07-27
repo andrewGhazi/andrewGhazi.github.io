@@ -201,6 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#deeper-benchmarking" id="toc-deeper-benchmarking" class="nav-link" data-scroll-target="#deeper-benchmarking">Deeper benchmarking</a></li>
   <li><a href="#tests-cran-professionalism" id="toc-tests-cran-professionalism" class="nav-link" data-scroll-target="#tests-cran-professionalism">Tests, CRAN, professionalism</a></li>
   </ul></li>
+  <li><a href="#july-26-update" id="toc-july-26-update" class="nav-link" data-scroll-target="#july-26-update">July 26 Update</a></li>
   </ul>
 </nav>
     </div>
@@ -359,9 +360,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="tests-cran-professionalism">Tests, CRAN, professionalism</h2>
 <p>I’m too lazy…</p>
 <p><img src="images/emoji_u1f6cc2.png" class="img-fluid" style="width:25.0%" alt="an emoji of a person sleeping"></p>
-
-
 </section>
+</section>
+<section id="july-26-update" class="level1">
+<h1>July 26 Update</h1>
+<p><code>huffyhenry</code> on the <a href="https://discourse.mc-stan.org/t/fast-cmdstanr-summary-function/35940/1">Stan discourse</a> forum mentions their package <a href="https://github.com/huffyhenry/Stanislaw">Stanislaw</a> which wraps <code>stansummary</code> from CmdStan. I tried <code>stansummary</code> out on a test fit with 12 1000-iteration chains of 2652 parameters and got the following confusing results:</p>
+<ul>
+<li><code>stansummary</code> 1 parameter: 37.7s</li>
+<li><code>stansummary</code> 2652 parameters: 44.6s</li>
+<li><code>posterior::summarise_draws()</code> 2652 parameters: 41.4s</li>
+<li><code>fsummary()</code> 2652 parameters: 20.5s</li>
+</ul>
+<p>So I guess <code>stansummary</code> has a lot of overhead from needing to read in the csv files, but summarizing each parameter is ultra-fast in comparison so going from 1 to 2652 parameters only adds 7 seconds? That would be about 384 about summaries per second over <code>fsummary</code> at 129/s assuming the first 37.7 seconds is indeed only spent on reading the csvs. So, it might be faster if you have ultra-long chains or something? Not sure, but probably worth a try if you’re desperate enough to find this post and read this far.</p>
+<p>Also, the Rhat and ESS values from <code>stansummary</code> were not equivalent to those from <code>posterior::summarise_draws()</code> at time of writing with CmdStan 2.35.0. They were largely consistent in relative magnitude / rank, but not equal-to-the-10th-digit equal. <code>stansummary</code> also doesn’t provide ess_tail estimates at all. In the same discourse thread Mitzi Morris mentions that they have a new dev working on this.</p>
+
+
 </section>
 
 </main> <!-- /main -->
