@@ -21,7 +21,7 @@
 
 
 
-<p><a href="https://www.youtube.com/watch?v=RJC9DXQAd7U">DO YOU FOLKS LIKE COFFEE?!</a></p>
+<p><a href="https://www.youtube.com/watch?v=RJC9DXQAd7U">DO YOU FOLKS LIKE COFFEE?!</a> Gaussian Processes for optimal brewing.</p>
 <p>I saw <a href="https://www.youtube.com/watch?v=wZODGJzKmD0">an interesting lecture by Roman Garnett</a> on the topic of Bayesian Optimization. It seemed like an interesting method so I thought I’d implement it in Stan so that I could learn more about it and optimize my coffee brewing in the process. This gif gives the gist of it:</p>
 <p><img src="https://andrewghazi.github.io/posts/dyingforacup/images/out2.gif" class="img-fluid" alt="a gif showing several steps in a Bayesian Optimization process for coffee optimization. It alternates between exploring poorly characterized regions and finding optima within high-scoring regions."></p>
 <section id="the-package" class="level1">
