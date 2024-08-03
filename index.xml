@@ -10,7 +10,67 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.53</generator>
-<lastBuildDate>Sat, 20 Jul 2024 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 03 Aug 2024 04:00:00 GMT</lastBuildDate>
+<item>
+  <title>Optimal coffee with dyingforacup</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/dyingforacup/dyingforacup.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="https://www.youtube.com/watch?v=RJC9DXQAd7U">DO YOU FOLKS LIKE COFFEE?!</a></p>
+<p>I saw <a href="https://www.youtube.com/watch?v=wZODGJzKmD0">an interesting lecture by Roman Garnett</a> on the topic of Bayesian Optimization. It seemed like an interesting method so I thought I’d implement it in Stan so that I could learn more about it and optimize my coffee brewing in the process. This gif gives the gist of it:</p>
+<p><img src="https://andrewghazi.github.io/posts/dyingforacup/images/out2.gif" class="img-fluid" alt="a gif showing several steps in a Bayesian Optimization process for coffee optimization. It alternates between exploring poorly characterized regions and finding optima within high-scoring regions."></p>
+<section id="the-package" class="level1">
+<h1>The package</h1>
+<p>I put the code into <a href="https://github.com/andrewGhazi/dyingforacup">an R package on GitHub</a>. It fits an N-dimensional Gaussian GP over a user-provided grid conditioned on a user-provided dataset of parameters and ratings.</p>
+<p>I also tried to use <a href="https://wlandau.github.io/instantiate/"><code>instantiate</code></a> for the package setup which worked out pretty well. Maybe if I feel like it I’ll try to put it on CRAN. I’m pretty proud of the name :)</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<p>To try to minimize uncontrolled variation, I try to keep everything the same besides my brew parameters.</p>
+<ul>
+<li>18 grams of <a href="https://www.costco.com/mayorga-buenos-d%c3%adas%2c-usda-organic%2c-light-roast%2c-whole-bean-coffee%2c-2lb%2c-2-pack.product.100844180.html">Mayorga Buenos Días coffee</a> which is the best combination of freshness and consistency I’ve found in the last decade. I’ve tried many specialty coffee lines, but generally my sense of smell isn’t sharp enough to appreciate them.</li>
+<li>A <a href="https://www.orphanespresso.com/oe-hand-grinders.html">LIDO 2</a> grinder</li>
+<li>Gooseneck kettle, Melitta filters, Melitta Cone w/ 4 extra holes</li>
+<li>and a tiny pinch of salt</li>
+</ul>
+<p>Unfortunately there are some factors that are difficult or impossible to control. Coffee freshness, batch effects. Food consumed alongside can also have a strong impact on the perceived rating.</p>
+<p>My <code>dyingforacup</code> workflow is:</p>
+<ol type="1">
+<li>Wake up.</li>
+<li>Run <code>suggest_next()</code> on my existing set of observations to get a new suggested grinder setting + temp + bloom time combination.</li>
+<li>Run <code>suggest_tune()</code> to get a song to listen to.</li>
+<li>Make a coffee using the provided suggestion.</li>
+<li><a href="https://youtu.be/UUNFjNXo6QM?t=64">Enjoy my coffee and my basic freedoms.</a></li>
+<li>Enter a normally distributed rating into the <code>tibble::tribble()</code> at the top of my script.</li>
+<li>Repeat.</li>
+</ol>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>Unfortunately it turns out that my coffee ratings are pretty noisy! I’ve learned that it’s important to drink the whole cup and carefully consider how the flavor changes as it cools down in order to be able to give a fair, comprehensive rating.</p>
+<p><img src="https://andrewghazi.github.io/posts/dyingforacup/images/hyperpar_ints.png" class="img-fluid" alt="interval plots of alpha, rho, and sigma. They're about .67 +/- .2, 1.8 +/- 1.6, and .84 +/- .1 respectively."></p>
+<p>Alpha is the “amplitude” of the GP, rho is the length scale, and sigma is the observation noise. Noisy ratings of course makes the whole problem much harder. A single observation at a grid point doesn’t contract the posterior variance very much.</p>
+<p>And 3D parameter space is huge! Almost all of the sampler time is computing the conditional mean for the grid points. Fitting the data is almost instant in comparison. I’d like to try re-implementing the estimation from scratch using INLA, that would be fun. Extending the <a href="https://github.com/onnela-lab/gptools/tree/main/stan"><code>gptools</code></a> package to N-dimensions could also be helpful here given that the grid points lie on a regular grid.</p>
+<p>I made this little gif of my observations so far, you can tell I have a long way to go in my optimization process :)</p>
+<p><img src="https://andrewghazi.github.io/posts/dyingforacup/images/out.gif" class="img-fluid" alt="a gif of temperature/grinder setting slices at increasing bloom times."></p>
+<p>As you can see I cut off some corners of the space where I’m confident there won’t be promising combinations. This makes computing the conditional mean a bit faster.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>Stan</category>
+  <category>Coffee</category>
+  <guid>https://andrewghazi.github.io/posts/dyingforacup/dyingforacup.html</guid>
+  <pubDate>Sat, 03 Aug 2024 04:00:00 GMT</pubDate>
+  <media:content url="https://andrewghazi.github.io/posts/dyingforacup/images/mqdefault.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>Fast cmdstanr summary function</title>
   <dc:creator>Andrew Ghazi</dc:creator>
