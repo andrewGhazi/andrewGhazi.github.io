@@ -509,6 +509,12 @@ font-style: inherit;">"sequence length"</span>)</span></code></pre></div>
 </ul>
 <p>So I guess <code>stansummary</code> has a lot of overhead from needing to read in the csv files, but summarizing each parameter is ultra-fast in comparison so going from 1 to 2652 parameters only adds 7 seconds? That would be about 384 about summaries per second over <code>fsummary</code> at 129/s assuming the first 37.7 seconds is indeed only spent on reading the csvs. So, it might be faster if you have ultra-long chains or something? Not sure, but probably worth a try if you’re desperate enough to find this post and read this far.</p>
 <p>Also, the Rhat and ESS values from <code>stansummary</code> were not equivalent to those from <code>posterior::summarise_draws()</code> at time of writing with CmdStan 2.35.0. They were largely consistent in relative magnitude / rank, but not equal-to-the-10th-digit equal. <code>stansummary</code> also doesn’t provide ess_tail estimates at all. In the same discourse thread Mitzi Morris mentions that they have a new dev working on this.</p>
+</section>
+<section id="aug-11-update" class="level1">
+<h1>Aug 11 Update</h1>
+<p>I transitioned to running the FFTs of the parameters in C++ with RcppArmadillo, which led to a bit more speed. It’s now about 2.2x faster than <code>summarise_draws()</code> in my tests. It runs chain by chain as well, so it should be more conducive to parallelizing across chains in the future. A test from the readme with 1000 standard normal variables.</p>
+<p><img src="https://andrewghazi.github.io/posts/fsummary/images/comparison.png" class="img-fluid" alt="an update comparison bar plot. The improvement over summarise_draws() in the 'with convergence metrics' category is now slightly larger."></p>
+<p>I’ve implemented faster Rhat computation as well, but currently it requires Julia so I haven’t pushed it to the main branch.</p>
 
 
 </section>
