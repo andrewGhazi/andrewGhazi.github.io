@@ -10,7 +10,30 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.53</generator>
-<lastBuildDate>Sat, 03 Aug 2024 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 07 Sep 2024 04:00:00 GMT</lastBuildDate>
+<item>
+  <title>The Count of Monte Carlo</title>
+  <link>https://andrewghazi.github.io/posts/comc/comc.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Shh, shh.</p>
+<p><img src="https://andrewghazi.github.io/posts/comc/images/drawing.png" alt="" height="900"></p>
+<blockquote class="blockquote">
+<p>Once I was as you are now, but I promise, it will pass.</p>
+</blockquote>
+
+
+
+ ]]></description>
+  <category>jokes</category>
+  <guid>https://andrewghazi.github.io/posts/comc/comc.html</guid>
+  <pubDate>Sat, 07 Sep 2024 04:00:00 GMT</pubDate>
+  <media:content url="https://andrewghazi.github.io/posts/comc/images/image1.png" medium="image" type="image/png" height="78" width="144"/>
+</item>
 <item>
   <title>Optimal coffee with dyingforacup</title>
   <dc:creator>Andrew Ghazi</dc:creator>
