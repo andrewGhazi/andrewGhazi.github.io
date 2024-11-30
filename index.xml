@@ -10,7 +10,30 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.53</generator>
-<lastBuildDate>Sat, 07 Sep 2024 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 30 Nov 2024 05:00:00 GMT</lastBuildDate>
+<item>
+  <title>Concurrent progress bars for Stan models</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/thebars/thebars.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Made a little package to show concurrent progress bars on Stan models:</p>
+<p><img src="https://andrewghazi.github.io/posts/thebars/images/anim.gif" class="img-fluid"></p>
+<p>More detail on <a href="https://github.com/andrewGhazi/thebars">the Github page</a>.</p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <category>Stan</category>
+  <guid>https://andrewghazi.github.io/posts/thebars/thebars.html</guid>
+  <pubDate>Sat, 30 Nov 2024 05:00:00 GMT</pubDate>
+  <media:content url="https://andrewghazi.github.io/posts/thebars/images/thebars.png" medium="image" type="image/png" height="100" width="144"/>
+</item>
 <item>
   <title>The Count of Monte Carlo</title>
   <link>https://andrewghazi.github.io/posts/comc/comc.html</link>
