@@ -10,7 +10,29 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.53</generator>
-<lastBuildDate>Sat, 30 Nov 2024 05:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 20 Dec 2024 05:00:00 GMT</lastBuildDate>
+<item>
+  <title>The most egregiously defective plot I ever made</title>
+  <link>https://andrewghazi.github.io/posts/egregious/egregious.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Back when I was first learning R in undergrad, I messed up on a homework assignment and generated this:</p>
+<p><img src="https://andrewghazi.github.io/posts/egregious/images/rainbow plot.png" class="img-fluid" alt="A horribly messed up plot. It's like a biased parabola rotated 90 degrees and drawn with rainbow dots. The title is a long sequence of numbers with each on a new line so the label goes from top to bottom, covering the plot. A group of four numbers in the middle inexplicably has 16 digits of precision."></p>
+<p>:)</p>
+<p>This is what I was going for:</p>
+<p><img src="https://andrewghazi.github.io/posts/egregious/images/intended.png" class="img-fluid" alt="an ugly but correct plot. A sequence of 7 gaussian log likelihoods (parabolas) in rainbow colors."></p>
+
+
+
+ ]]></description>
+  <category>jokes</category>
+  <guid>https://andrewghazi.github.io/posts/egregious/egregious.html</guid>
+  <pubDate>Fri, 20 Dec 2024 05:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Concurrent progress bars for Stan models</title>
   <dc:creator>Andrew Ghazi</dc:creator>
