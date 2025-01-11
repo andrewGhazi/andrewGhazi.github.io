@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.53">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Andrew Ghazi">
-<meta name="dcterms.date" content="2024-12-15">
+<meta name="dcterms.date" content="2025-01-11">
 
-<title>Benchmarking duckplyr for t-test simulations – andrewghazi.github.io</title>
+<title>Ranked pairs and STAR voting in R – andrewghazi.github.io</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,22 +59,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-977b4f0b4b5b0bfbf06db5d925f2314b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,7 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -114,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">andrewghazi.github.io</span>
     </a>
   </div>
@@ -125,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -134,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -149,10 +149,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Benchmarking <code>duckplyr</code> for t-test simulations</h1>
+      <h1 class="title">Ranked pairs and STAR voting in R</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">R</div>
-                <div class="quarto-category">benchmark</div>
+                <div class="quarto-category">Voting</div>
               </div>
                   </div>
   </div>
@@ -170,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 15, 2024</p>
+        <p class="date">January 11, 2025</p>
       </div>
     </div>
     
@@ -191,262 +191,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p><code>duckdb</code> is all the rage these days so I thought I would try out <code>duckplyr</code> and see how it compares to the others on my little <a href="../posts/collapse_is_sick/sick.html">statistical simulation benchmark</a>. It performed decently, but far from the best.</p>
+<p>FPTP sucks.</p>
+<p>In order to learn more the behavior of alternate electoral systems, I added functions for <a href="https://en.wikipedia.org/wiki/Ranked_pairs">Ranked Pairs</a> (RP) and <a href="https://en.wikipedia.org/wiki/STAR_voting">Score Then Automatic Runoff</a> (STAR) voting to my <a href="https://github.com/andrewGhazi/geryon"><code>geryon</code></a> R package. Ranked Pairs and STAR are electoral systems that result in winners that more accurately represent the will of the voters compared to FPTP. The ballot in RP is a set of candidate rankings, while in STAR the candidates are scored.</p>
+<p>After implementing both, I think if a group is deciding on what electoral system to use, I would advocate more strongly for STAR over Ranked Pairs. There are some arguments in RP’s favor, but the deciding factor to me is that STAR is much easier to explain. Voters will trust the results more if they understand the algorithm by which the winner is chosen.</p>
+<p>As mentioned in the warning messages, these functions are not deeply tested for edge cases and probably shouldn’t be used for anything serious.</p>
+<p>This chunk simulates some ranked votes then runs RP:</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(collapse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geryon)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>vote_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">voter_id  =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">each =</span> <span class="dv">4</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">candidate =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">times =</span> <span class="dv">100</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">vote_rank =</span> <span class="fu">replicate</span>(<span class="dv">100</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">order</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                                                        <span class="at">replace =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                                        <span class="at">prob =</span> <span class="fu">c</span>(.<span class="dv">1</span>, .<span class="dv">45</span>, .<span class="dv">5</span>, .<span class="dv">1</span>))),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">simplify =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> <span class="fu">unlist</span>())</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ranked_pairs</span>(vote_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>collapse 2.0.10, see ?`collapse-package` or ?`collapse-documentation`</code></pre>
+<pre><code>! This function is still experimental. It probably doesn't handle ties nor ballots with equal ranks properly.</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'collapse'</code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="voting_methods_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" alt="A voter preference network graph used by RP." width="672"></p>
+</figure>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:data.table':
-
-    fdroplevels</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:stats':
-
-    D</code></pre>
-</div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(duckplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>The duckplyr package is configured to fall back to dplyr when it encounters an
-incompatibility. Fallback events can be collected and uploaded for analysis to
-guide future development. By default, no data will be collected or uploaded.
-→ Run `duckplyr::fallback_sitrep()` to review the current settings.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>✔ Overwriting dplyr methods with duckplyr methods.
-ℹ Turn off with `duckplyr::methods_restore()`.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'duckplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:data.table':
-
-    between, first, last</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fl">3e5</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>val_df <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">g =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">each =</span> <span class="dv">6</span>),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">x =</span> <span class="fu">rt</span>(<span class="dv">6</span> <span class="sc">*</span> n, <span class="dv">3</span>))</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>val_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>              g           x
-          &lt;int&gt;       &lt;num&gt;
-      1:      1 -1.42377258
-      2:      1  0.92108707
-      3:      1  2.66511828
-      4:      1  1.89777959
-      5:      1 -1.72858662
-     ---                   
-1799996: 300000  4.21331950
-1799997: 300000 -1.90531659
-1799998: 300000  0.05525021
-1799999: 300000 -2.02495853
-1800000: 300000  0.34154318</code></pre>
-</div>
-</div>
-<p>The</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>duckplyr_slow <span class="ot">=</span> <span class="cf">function</span>(val_df) {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  val_df <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_duckplyr_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">.by =</span> g,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">p =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(<span class="fu">mean</span>(x) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">6</span>) <span class="sc">/</span> <span class="fu">sd</span>(x)),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">df =</span> <span class="dv">5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>()</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>So to get a fast version we have to include a few extra steps:</p>
-<ul>
-<li>The group-wise means/sds are calculated in their own step (similar to what <code>data.table</code> required in the previous post)</li>
-<li>An <code>arrange(g)</code> step, since all the other competitors maintain the ordering of the groups.</li>
-</ul>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>duckplyr_fast <span class="ot">=</span> <span class="cf">function</span>(val_df) {</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  val_df <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_duckplyr_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">.by =</span> g,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">mx =</span> <span class="fu">mean</span>(x),</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">sx =</span> <span class="fu">sd</span>(x)) <span class="sc">|&gt;</span> </span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mx<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">6</span>) <span class="sc">/</span> sx),</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">df =</span> <span class="dv">5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(g) <span class="sc">|&gt;</span> </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>mx, <span class="sc">-</span>sx) <span class="sc">|&gt;</span> </span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>()</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>For comparison, here is the <code>collapse</code> version:</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>collapse_soln <span class="ot">=</span> <span class="cf">function</span>(val_df) {</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  val_df <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gby</span>(g) <span class="sc">|&gt;</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">smr</span>(<span class="at">p =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="fu">abs</span>(<span class="fu">fmean</span>(x) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">6</span>) <span class="sc">/</span> <span class="fu">fsd</span>(x)), </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">df =</span> <span class="dv">5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>Here we run an updated benchmark. I added a check function to make sure they all produce the same result.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>check_fun <span class="ot">=</span> \(x,y) <span class="fu">length</span>(waldo<span class="sc">::</span><span class="fu">compare</span>(x, y, <span class="at">ignore_attr =</span> <span class="cn">TRUE</span>, <span class="at">tolerance =</span> <span class="fl">1e-8</span>)) <span class="sc">==</span> <span class="dv">0</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>bench_res <span class="ot">=</span> bench<span class="sc">::</span><span class="fu">mark</span>(<span class="at">duckplyr_slow =</span> <span class="fu">duckplyr_slow</span>(val_df),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">duckplyr_fast =</span> <span class="fu">duckplyr_fast</span>(val_df),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">collapse =</span> <span class="fu">collapse_soln</span>(val_df),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">check =</span> check_fun, </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">min_iterations =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>The duckplyr package is configured to fall back to dplyr when it encounters an
-incompatibility. Fallback events can be collected and uploaded for analysis to
-guide future development. By default, no data will be collected or uploaded.
-ℹ A fallback situation just occurred. The following information would have been
-  recorded:
-  {"version":"0.4.1","message":"No translation for function
-  `pt`.","name":"summarise","x":{"...1":"integer","...2":"numeric"},"args":{"dots":{"...3":"2
-  * pt(abs(mean(...2) * sqrt(6) / sd(...2)), df = 5, lower.tail =
-  FALSE)"},"by":["...1"]}}
-→ Run `duckplyr::fallback_sitrep()` to review the current settings.
-→ Run `Sys.setenv(DUCKPLYR_FALLBACK_COLLECT = 1)` to enable fallback logging,
-  and `Sys.setenv(DUCKPLYR_FALLBACK_VERBOSE = TRUE)` in addition to enable
-  printing of fallback situations to the console.
-→ Run `duckplyr::fallback_review()` to review the available reports, and
-  `duckplyr::fallback_upload()` to upload them.
-ℹ See `?duckplyr::fallback()` for details.
-ℹ This message will be displayed once every eight hours.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>duckplyr: materializing
-duckplyr: materializing
-duckplyr: materializing
-duckplyr: materializing
-duckplyr: materializing
-duckplyr: materializing
-duckplyr: materializing
-duckplyr: materializing</code></pre>
+<pre><code>$pair_df
+# A tibble: 6 × 6
+     V1    V2 pair_res         sel      marg elim 
+  &lt;int&gt; &lt;int&gt; &lt;list&gt;           &lt;chr&gt;   &lt;int&gt; &lt;lgl&gt;
+1     2     4 &lt;named list [2]&gt; pref_c1    68 FALSE
+2     1     2 &lt;named list [2]&gt; pref_c2    62 FALSE
+3     1     3 &lt;named list [2]&gt; pref_c2    62 FALSE
+4     3     4 &lt;named list [2]&gt; pref_c1    62 FALSE
+5     2     3 &lt;named list [2]&gt; pref_c2     6 FALSE
+6     1     4 &lt;named list [2]&gt; pref_c1     2 FALSE
+
+$pair_graph
+IGRAPH 3332be2 D--- 4 6 -- 
++ edges from 3332be2:
+[1] 2-&gt;4 2-&gt;1 3-&gt;1 3-&gt;4 3-&gt;2 1-&gt;4
+
+$winner
+[1] 3</code></pre>
+</div>
+</div>
+<p>This chunk simulates some <em>scored</em> votes, then runs STAR.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sim_vote <span class="ot">=</span> <span class="cf">function</span>(n_cand) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate one voter's scores from 0-5.</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Higher candidates more likely to get higher scores.</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Last candidate will be most likely to win.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">floor</span>(<span class="dv">6</span><span class="sc">*</span><span class="fu">rbeta</span>(n_cand, <span class="dv">1</span><span class="sc">:</span>n_cand, <span class="dv">1</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>n_voter <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>n_cand <span class="ot">=</span> <span class="dv">4</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>vote_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">voter_id  =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_voter, <span class="at">each =</span> n_cand),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">candidate =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_cand, <span class="at">times =</span> n_voter),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">score =</span> <span class="fu">as.vector</span>(<span class="fu">replicate</span>(n_voter, <span class="fu">sim_vote</span>(n_cand))))</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">star</span>(vote_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>! This function is still experimental. It probably shouldn't be used for anything serious.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
-disabled.</code></pre>
+<pre><code>Score sums:</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bench_res <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slt</span>(expression<span class="sc">:</span>mem_alloc, n_itr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 5
-  expression         min   median `itr/sec` mem_alloc
-  &lt;bch:expr&gt;    &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;
-1 duckplyr_slow    3.56s    3.57s     0.280    98.3MB
-2 duckplyr_fast 165.39ms 169.04ms     5.67       32MB
-3 collapse        86.7ms 100.09ms     8.31       29MB</code></pre>
+<pre><code>  candidate sum_score
+1         3       418
+2         4       417
+3         2       351
+4         1       238</code></pre>
 </div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Automatic runoff results:</code></pre>
 </div>
-<p>To me the <code>collapse</code> version seems clearly better. It’s comparatively faster, shorter, and more interoperable with other R functions (i.e.&nbsp;<code>pt()</code>)</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>─ Session info ───────────────────────────────────────────────────────────────
- setting  value
- version  R version 4.4.2 (2024-10-31)
- os       Pop!_OS 22.04 LTS
- system   x86_64, linux-gnu
- ui       X11
- language (EN)
- collate  en_US.UTF-8
- ctype    en_US.UTF-8
- tz       America/New_York
- date     2024-12-15
- pandoc   3.2 @ /usr/lib/rstudio/resources/app/bin/quarto/bin/tools/x86_64/ (via rmarkdown)
-
-─ Packages ───────────────────────────────────────────────────────────────────
- package     * version date (UTC) lib source
- bench         1.1.3   2023-05-04 [1] CRAN (R 4.4.1)
- cli           3.6.3   2024-06-21 [1] CRAN (R 4.4.1)
- collapse    * 2.0.10  2024-02-17 [1] CRAN (R 4.4.2)
- collections   0.3.7   2023-01-05 [1] CRAN (R 4.4.2)
- data.table  * 1.16.0  2024-08-27 [1] CRAN (R 4.4.1)
- DBI           1.2.2   2024-02-16 [1] CRAN (R 4.4.0)
- digest        0.6.35  2024-03-11 [1] CRAN (R 4.4.0)
- dplyr         1.1.4   2023-11-17 [1] CRAN (R 4.4.0)
- duckdb        1.1.3-1 2024-12-08 [1] CRAN (R 4.4.2)
- duckplyr    * 0.4.1   2024-07-12 [1] CRAN (R 4.4.2)
- evaluate      0.23    2023-11-01 [1] CRAN (R 4.4.0)
- fansi         1.0.6   2023-12-08 [1] CRAN (R 4.4.0)
- fastmap       1.1.1   2023-02-24 [1] CRAN (R 4.4.0)
- generics      0.1.3   2022-07-05 [1] CRAN (R 4.4.0)
- glue          1.7.0   2024-01-09 [1] CRAN (R 4.4.0)
- htmltools     0.5.8.1 2024-04-04 [1] CRAN (R 4.4.0)
- htmlwidgets   1.6.4   2023-12-06 [1] CRAN (R 4.4.0)
- jsonlite      1.8.8   2023-12-04 [1] CRAN (R 4.4.0)
- knitr         1.46    2024-04-06 [1] CRAN (R 4.4.0)
- lifecycle     1.0.4   2023-11-07 [1] CRAN (R 4.4.0)
- magrittr      2.0.3   2022-03-30 [1] CRAN (R 4.4.0)
- pillar        1.9.0   2023-03-22 [1] CRAN (R 4.4.0)
- pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.4.0)
- profmem       0.6.0   2020-12-13 [1] CRAN (R 4.4.1)
- R6            2.5.1   2021-08-19 [1] CRAN (R 4.4.0)
- Rcpp          1.0.13  2024-07-17 [1] CRAN (R 4.4.1)
- rlang         1.1.4   2024-06-04 [1] CRAN (R 4.4.1)
- rmarkdown     2.26    2024-03-05 [1] CRAN (R 4.4.0)
- rstudioapi    0.16.0  2024-03-24 [1] CRAN (R 4.4.0)
- sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.4.0)
- tibble        3.2.1   2023-03-20 [1] CRAN (R 4.4.0)
- tidyselect    1.2.1   2024-03-11 [1] CRAN (R 4.4.0)
- utf8          1.2.4   2023-10-22 [1] CRAN (R 4.4.0)
- vctrs         0.6.5   2023-12-01 [1] CRAN (R 4.4.0)
- waldo         0.5.2   2023-11-02 [1] CRAN (R 4.4.0)
- withr         3.0.0   2024-01-16 [1] CRAN (R 4.4.0)
- xfun          0.43    2024-03-25 [1] CRAN (R 4.4.0)
- yaml          2.3.8   2023-12-11 [1] CRAN (R 4.4.0)
-
- [1] /home/ghazi/R/x86_64-pc-linux-gnu-library/4.4
- [2] /usr/local/lib/R/site-library
- [3] /usr/lib/R/site-library
- [4] /usr/lib/R/library
-
-──────────────────────────────────────────────────────────────────────────────</code></pre>
+<pre><code># A tibble: 3 × 2
+  preference     n
+       &lt;int&gt; &lt;int&gt;
+1          3    35
+2          4    35
+3         NA    30</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ The winning candidate is: 3</code></pre>
 </div>
 </div>
 
@@ -535,8 +371,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -647,7 +481,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
