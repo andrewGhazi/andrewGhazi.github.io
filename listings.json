@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/quotations/quotations.html",
       "/posts/voting_methods/voting_methods.html",
       "/posts/egregious/egregious.html",
       "/posts/thebars/thebars.html",

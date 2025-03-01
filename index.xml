@@ -6394,5 +6394,31 @@ Vehtari, Aki, Tommi Mononen, Ville Tolvanen, Tuomas Sivula, and Ole Winther. 201
   <guid>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</guid>
   <pubDate>Fri, 22 Sep 2023 04:00:00 GMT</pubDate>
 </item>
+<item>
+  <title>Important quotations</title>
+  <link>https://andrewghazi.github.io/posts/quotations/quotations.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<blockquote class="blockquote">
+<p>“The combination of some data and an aching desire for an answer does not ensure that a reasonable answer can be extracted from a given body of data.”</p>
+</blockquote>
+<p>From <a href="https://en.wikipedia.org/wiki/John_Tukey">John Tukey</a></p>
+<blockquote class="blockquote">
+<p>“The ethical statistical practitioner… 4. Avoids compromising validity for expediency.”</p>
+</blockquote>
+<p>From the <a href="https://www.amstat.org/your-career/ethical-guidelines-for-statistical-practice">ASA Ethical Guidelines for Statistical Practice</a></p>
+<p>I think about these quotations all the time, but they’re rarely what people want to hear when they’re apt.</p>
+
+
+
+ ]]></description>
+  <guid>https://andrewghazi.github.io/posts/quotations/quotations.html</guid>
+  <pubDate>Sat, 01 Mar 2025 14:54:24 GMT</pubDate>
+  <media:content url="https://andrewghazi.github.io/posts/quotations/images/John_Tukey.jpg" medium="image" type="image/jpeg"/>
+</item>
 </channel>
 </rss>
