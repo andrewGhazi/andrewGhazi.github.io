@@ -10,7 +10,93 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.6.40</generator>
-<lastBuildDate>Sat, 01 Mar 2025 05:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 20 Apr 2025 04:00:00 GMT</lastBuildDate>
+<item>
+  <title>Tricks for RevealJS Quarto presentations</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/quarto_tricks/quarto_tricks.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>A few helpful quarto snippets whose syntax I always struggle to recollect.</p>
+<section id="text" class="level1">
+<h1>Text</h1>
+<section id="small-text" class="level2">
+<h2 class="anchored" data-anchor-id="small-text">Small text</h2>
+<pre><code>&lt;small&gt; This will be small.  &lt;/small&gt;</code></pre>
+</section>
+<section id="red-text" class="level2">
+<h2 class="anchored" data-anchor-id="red-text">Red text</h2>
+<pre><code>&lt;span style="color:red;"&gt; This will be red. &lt;/span&gt; </code></pre>
+</section>
+<section id="small-red-text" class="level2">
+<h2 class="anchored" data-anchor-id="small-red-text">Small, red text</h2>
+<pre><code>&lt;small&gt; &lt;span style="color:red;"&gt; Small and red. &lt;/span&gt; &lt;/small&gt;</code></pre>
+</section>
+<section id="bold-absolute-position-text" class="level2">
+<h2 class="anchored" data-anchor-id="bold-absolute-position-text">Bold, absolute position text</h2>
+<pre><code>[&lt;strong&gt;&lt;small&gt;Small bold text at a specific spot.&lt;/strong&gt;&lt;/small&gt;]{.absolute left=300 top=850}</code></pre>
+</section>
+</section>
+<section id="boxes" class="level1">
+<h1>Boxes</h1>
+<section id="empty-red-box-at-a-specific-spot" class="level2">
+<h2 class="anchored" data-anchor-id="empty-red-box-at-a-specific-spot">Empty red box at a specific spot</h2>
+<pre><code>::: {data-id="box1" style="border: 5px solid #FF0000; width: 150px; height: 120px; margin: 10px;" left=1300 top=250 .absolute}
+:::
+</code></pre>
+</section>
+<section id="filled-box" class="level2">
+<h2 class="anchored" data-anchor-id="filled-box">Filled box</h2>
+<pre><code>::: {data-id="box1" style="background: #2780e3; width: 200px; height: 150px; margin: 10px;"}
+:::</code></pre>
+</section>
+<section id="blurring-box" class="level2">
+<h2 class="anchored" data-anchor-id="blurring-box">Blurring box</h2>
+<p>These are helpful if you want to blur / de-emphasize part of the slide. Add <code>.fragment .fade-out</code> to make it disappear on click.</p>
+<pre><code>::: {data-id="box1" style="background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px); width: 260px; height: 320px; " .absolute left=1270 top=280}
+:::</code></pre>
+<ul>
+<li>adjust the 10 in <code>blur(10px)</code> to adjust the strength of the blurring</li>
+</ul>
+</section>
+</section>
+<section id="misc" class="level1">
+<h1>Misc</h1>
+<section id="center-captions" class="level2">
+<h2 class="anchored" data-anchor-id="center-captions">Center captions</h2>
+<pre><code>:::{#headshots layout-ncol=3 style="text-align: center"}
+
+![Andrew Ghazi, PhD](images/Andrew_Ghazi_003_sq_sm2.JPG){height=320}
+:::
+</code></pre>
+</section>
+<section id="taller-code-blocks" class="level2">
+<h2 class="anchored" data-anchor-id="taller-code-blocks">Taller code blocks</h2>
+<p>This goes in the .scss file</p>
+<pre><code>.reveal code {
+  max-height: 900px !important;
+}</code></pre>
+</section>
+<section id="column-of-text-that-doesnt-fill-the-width-of-the-page" class="level2">
+<h2 class="anchored" data-anchor-id="column-of-text-that-doesnt-fill-the-width-of-the-page">Column of text that doesn’t fill the width of the page</h2>
+<pre><code>:::{.column width=60%}
+* empty droplets - droplets that failed to capture a cell, but still got barcoded and sequenced
+:::
+</code></pre>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Quarto</category>
+  <guid>https://andrewghazi.github.io/posts/quarto_tricks/quarto_tricks.html</guid>
+  <pubDate>Sun, 20 Apr 2025 04:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Important quotations</title>
   <link>https://andrewghazi.github.io/posts/quotations/quotations.html</link>
@@ -302,6 +388,7 @@ font-style: inherit;">star</span>(vote_df)</span></code></pre></div>
 
 
 
+<p>We all start somewhere.</p>
 <p>Back when I was first learning R in undergrad, I messed up on a homework assignment and generated this:</p>
 <p><img src="https://andrewghazi.github.io/posts/egregious/images/rainbow plot.png" class="img-fluid" alt="A horribly messed up plot. It's like a biased parabola rotated 90 degrees and drawn with rainbow dots. The title is a long sequence of numbers with each on a new line so the label goes from top to bottom, covering the plot. A group of four numbers in the middle inexplicably has 16 digits of precision."></p>
 <p>:)</p>

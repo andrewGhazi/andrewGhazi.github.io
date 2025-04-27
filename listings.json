@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/quarto_tricks/quarto_tricks.html",
       "/posts/quotations/quotations.html",
       "/posts/voting_methods/voting_methods.html",
       "/posts/egregious/egregious.html",
