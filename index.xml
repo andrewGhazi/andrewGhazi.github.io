@@ -4878,7 +4878,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
 <li>show how to perform the integral more flexibly in R / outside of Stan</li>
 </ul>
 <p>Load some setup libraries:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-1_adb1fa5edb404d74bfe907a4ee1e69d4">
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
@@ -4890,7 +4890,7 @@ font-style: inherit;">library</span>(cmdstanr)</span></code></pre></div>
 <section id="why-use-integrated-loo" class="level1">
 <h1>Why use integrated LOO?</h1>
 <p>The LOO method as implemented in the <code>loo</code> package requires an array of log-likelihood values for every observation at every iteration in the MCMC chains. There are some addtional complications around extensions like k-fold LOO and leave-one-group-out, but I’m going to ignore those. There’s a built in example in the <code>loo</code> package from a model fit with 32 observations - here’s the first 3 of 1000 rows (i.e.&nbsp;the MCMC chain took 1000 draws):</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-2_e2701638a8a927b9bcee14f27de2e2dc">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">loo<span class="sc" style="color: #5E5E5E;
@@ -4934,11 +4934,11 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 </div>
 <p>LOO works by looking at the distributions of observation-wise log-likelihoods to assess how strongly each observation influences the overall fit. Low log-likelihood = strong influence on fit.</p>
 <p>Observation-wise log-likelihood values can be unstable when a given observation strongly influences the posterior for a related parameter. Normally you’ll notice this when a Stan model gets through the MCMC stage without any warnings, but the Pareto k diagnostics come out badly when you try to run LOO and warning messages go off.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-3_bf47641226528e196e95af699bdf5288">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://andrewghazi.github.io/posts/int_loo/img/diagram.png" class="img-fluid figure-img" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations." width="1179"></p>
+<p><img src="https://andrewghazi.github.io/posts/int_loo/img/diagram.png" class="img-fluid figure-img" alt="A diagram contrasting two situations where LOO may be applied. On the left, a single higher-level hyperparameter generates the data, which is an unproblematic situation for standard LOO calculations. On the right, the upper-level hyperparamter generates an intermediate observation-specific parameter which then generates the observations. The right situation is difficult for standard LOO calculations."></p>
 </figure>
 </div>
 </div>
@@ -4950,7 +4950,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 </ul>
 <p>Why are unstable log-likehood values problematic? Because it makes estimating that observation’s contribution to the model fit challenging. When the log-likelihood values are unstable, the importance ratios can have high or infinite variance <span class="citation" data-cites="vehtari_practical_2017">(Vehtari, Gelman, and Gabry 2017)</span>. The loo package automatically performs <em>Pareto smoothed</em> importance sampling to smooth the importance weights. This estimates a generalized Pareto distribution to the tail of each log-likelihood distribution. The k parameter of this Pareto distribution is used as a diagnostic to assess whether or not the leave-one-out distribution for the observation in question has been accurately characterized by the log-likelihood values from the MCMC fit.</p>
 <p>The example below compares log-likelihood values for a single observation over two long MCMC chains evaluated with and without integration.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-4_27e6cef21460f6a0b5747d4288ffb8db">
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r fold-hide code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
@@ -5005,12 +5005,12 @@ font-style: inherit;"># &lt;step through anpan_pglmm(), then use nonint_loo to g
 <span id="cb4-14"></span>
 <span id="cb4-15"><span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># V This is pglmm_loo.R from anpan with some updates to drop the integration, the key distinction being the log_lik_i_j_gaussian function below.</span></span>
+font-style: inherit;"># V Get ll functions from pglmm_loo.R from anpan, then overwrite log_lik_i_j_gaussian</span></span>
 <span id="cb4-16"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">source</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"~/misc/R/pglmm_nonint_loo.R"</span>)</span>
+font-style: inherit;">"~/projects/anpan/R/pglmm_loo.R"</span>)</span>
 <span id="cb4-17"></span>
 <span id="cb4-18"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -5021,127 +5021,85 @@ font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(effect_j,</span>
-<span id="cb4-20">    mu_bar_j, sigma_bar_j, <span class="co" style="color: #5E5E5E;
+<span id="cb4-20">    m1, s1, <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># phylo term components</span></span>
-<span id="cb4-21">    sigma_resid, yj, lm_term, <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># LM term components</span></span>
-<span id="cb4-22">    offset_term) {</span>
-<span id="cb4-23">    phylo_term <span class="ot" style="color: #003B4F;
+<span id="cb4-21">    l, yj, s2) {</span>
+<span id="cb4-22">    phylo_term <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">dnorm</span>(effect_j,</span>
+<span id="cb4-23">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> m1,</span>
 <span id="cb4-24">        <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">mean =</span> mu_bar_j,</span>
+font-style: inherit;">sd =</span> s1,</span>
 <span id="cb4-25">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">sd =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sqrt</span>(sigma_bar_j),</span>
-<span id="cb4-26">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">log =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span></span>
-<span id="cb4-27">    )</span>
-<span id="cb4-28"></span>
-<span id="cb4-29">    model_mean <span class="ot" style="color: #003B4F;
+<span id="cb4-26">    )</span>
+<span id="cb4-27"></span>
+<span id="cb4-28">    model_mean <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">c</span>(lm_term) <span class="sc" style="color: #5E5E5E;
+font-style: inherit;">c</span>(l) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> effect_j</span>
-<span id="cb4-30"></span>
-<span id="cb4-31">    fit_term <span class="ot" style="color: #003B4F;
+<span id="cb4-29"></span>
+<span id="cb4-30">    fit_term <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">dnorm</span>(</span>
-<span id="cb4-32">        <span class="at" style="color: #657422;
+<span id="cb4-31">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">x =</span> yj,</span>
-<span id="cb4-33">        <span class="at" style="color: #657422;
+<span id="cb4-32">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">mean =</span> model_mean,</span>
-<span id="cb4-34">        <span class="at" style="color: #657422;
+<span id="cb4-33">        <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">sd =</span> sigma_resid,</span>
-<span id="cb4-35">        <span class="at" style="color: #657422;
+font-style: inherit;">sd =</span> s2,</span>
+<span id="cb4-34">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">log =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span></span>
-<span id="cb4-36">    )</span>
-<span id="cb4-37"></span>
-<span id="cb4-38">    res <span class="ot" style="color: #003B4F;
+<span id="cb4-35">    )</span>
+<span id="cb4-36"></span>
+<span id="cb4-37">    res <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> phylo_term <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">+</span> fit_term <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> offset_term</span>
-<span id="cb4-39"></span>
-<span id="cb4-40">    <span class="fu" style="color: #4758AB;
+font-style: inherit;">+</span> fit_term</span>
+<span id="cb4-38"></span>
+<span id="cb4-39">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">return</span>(res)</span>
-<span id="cb4-41">}</span>
-<span id="cb4-42"></span>
-<span id="cb4-43">ll_attempt <span class="ot" style="color: #003B4F;
+<span id="cb4-40">}</span>
+<span id="cb4-41"></span>
+<span id="cb4-42"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+font-style: inherit;">source</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">safely_get_ll_mat</span>(draw_df,</span>
-<span id="cb4-44">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">effect_means =</span> effect_means,</span>
-<span id="cb4-45">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cor_mat =</span> cor_mat,</span>
-<span id="cb4-46">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Lcov =</span> Lcov,</span>
-<span id="cb4-47">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Xc =</span> Xc,</span>
-<span id="cb4-48">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">offset_val =</span> data_list<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>offset_val,</span>
-<span id="cb4-49">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Y =</span> data_list<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>Y,</span>
-<span id="cb4-50">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">family =</span> family,</span>
-<span id="cb4-51">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose</span>
-<span id="cb4-52">)</span>
-<span id="cb4-53"></span>
-<span id="cb4-54">ll_mat <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> ll_attempt<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>result</span>
-<span id="cb4-55"></span>
-<span id="cb4-56">nonint_loo <span class="ot" style="color: #003B4F;
+font-style: inherit;">"phylo_comp_redo.R"</span>)</span>
+<span id="cb4-43"></span>
+<span id="cb4-44">nonint_loo <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">loo</span>(</span>
-<span id="cb4-57">    <span class="at" style="color: #657422;
+<span id="cb4-45">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">x =</span> ll_mat,</span>
-<span id="cb4-58">    <span class="at" style="color: #657422;
+<span id="cb4-46">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">r_eff =</span> loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -5150,7 +5108,7 @@ background-color: null;
 font-style: inherit;">relative_eff</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">exp</span>(ll_mat),</span>
-<span id="cb4-59">        <span class="at" style="color: #657422;
+<span id="cb4-47">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">chain_id =</span> draw_df<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -5161,12 +5119,12 @@ background-color: null;
 font-style: inherit;">.chain</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb4-60">    )</span>
-<span id="cb4-61">)</span>
-<span id="cb4-62"></span>
-<span id="cb4-63">nonint_loo</span>
-<span id="cb4-64"></span>
-<span id="cb4-65">k <span class="ot" style="color: #003B4F;
+<span id="cb4-48">    )</span>
+<span id="cb4-49">)</span>
+<span id="cb4-50"></span>
+<span id="cb4-51">nonint_loo</span>
+<span id="cb4-52"></span>
+<span id="cb4-53">k <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5177,20 +5135,20 @@ background-color: null;
 font-style: inherit;">$</span>pareto_k) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># 280</span></span>
-<span id="cb4-66">nonint_loo<span class="sc" style="color: #5E5E5E;
+<span id="cb4-54">nonint_loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>diagnostics<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>pareto_k[k] <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># 280</span></span>
-<span id="cb4-67"></span>
-<span id="cb4-68">int_comp <span class="ot" style="color: #003B4F;
+<span id="cb4-55"></span>
+<span id="cb4-56">int_comp <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">tibble</span>(</span>
-<span id="cb4-69">    <span class="at" style="color: #657422;
+<span id="cb4-57">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">with_integration =</span> loo_df_with_int_loo[[<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5199,12 +5157,14 @@ background-color: null;
 font-style: inherit;">"log_lik["</span>, k, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"]"</span>)]],</span>
-<span id="cb4-70">    <span class="at" style="color: #657422;
+<span id="cb4-58">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">without =</span> ll_mat[, k]</span>
-<span id="cb4-71">) <span class="sc" style="color: #5E5E5E;
+<span id="cb4-59">) <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+font-style: inherit;">|&gt;</span> tidyr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">pivot_longer</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5213,34 +5173,34 @@ background-color: null;
 font-style: inherit;">names_to =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"type"</span>)</span>
-<span id="cb4-72"></span>
-<span id="cb4-73">int_comp <span class="sc" style="color: #5E5E5E;
+<span id="cb4-60"></span>
+<span id="cb4-61">int_comp <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb4-74">    <span class="fu" style="color: #4758AB;
+<span id="cb4-62">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">aes</span>(value)) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb4-75">    <span class="fu" style="color: #4758AB;
+<span id="cb4-63">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">geom_histogram</span>(</span>
-<span id="cb4-76">        <span class="at" style="color: #657422;
+<span id="cb4-64">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">bins =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">60</span>,</span>
-<span id="cb4-77">        <span class="at" style="color: #657422;
+<span id="cb4-65">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey25"</span></span>
-<span id="cb4-78">    ) <span class="sc" style="color: #5E5E5E;
+<span id="cb4-66">    ) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb4-79">    <span class="fu" style="color: #4758AB;
+<span id="cb4-67">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">facet_wrap</span>(<span class="st" style="color: #20794D;
 background-color: null;
@@ -5251,31 +5211,31 @@ background-color: null;
 font-style: inherit;">2</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb4-80">    <span class="fu" style="color: #4758AB;
+<span id="cb4-68">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">geom_rug</span>(</span>
-<span id="cb4-81">        <span class="at" style="color: #657422;
+<span id="cb4-69">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">alpha =</span> .<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">333</span>,</span>
-<span id="cb4-82">        <span class="at" style="color: #657422;
+<span id="cb4-70">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey25"</span></span>
-<span id="cb4-83">    ) <span class="sc" style="color: #5E5E5E;
+<span id="cb4-71">    ) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb4-84">    <span class="fu" style="color: #4758AB;
+<span id="cb4-72">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">theme_light</span>() <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb4-85">    <span class="fu" style="color: #4758AB;
+<span id="cb4-73">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">theme</span>(</span>
-<span id="cb4-86">        <span class="at" style="color: #657422;
+<span id="cb4-74">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5284,7 +5244,7 @@ background-color: null;
 font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey10"</span>),</span>
-<span id="cb4-87">        <span class="at" style="color: #657422;
+<span id="cb4-75">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">strip.text =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5293,7 +5253,7 @@ background-color: null;
 font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey10"</span>),</span>
-<span id="cb4-88">        <span class="at" style="color: #657422;
+<span id="cb4-76">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">plot.background =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5306,7 +5266,7 @@ background-color: null;
 font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey95"</span>),</span>
-<span id="cb4-89">        <span class="at" style="color: #657422;
+<span id="cb4-77">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">panel.background =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5319,7 +5279,7 @@ background-color: null;
 font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey95"</span>),</span>
-<span id="cb4-90">        <span class="at" style="color: #657422;
+<span id="cb4-78">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">panel.grid =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5328,14 +5288,14 @@ background-color: null;
 font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey75"</span>)</span>
-<span id="cb4-91">    )</span></code></pre></div>
+<span id="cb4-79">    )</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-5_66d8583634dc214633ef3a670d4b2068">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://andrewghazi.github.io/posts/int_loo/img/integral_comparison2.png" class="img-fluid figure-img" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8." width="1050"></p>
+<p><img src="https://andrewghazi.github.io/posts/int_loo/img/integral_comparison2.png" class="img-fluid figure-img" alt="A figure showing two histograms facetted vertically. The top shows the distribution of the log-likelihood values for a single observation over the posterior distribution. With integration the distribution is fairly narrow around the mean, from -1.75 to .2 or so. Without integration the distribution has an extremely heavy left tail, down to -8."></p>
 </figure>
 </div>
 </div>
@@ -5386,7 +5346,7 @@ font-style: inherit;">1</span>:N) log_lik[i] = normal_lpdf(y[i] | observation_mu
 <section id="simulated-pathological-example" class="level1">
 <h1>Simulated pathological example</h1>
 <p>I’ll work with a simplified version of the PGLMM example (no intercepts, covariates, etc). Here’s a tiny data simulation with sigma_phylo = 1 and sigma_resid = 0.5:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-6_9f016c224d7ef0d1cd49c010679fccc2">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
@@ -5613,7 +5573,7 @@ font-style: inherit;">1</span>:N){</span>
 <span id="cb9-34">  }</span>
 <span id="cb9-35">}</span></code></pre></div>
 <p>Let’s run it:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/stanfit_f2ef98389e345beafb9eda7059645e8b">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">dir_prefix <span class="ot" style="color: #003B4F;
@@ -5625,7 +5585,7 @@ font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">interactive</span>()) <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"~/miscR/qmd/"</span> <span class="cf" style="color: #003B4F;
+font-style: inherit;">"~/misc/qmd/"</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">else</span> <span class="st" style="color: #20794D;
@@ -5639,47 +5599,52 @@ background-color: null;
 font-style: inherit;">paste0</span>(dir_prefix, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"stan/simple_pglmm.stan"</span>)</span>
-<span id="cb10-4">out_dir <span class="ot" style="color: #003B4F;
+<span id="cb10-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stopifnot</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">file.exists</span>(model_path))</span>
+<span id="cb10-5">out_dir <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">paste0</span>(dir_prefix, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"cmdstanr_out/"</span>)</span>
-<span id="cb10-5"></span>
-<span id="cb10-6">m <span class="ot" style="color: #003B4F;
+<span id="cb10-6"></span>
+<span id="cb10-7">m <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">cmdstan_model</span>(model_path)</span>
-<span id="cb10-7"></span>
-<span id="cb10-8">data_list <span class="ot" style="color: #003B4F;
+<span id="cb10-8"></span>
+<span id="cb10-9">data_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">list</span>(</span>
-<span id="cb10-9">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">N =</span> n,</span>
 <span id="cb10-10">    <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">Y =</span> sim_outcome,</span>
+font-style: inherit;">N =</span> n,</span>
 <span id="cb10-11">    <span class="at" style="color: #657422;
 background-color: null;
+font-style: inherit;">Y =</span> sim_outcome,</span>
+<span id="cb10-12">    <span class="at" style="color: #657422;
+background-color: null;
 font-style: inherit;">Lcov =</span> Lcov</span>
-<span id="cb10-12">)</span>
-<span id="cb10-13"></span>
-<span id="cb10-14">pglmm_fit <span class="ot" style="color: #003B4F;
+<span id="cb10-13">)</span>
+<span id="cb10-14"></span>
+<span id="cb10-15">pglmm_fit <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> m<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(</span>
-<span id="cb10-15">    <span class="at" style="color: #657422;
+<span id="cb10-16">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">data =</span> data_list,</span>
-<span id="cb10-16">    <span class="at" style="color: #657422;
+<span id="cb10-17">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">refresh =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5688,36 +5653,40 @@ background-color: null;
 font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">500</span>,</span>
-<span id="cb10-17">    <span class="at" style="color: #657422;
+<span id="cb10-18">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">parallel_chains =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">4</span>,</span>
-<span id="cb10-18">    <span class="at" style="color: #657422;
+<span id="cb10-19">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">show_messages =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">interactive</span>(),</span>
-<span id="cb10-19">    <span class="at" style="color: #657422;
+<span id="cb10-20">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">show_exceptions =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">interactive</span>(),</span>
-<span id="cb10-20">    <span class="at" style="color: #657422;
+<span id="cb10-21">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">output_dir =</span> out_dir</span>
-<span id="cb10-21">)</span></code></pre></div>
+<span id="cb10-22">)</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: 7 of 4000 (0.0%) transitions ended with a divergence.
+<pre><code>Warning: 10 of 4000 (0.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 1 of 4 chains had an E-BFMI less than 0.3.
 See https://mc-stan.org/misc/warnings for details.</code></pre>
 </div>
 </div>
-<p>It samples fine, but the loo results are not good:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/naiveloo_1f931b29a33184310a87a79ffa3aa3aa">
+<p>It samples fine, but the loo results are not great:</p>
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">pglmm_fit<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">pglmm_fit<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5728,21 +5697,21 @@ font-style: inherit;">loo</span>()</span></code></pre></div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Computed from 4000 by 150 log-likelihood matrix
+Computed from 4000 by 150 log-likelihood matrix.
 
          Estimate   SE
 elpd_loo   -258.1  8.4
-p_loo        61.4  5.0
-looic       516.2 16.7
+p_loo        61.0  5.0
+looic       516.2 16.8
 ------
-Monte Carlo SE of elpd_loo is NA.
+MCSE of elpd_loo is NA.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.1, 1.4]).
 
 Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     64    42.7%   292       
- (0.5, 0.7]   (ok)       61    40.7%   111       
-   (0.7, 1]   (bad)      24    16.0%   26        
-   (1, Inf)   (very bad)  1     0.7%   32        
+                         Count Pct.    Min. ESS
+(-Inf, 0.7]   (good)     130   86.7%   35      
+   (0.7, 1]   (bad)       20   13.3%   &lt;NA&gt;    
+   (1, Inf)   (very bad)   0    0.0%   &lt;NA&gt;    
 See help('pareto-k-diagnostic') for details.</code></pre>
 </div>
 </div>
@@ -5761,70 +5730,70 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <li>the term from the phylogenetically correlated distribution of phylo effects</li>
 <li>and the term from the fit to the observation <code>y[i]</code></li>
 </ul>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-7_0bcadfcedd464c4146df4f4004ebe4fe">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">vec_integrand <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">vec_integrand <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(phylo_effect_vec,</span>
-<span id="cb15-2">    mu_bar_ij, sigma_bar_ij,</span>
-<span id="cb15-3">    sigma_resid_j, yi,</span>
-<span id="cb15-4">    <span class="at" style="color: #657422;
+<span id="cb16-2">    mu_bar_ij, sigma_bar_ij,</span>
+<span id="cb16-3">    sigma_resid_j, yi,</span>
+<span id="cb16-4">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">log =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">FALSE</span>) {</span>
-<span id="cb15-5">    phylo_term <span class="ot" style="color: #003B4F;
+<span id="cb16-5">    phylo_term <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">dnorm</span>(phylo_effect_vec,</span>
-<span id="cb15-6">        <span class="at" style="color: #657422;
+<span id="cb16-6">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">mean =</span> mu_bar_ij,</span>
-<span id="cb15-7">        <span class="at" style="color: #657422;
+<span id="cb16-7">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sd =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sqrt</span>(sigma_bar_ij),</span>
-<span id="cb15-8">        <span class="at" style="color: #657422;
+<span id="cb16-8">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">log =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span></span>
-<span id="cb15-9">    )</span>
-<span id="cb15-10"></span>
-<span id="cb15-11">    fit_term <span class="ot" style="color: #003B4F;
+<span id="cb16-9">    )</span>
+<span id="cb16-10"></span>
+<span id="cb16-11">    fit_term <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">dnorm</span>(</span>
-<span id="cb15-12">        <span class="at" style="color: #657422;
+<span id="cb16-12">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">x =</span> yi,</span>
-<span id="cb15-13">        <span class="at" style="color: #657422;
+<span id="cb16-13">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">mean =</span> phylo_effect_vec,</span>
-<span id="cb15-14">        <span class="at" style="color: #657422;
+<span id="cb16-14">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sd =</span> sigma_resid_j,</span>
-<span id="cb15-15">        <span class="at" style="color: #657422;
+<span id="cb16-15">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">log =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span></span>
-<span id="cb15-16">    )</span>
-<span id="cb15-17"></span>
-<span id="cb15-18">    res <span class="ot" style="color: #003B4F;
+<span id="cb16-16">    )</span>
+<span id="cb16-17"></span>
+<span id="cb16-18">    res <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> phylo_term <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> fit_term</span>
-<span id="cb15-19"></span>
-<span id="cb15-20">    <span class="cf" style="color: #003B4F;
+<span id="cb16-19"></span>
+<span id="cb16-20">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
@@ -5834,11 +5803,11 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">exp</span>(res)</span>
-<span id="cb15-21"></span>
-<span id="cb15-22">    <span class="fu" style="color: #4758AB;
+<span id="cb16-21"></span>
+<span id="cb16-22">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">return</span>(res)</span>
-<span id="cb15-23">}</span></code></pre></div>
+<span id="cb16-23">}</span></code></pre></div>
 </details>
 </div>
 <p><code>sigma_resid_j</code> and <code>yi</code> are fairly obvious. What about <code>mu_bar_ij</code> and <code>sigma_bar_ij</code>? Given the structure of the model, the mean and standard deviation of <code>phylo_effects[i]</code> are conditional on <code>phylo_effects[-i]</code> and <code>sigma_phylo[j]</code>. We’ll have to use <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions">the conditional distribution of a multivariate normal</a>:</p>
@@ -5856,31 +5825,31 @@ font-style: inherit;">return</span>(res)</span>
 <section id="get-the-inputs" class="level1">
 <h1>Get the inputs</h1>
 <p>This code chunk does a lot of the book-keeping to prepare lists of correlation matrix products and format the posterior draws into a nice <code>draw_list</code>.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/inverses_9ca3116c3f8fcc117bfdba06653dbbf4">
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">get_corr_mat_minus_i_inv <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">get_corr_mat_minus_i_inv <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(i, cor_mat, n) {</span>
-<span id="cb16-2">    cor_mat[<span class="sc" style="color: #5E5E5E;
+<span id="cb17-2">    cor_mat[<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span>i, <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span>i] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb16-3">        <span class="fu" style="color: #4758AB;
+<span id="cb17-3">        <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">solve</span>()</span>
-<span id="cb16-4">}</span>
-<span id="cb16-5"></span>
-<span id="cb16-6"><span class="co" style="color: #5E5E5E;
+<span id="cb17-4">}</span>
+<span id="cb17-5"></span>
+<span id="cb17-6"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># precompute lists of corr_11, corr_12, corr_22_inv, and corr_12 * corr_22_inv</span></span>
-<span id="cb16-7">corr_minus_i_list <span class="ot" style="color: #003B4F;
+<span id="cb17-7">corr_minus_i_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -5889,26 +5858,26 @@ background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n,</span>
-<span id="cb16-8">    get_corr_mat_minus_i_inv,</span>
-<span id="cb16-9">    <span class="at" style="color: #657422;
+<span id="cb17-8">    get_corr_mat_minus_i_inv,</span>
+<span id="cb17-9">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">cor_mat =</span> cor_mat, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">n =</span> n</span>
-<span id="cb16-10">)</span>
-<span id="cb16-11"></span>
-<span id="cb16-12">corr_12_list <span class="ot" style="color: #003B4F;
+<span id="cb17-10">)</span>
+<span id="cb17-11"></span>
+<span id="cb17-12">corr_12_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">lapply</span>(</span>
-<span id="cb16-13">    <span class="dv" style="color: #AD0000;
+<span id="cb17-13">    <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n,</span>
-<span id="cb16-14">    \(i) cor_mat[</span>
-<span id="cb16-15">        <span class="fu" style="color: #4758AB;
+<span id="cb17-14">    \(i) cor_mat[</span>
+<span id="cb17-15">        <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">c</span>(i, (<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -5917,7 +5886,7 @@ background-color: null;
 font-style: inherit;">:</span>n)[<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span>i]),</span>
-<span id="cb16-16">        <span class="fu" style="color: #4758AB;
+<span id="cb17-16">        <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">c</span>(i, (<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -5926,7 +5895,7 @@ background-color: null;
 font-style: inherit;">:</span>n)[<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span>i])</span>
-<span id="cb16-17">    ][<span class="dv" style="color: #AD0000;
+<span id="cb17-17">    ][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>, <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -5937,60 +5906,60 @@ background-color: null;
 font-style: inherit;">drop =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">FALSE</span>]</span>
-<span id="cb16-18">)</span>
-<span id="cb16-19"></span>
-<span id="cb16-20">corr_11 <span class="ot" style="color: #003B4F;
+<span id="cb17-18">)</span>
+<span id="cb17-19"></span>
+<span id="cb17-20">corr_11 <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">diag</span>(cor_mat)</span>
-<span id="cb16-21"></span>
-<span id="cb16-22">corr12xcorr22_inv_list <span class="ot" style="color: #003B4F;
+<span id="cb17-21"></span>
+<span id="cb17-22">corr12xcorr22_inv_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">lapply</span>(</span>
-<span id="cb16-23">    <span class="dv" style="color: #AD0000;
+<span id="cb17-23">    <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n,</span>
-<span id="cb16-24">    \(i) corr_12_list[[i]] <span class="sc" style="color: #5E5E5E;
+<span id="cb17-24">    \(i) corr_12_list[[i]] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%*%</span> corr_minus_i_list[[i]]</span>
-<span id="cb16-25">)</span>
-<span id="cb16-26"></span>
-<span id="cb16-27">corr_11_i_list <span class="ot" style="color: #003B4F;
+<span id="cb17-25">)</span>
+<span id="cb17-26"></span>
+<span id="cb17-27">corr_11_i_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sapply</span>(</span>
-<span id="cb16-28">    <span class="dv" style="color: #AD0000;
+<span id="cb17-28">    <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n,</span>
-<span id="cb16-29">    \(i) corr_11[i] <span class="sc" style="color: #5E5E5E;
+<span id="cb17-29">    \(i) corr_11[i] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span></span>
-<span id="cb16-30">        corr12xcorr22_inv_list[[i]] <span class="sc" style="color: #5E5E5E;
+<span id="cb17-30">        corr12xcorr22_inv_list[[i]] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%*%</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">t</span>(corr_12_list[[i]])</span>
-<span id="cb16-31">)</span>
-<span id="cb16-32"></span>
-<span id="cb16-33">get_sigma_bar_ij <span class="ot" style="color: #003B4F;
+<span id="cb17-31">)</span>
+<span id="cb17-32"></span>
+<span id="cb17-33">get_sigma_bar_ij <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(sigma_phylo, corr_minus_i_list,</span>
-<span id="cb16-34">    corr_12_list) {</span>
-<span id="cb16-35">    <span class="co" style="color: #5E5E5E;
+<span id="cb17-34">    corr_12_list) {</span>
+<span id="cb17-35">    <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># returns a vector</span></span>
-<span id="cb16-36">    <span class="fu" style="color: #4758AB;
+<span id="cb17-36">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sqrt</span>(sigma_phylo<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -5999,26 +5968,26 @@ background-color: null;
 font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">*</span> corr_11_i_list)</span>
-<span id="cb16-37">}</span>
-<span id="cb16-38"></span>
-<span id="cb16-39">get_mu_bar_ij <span class="ot" style="color: #003B4F;
+<span id="cb17-37">}</span>
+<span id="cb17-38"></span>
+<span id="cb17-39">get_mu_bar_ij <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(a) {</span>
-<span id="cb16-40">    <span class="co" style="color: #5E5E5E;
+<span id="cb17-40">    <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># mu_1 and mu_2 are 0</span></span>
-<span id="cb16-41">    <span class="fu" style="color: #4758AB;
+<span id="cb17-41">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sapply</span>(</span>
-<span id="cb16-42">        <span class="dv" style="color: #AD0000;
+<span id="cb17-42">        <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n,</span>
-<span id="cb16-43">        \(i) corr12xcorr22_inv_list[[i]] <span class="sc" style="color: #5E5E5E;
+<span id="cb17-43">        \(i) corr12xcorr22_inv_list[[i]] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%*%</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -6029,52 +5998,52 @@ background-color: null;
 font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb16-44">    )</span>
-<span id="cb16-45">}</span>
-<span id="cb16-46"></span>
-<span id="cb16-47">draw_df <span class="ot" style="color: #003B4F;
+<span id="cb17-44">    )</span>
+<span id="cb17-45">}</span>
+<span id="cb17-46"></span>
+<span id="cb17-47">draw_df <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> pglmm_fit<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">draws</span>(</span>
-<span id="cb16-48">    <span class="fu" style="color: #4758AB;
+<span id="cb17-48">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">c</span>(</span>
-<span id="cb16-49">        <span class="st" style="color: #20794D;
+<span id="cb17-49">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"phylo_effects"</span>,</span>
-<span id="cb16-50">        <span class="st" style="color: #20794D;
+<span id="cb17-50">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"sigma_resid"</span>,</span>
-<span id="cb16-51">        <span class="st" style="color: #20794D;
+<span id="cb17-51">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"sigma_phylo"</span></span>
-<span id="cb16-52">    ),</span>
-<span id="cb16-53">    <span class="at" style="color: #657422;
+<span id="cb17-52">    ),</span>
+<span id="cb17-53">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">format =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"data.frame"</span></span>
-<span id="cb16-54">) <span class="sc" style="color: #5E5E5E;
+<span id="cb17-54">) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb16-55">    tidybayes<span class="sc" style="color: #5E5E5E;
+<span id="cb17-55">    tidybayes<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">tidy_draws</span>(</span>
-<span id="cb16-56">        sigma_resid, sigma_phylo,</span>
-<span id="cb16-57">        phylo_effects[i]</span>
-<span id="cb16-58">    )</span>
-<span id="cb16-59"></span>
-<span id="cb16-60">draw_list <span class="ot" style="color: #003B4F;
+<span id="cb17-56">        sigma_resid, sigma_phylo,</span>
+<span id="cb17-57">        phylo_effects[i]</span>
+<span id="cb17-58">    )</span>
+<span id="cb17-59"></span>
+<span id="cb17-60">draw_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> draw_df <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb16-61">    dplyr<span class="sc" style="color: #5E5E5E;
+<span id="cb17-61">    dplyr<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -6083,24 +6052,24 @@ background-color: null;
 font-style: inherit;">phylo_effect_vectors =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">lapply</span>(</span>
-<span id="cb16-62">        <span class="dv" style="color: #AD0000;
+<span id="cb17-62">        <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">4000</span>,</span>
-<span id="cb16-63">        \(x) <span class="fu" style="color: #4758AB;
+<span id="cb17-63">        \(x) <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">as.numeric</span>(draw_df[x, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n])</span>
-<span id="cb16-64">    )) <span class="sc" style="color: #5E5E5E;
+<span id="cb17-64">    )) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb16-65">    dplyr<span class="sc" style="color: #5E5E5E;
+<span id="cb17-65">    dplyr<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -6113,7 +6082,7 @@ background-color: null;
 font-style: inherit;">"phylo_effects"</span>)) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb16-66">    dplyr<span class="sc" style="color: #5E5E5E;
+<span id="cb17-66">    dplyr<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -6132,10 +6101,10 @@ font-style: inherit;"># one list element per draw</span></span></code></pre></di
 <section id="evaluate-the-integral" class="level1">
 <h1>Evaluate the integral</h1>
 <p>So using one draw from the <code>draw_list</code> we prepared in the previous section, along with the functions <code>get_mu_bar_ij()</code> and <code>get_sigma_bar_ij()</code>, we can get the set of <code>mu_bar_ij</code> and <code>sigma_bar_ij</code> for each observation for this one draw:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-8_ea9ce275ca7414e5d5b4a3a088d4bd4f">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">mu_bar_i1 <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">mu_bar_i1 <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> draw_list[[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -6148,7 +6117,7 @@ background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">get_mu_bar_ij</span>()</span>
-<span id="cb17-2">sigma_bar_i1 <span class="ot" style="color: #003B4F;
+<span id="cb18-2">sigma_bar_i1 <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> draw_list[[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -6159,31 +6128,31 @@ background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">get_sigma_bar_ij</span>(</span>
-<span id="cb17-3">    corr_minus_i_list,</span>
-<span id="cb17-4">    corr_12_list</span>
-<span id="cb17-5">)</span></code></pre></div>
+<span id="cb18-3">    corr_minus_i_list,</span>
+<span id="cb18-4">    corr_12_list</span>
+<span id="cb18-5">)</span></code></pre></div>
 </details>
 </div>
 <section id="integrand-at-one-point-for-one-observation-in-one-draw" class="level2">
 <h2 class="anchored" data-anchor-id="integrand-at-one-point-for-one-observation-in-one-draw">Integrand at one point for one observation in one draw</h2>
 <p>Let’s evaluate the integrand for an (arbitrarily selected) phylogenetic effect of 0.333 for the fifth observation on the first draw:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-9_2535432966cd3aab92b48f2ff34e1a7c">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">vec_integrand</span>(<span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.333</span>,</span>
-<span id="cb18-2">    mu_bar_i1[<span class="dv" style="color: #AD0000;
+<span id="cb19-2">    mu_bar_i1[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>],</span>
-<span id="cb18-3">    <span class="at" style="color: #657422;
+<span id="cb19-3">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sigma_bar_ij =</span> sigma_bar_i1[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>],</span>
-<span id="cb18-4">    draw_list[[<span class="dv" style="color: #AD0000;
+<span id="cb19-4">    draw_list[[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>]]<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -6192,11 +6161,11 @@ background-color: null;
 font-style: inherit;">$</span>Y[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span>
-<span id="cb18-5">)</span></code></pre></div>
+<span id="cb19-5">)</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>      t136 
-0.02345266 </code></pre>
+<pre><code>     t136 
+0.0352494 </code></pre>
 </div>
 </div>
 <p>A reasonable-looking number, hooray!</p>
@@ -6207,47 +6176,47 @@ font-style: inherit;">5</span>]</span>
 <p>In the roaches example they use Stan’s built-in <code>integrate_1d()</code> function. While it’s nice to keep the log-likelihood calculation in the Stan program, the interface is unwieldy to me. You have to pass in ALL of the secondary real-valued arguments into the integrand function in a single argument, which is tricky when that includes many irregularly structured components. Same goes for integers. To me, doing the integral after the fact in R is much simpler. You can then hand the log-likelihood matrix directly to <code>loo::loo()</code>.</p>
 <p>The R function <code>stats::integrate()</code> uses adaptive quadrature to numerically integrate functions. I don’t know much about how it works, but it internally calls C code for the heavy lifting, so it’s pretty fast. It would be interesting to benchmark it against Stan’s <code>integrate_1d()</code>.</p>
 <p>Anyway, you just hand <code>stats::integrate()</code> the function, the integration range, and other needed arguments.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-10_832b194957314d7760a763a9953c1299">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">integrate</span>(vec_integrand,</span>
-<span id="cb20-2">    <span class="sc" style="color: #5E5E5E;
+<span id="cb21-2">    <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span><span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">Inf</span>, <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">Inf</span>,</span>
-<span id="cb20-3">    <span class="at" style="color: #657422;
+<span id="cb21-3">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">mu_bar_ij =</span> mu_bar_i1[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>],</span>
-<span id="cb20-4">    <span class="at" style="color: #657422;
+<span id="cb21-4">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sigma_bar_ij =</span> sigma_bar_i1[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>],</span>
-<span id="cb20-5">    <span class="at" style="color: #657422;
+<span id="cb21-5">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sigma_resid =</span> draw_list[[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>]]<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>sigma_resid,</span>
-<span id="cb20-6">    <span class="at" style="color: #657422;
+<span id="cb21-6">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">yi =</span> data_list<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>Y[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span>
-<span id="cb20-7">)</span></code></pre></div>
+<span id="cb21-7">)</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.1941623 with absolute error &lt; 3.8e-05</code></pre>
+<pre><code>0.1672871 with absolute error &lt; 2e-06</code></pre>
 </div>
 </div>
 <p>Another reasonable number, hooray!</p>
@@ -6255,41 +6224,41 @@ font-style: inherit;">5</span>]</span>
 <section id="integral-for-all-observations-in-one-draw" class="level2">
 <h2 class="anchored" data-anchor-id="integral-for-all-observations-in-one-draw">Integral for all observations in one draw</h2>
 <p>Going further, let’s write a couple functions to evaluate the integral for all observations in a given draw:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-11_1671498397dd2a584fa05713e10cdac9">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">integrate_one_obs <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">integrate_one_obs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(mu_bar_ij, sigma_bar_ij, Y,</span>
-<span id="cb22-2">    sigma_resid) {</span>
-<span id="cb22-3">    <span class="fu" style="color: #4758AB;
+<span id="cb23-2">    sigma_resid) {</span>
+<span id="cb23-3">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">integrate</span>(</span>
-<span id="cb22-4">        vec_integrand,</span>
-<span id="cb22-5">        <span class="sc" style="color: #5E5E5E;
+<span id="cb23-4">        vec_integrand,</span>
+<span id="cb23-5">        <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span><span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">Inf</span>, <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">Inf</span>,</span>
-<span id="cb22-6">        mu_bar_ij, sigma_bar_ij,</span>
-<span id="cb22-7">        sigma_resid, Y</span>
-<span id="cb22-8">    )<span class="sc" style="color: #5E5E5E;
+<span id="cb23-6">        mu_bar_ij, sigma_bar_ij,</span>
+<span id="cb23-7">        sigma_resid, Y</span>
+<span id="cb23-8">    )<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>value</span>
-<span id="cb22-9">}</span>
-<span id="cb22-10"></span>
-<span id="cb22-11">integrate_all_obs <span class="ot" style="color: #003B4F;
+<span id="cb23-9">}</span>
+<span id="cb23-10"></span>
+<span id="cb23-11">integrate_all_obs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">function</span>(draw_j) {</span>
-<span id="cb22-12">    mu_bar_ij <span class="ot" style="color: #003B4F;
+<span id="cb23-12">    mu_bar_ij <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> draw_j<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -6300,7 +6269,7 @@ background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">get_mu_bar_ij</span>()</span>
-<span id="cb22-13">    sigma_bar_ij <span class="ot" style="color: #003B4F;
+<span id="cb23-13">    sigma_bar_ij <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> draw_j<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -6309,44 +6278,44 @@ background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">get_sigma_bar_ij</span>(</span>
-<span id="cb22-14">        corr_minus_i_list,</span>
-<span id="cb22-15">        corr_12_list</span>
-<span id="cb22-16">    )</span>
-<span id="cb22-17"></span>
-<span id="cb22-18">    <span class="fu" style="color: #4758AB;
+<span id="cb23-14">        corr_minus_i_list,</span>
+<span id="cb23-15">        corr_12_list</span>
+<span id="cb23-16">    )</span>
+<span id="cb23-17"></span>
+<span id="cb23-18">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">mapply</span>(integrate_one_obs,</span>
-<span id="cb22-19">        mu_bar_ij, sigma_bar_ij, data_list<span class="sc" style="color: #5E5E5E;
+<span id="cb23-19">        mu_bar_ij, sigma_bar_ij, data_list<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>Y,</span>
-<span id="cb22-20">        <span class="at" style="color: #657422;
+<span id="cb23-20">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sigma_resid =</span> draw_j<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>sigma_resid</span>
-<span id="cb22-21">    )</span>
-<span id="cb22-22">}</span>
-<span id="cb22-23"></span>
-<span id="cb22-24"></span>
-<span id="cb22-25"><span class="fu" style="color: #4758AB;
+<span id="cb23-21">    )</span>
+<span id="cb23-22">}</span>
+<span id="cb23-23"></span>
+<span id="cb23-24"></span>
+<span id="cb23-25"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">system.time</span>({</span>
-<span id="cb22-26">    draw42_integrals <span class="ot" style="color: #003B4F;
+<span id="cb23-26">    draw42_integrals <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">integrate_all_obs</span>(draw_list[[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">42</span>]])</span>
-<span id="cb22-27">})</span></code></pre></div>
+<span id="cb23-27">})</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-   0.02    0.00    0.02 </code></pre>
+  0.013   0.000   0.012 </code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">draw42_integrals <span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1">draw42_integrals <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -6357,16 +6326,16 @@ background-color: null;
 font-style: inherit;">2</span>)</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>  [1] 0.14 0.24 0.27 0.27 0.21 0.23 0.19 0.14 0.11 0.29 0.29 0.30 0.31 0.29 0.29
- [16] 0.24 0.09 0.25 0.05 0.34 0.33 0.23 0.18 0.21 0.33 0.34 0.30 0.03 0.30 0.20
- [31] 0.06 0.27 0.10 0.22 0.15 0.27 0.24 0.34 0.21 0.28 0.14 0.30 0.33 0.29 0.35
- [46] 0.31 0.20 0.25 0.28 0.28 0.29 0.33 0.31 0.00 0.04 0.34 0.28 0.33 0.32 0.33
- [61] 0.06 0.12 0.06 0.29 0.23 0.27 0.31 0.28 0.01 0.29 0.29 0.23 0.31 0.22 0.23
- [76] 0.32 0.27 0.28 0.34 0.33 0.29 0.13 0.26 0.22 0.34 0.22 0.34 0.27 0.10 0.28
- [91] 0.13 0.26 0.23 0.32 0.33 0.29 0.32 0.20 0.33 0.31 0.28 0.03 0.29 0.29 0.31
-[106] 0.07 0.39 0.20 0.11 0.31 0.28 0.30 0.30 0.27 0.09 0.31 0.16 0.03 0.26 0.12
-[121] 0.16 0.12 0.30 0.12 0.28 0.16 0.22 0.34 0.07 0.32 0.21 0.30 0.16 0.08 0.29
-[136] 0.07 0.19 0.27 0.26 0.31 0.33 0.32 0.07 0.29 0.30 0.15 0.09 0.10 0.25 0.16</code></pre>
+<pre><code>  [1] 0.21 0.24 0.25 0.26 0.24 0.16 0.23 0.06 0.22 0.30 0.27 0.31 0.29 0.27 0.28
+ [16] 0.25 0.07 0.13 0.07 0.22 0.33 0.32 0.24 0.21 0.31 0.32 0.23 0.03 0.24 0.31
+ [31] 0.09 0.25 0.10 0.11 0.24 0.20 0.24 0.33 0.30 0.28 0.14 0.29 0.31 0.33 0.36
+ [46] 0.35 0.25 0.27 0.26 0.30 0.30 0.25 0.31 0.01 0.06 0.33 0.32 0.30 0.32 0.24
+ [61] 0.16 0.14 0.03 0.24 0.27 0.26 0.33 0.31 0.01 0.15 0.19 0.14 0.32 0.27 0.27
+ [76] 0.21 0.31 0.18 0.33 0.30 0.27 0.10 0.24 0.20 0.33 0.15 0.33 0.28 0.11 0.21
+ [91] 0.14 0.31 0.20 0.33 0.32 0.29 0.31 0.17 0.32 0.30 0.22 0.05 0.19 0.24 0.27
+[106] 0.18 0.32 0.33 0.10 0.28 0.32 0.29 0.27 0.22 0.12 0.29 0.16 0.05 0.29 0.16
+[121] 0.11 0.17 0.23 0.09 0.26 0.09 0.16 0.33 0.06 0.28 0.24 0.26 0.09 0.10 0.25
+[136] 0.09 0.22 0.25 0.33 0.27 0.33 0.31 0.05 0.26 0.26 0.12 0.17 0.03 0.12 0.17</code></pre>
 </div>
 </div>
 <p>Fast, reasonable likelihoods!</p>
@@ -6374,26 +6343,26 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 <section id="integral-for-all-observations-across-all-draws" class="level2">
 <h2 class="anchored" data-anchor-id="integral-for-all-observations-across-all-draws">Integral for all observations across all draws</h2>
 <p>Finally, let’s apply it to every posterior draw. I just remembered that <code>purrr::map()</code> recently introduced a <code>.progress</code> argument, let’s use it. <code>purrr</code> is sick.</p>
-<div class="cell" data-hash="integrated_loo_cache/html/_555e06ce18a628f6137f720ff04c1059">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">lik_mat <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">lik_mat <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> purrr<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">map</span>(draw_list,</span>
-<span id="cb26-2">    integrate_all_obs,</span>
-<span id="cb26-3">    <span class="at" style="color: #657422;
+<span id="cb27-2">    integrate_all_obs,</span>
+<span id="cb27-3">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">.progress =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">interactive</span>()</span>
-<span id="cb26-4">) <span class="sc" style="color: #5E5E5E;
+<span id="cb27-4">) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb26-5">    purrr<span class="sc" style="color: #5E5E5E;
+<span id="cb27-5">    purrr<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -6402,24 +6371,24 @@ font-style: inherit;">reduce</span>(rbind)</span></code></pre></div>
 </div>
 <p>It only takes a minute on my laptop, but of course with larger datasets / more complicated models it can slow down a bit. That <code>purrr::map()</code> call is embarassingly parallelizable.</p>
 <p>Finally we can see the loo results with the stable Pareto k diagnostics. We feed in the chain ID numbers so that loo is aware of the relative effective sample sizes:</p>
-<div class="cell" data-hash="integrated_loo_cache/html/unnamed-chunk-12_24c38faff93c98006050f379e040e3ed">
+<div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">loo<span class="sc" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1">loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">loo</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">log</span>(lik_mat),</span>
-<span id="cb27-2">    <span class="at" style="color: #657422;
+<span id="cb28-2">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">r_eff =</span> loo<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">relative_eff</span>(lik_mat,</span>
-<span id="cb27-3">        <span class="at" style="color: #657422;
+<span id="cb28-3">        <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">chain_id =</span> draw_df<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -6430,31 +6399,22 @@ background-color: null;
 font-style: inherit;">.chain</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb27-4">    )</span>
-<span id="cb27-5">)</span></code></pre></div>
+<span id="cb28-4">    )</span>
+<span id="cb28-5">)</span></code></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Computed from 4000 by 150 log-likelihood matrix
+Computed from 4000 by 150 log-likelihood matrix.
 
          Estimate   SE
-elpd_loo   -259.6  7.8
-p_loo        16.5  1.7
-looic       519.1 15.6
+elpd_loo   -260.0  7.8
+p_loo        16.8  1.8
+looic       520.0 15.6
 ------
-Monte Carlo SE of elpd_loo is 0.1.
+MCSE of elpd_loo is 0.1.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.1, 1.6]).
 
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     149   99.3%   852       
- (0.5, 0.7]   (ok)         1    0.7%   1762      
-   (0.7, 1]   (bad)        0    0.0%   &lt;NA&gt;      
-   (1, Inf)   (very bad)   0    0.0%   &lt;NA&gt;      
-
-All Pareto k estimates are ok (k &lt; 0.7).
+All Pareto k estimates are good (k &lt; 0.7).
 See help('pareto-k-diagnostic') for details.</code></pre>
 </div>
 </div>
