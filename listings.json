@@ -2,10 +2,6 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/dyingforacup/dyingforacup.html",
-      "/posts/fsummary/fsummary.html",
-      "/posts/tidy_dt/tidy_dt_translation.html",
-      "/posts/int_loo/integrated_loo.html",
       "/posts/quarto_tricks/quarto_tricks.html",
       "/posts/quotations/quotations.html",
       "/posts/voting_methods/voting_methods.html",
@@ -19,7 +15,11 @@
       "/posts/col_pal/col_pal.html",
       "/posts/geryon/geryon.html",
       "/posts/paste_image/paste_image.html",
-      "/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html"
+      "/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html",
+      "/posts/dyingforacup/dyingforacup.html",
+      "/posts/fsummary/fsummary.html",
+      "/posts/tidy_dt/tidy_dt_translation.html",
+      "/posts/int_loo/integrated_loo.html"
     ]
   }
 ]
