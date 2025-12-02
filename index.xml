@@ -10,7 +10,31 @@
 <atom:link href="https://andrewghazi.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.7.31</generator>
-<lastBuildDate>Fri, 13 Jun 2025 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 01 Dec 2025 05:00:00 GMT</lastBuildDate>
+<item>
+  <title>havel</title>
+  <dc:creator>Andrew Ghazi</dc:creator>
+  <link>https://andrewghazi.github.io/posts/havel/havel.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Visualize and tabulate R package dependencies.</p>
+<p>I submitted my package <a href="https://github.com/andrewGhazi/havel"><code>havel</code></a> to CRAN, we’ll see what they say. 0 NOTEs other than the “first submission” one.</p>
+<p>The package is for visualizing and tabulating R package dependencies. The idea being that if a package author wants to remove dependencies, visualizations of the dependency network can help identify the low-hanging fruit. There’s also another function that tabulates things like “this dependency adds 6 unique downstream dependencies, this pair adds 8”, etc. Better documentation on the github readme linked above.</p>
+<p>Here’s an example:</p>
+<p><img src="https://andrewghazi.github.io/posts/havel/img/README-ex2-1.png" class="img-fluid" alt="A network showing the dependencies of the havel package."></p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <guid>https://andrewghazi.github.io/posts/havel/havel.html</guid>
+  <pubDate>Mon, 01 Dec 2025 05:00:00 GMT</pubDate>
+  <media:content url="https://andrewghazi.github.io/posts/havel/img/logo.png" medium="image" type="image/png" height="166" width="144"/>
+</item>
 <item>
   <title>A skeleton script for power analysis</title>
   <dc:creator>Andrew Ghazi</dc:creator>
