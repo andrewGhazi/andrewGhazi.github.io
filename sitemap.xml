@@ -1,263 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://andrewghazi.github.io/anpan/404.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_outcome_tree.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_pwy_ranef.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/get_genome_intersect_counts.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/draw_mvnorm.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_pwy_ranef_batch.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/index.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_half_cor_mat.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/get_cor_mat.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_vignette.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_results.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/read_bug.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_subjectwise_pglmm.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/read_and_filter.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_tree_with_post.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_cor_mat.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/index.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/articles/anpan_tutorial.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/articles/gene_model.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/articles/pglmm.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/LICENSE-text.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/index.html</loc>
-    <lastmod>2025-05-11T22:35:29.895Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/comc/comc.html</loc>
-    <lastmod>2024-09-22T16:15:36.669Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/egregious/egregious.html</loc>
-    <lastmod>2025-04-20T21:47:08.055Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/geryon/geryon.html</loc>
-    <lastmod>2023-12-22T05:02:51.884Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/voting_methods/voting_methods.html</loc>
-    <lastmod>2025-01-11T19:17:19.716Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/power_skeleton/power_skeleton.html</loc>
-    <lastmod>2025-07-31T19:46:10.184Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/col_pal/col_pal.html</loc>
-    <lastmod>2023-12-22T04:50:47.931Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/fsummary/fsummary.html</loc>
-    <lastmod>2025-06-19T17:45:26.558Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/quotations/quotations.html</loc>
-    <lastmod>2025-03-01T14:59:27.067Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/dyingforacup/dyingforacup.html</loc>
-    <lastmod>2025-06-19T17:48:12.645Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/joint_ipw/joint_ipw.html</loc>
-    <lastmod>2025-05-10T21:12:57.013Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/thebars/thebars.html</loc>
-    <lastmod>2024-11-30T21:04:46.069Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
-    <lastmod>2025-08-01T01:24:10.159Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
-    <lastmod>2024-02-24T17:46:34.510Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/havel/havel.html</loc>
-    <lastmod>2025-12-02T01:53:45.608Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
-    <lastmod>2025-05-10T20:52:21.600Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</loc>
-    <lastmod>2023-12-27T16:31:52.735Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/use_options/options.html</loc>
-    <lastmod>2024-06-09T01:21:38.627Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/quarto_tricks/quarto_tricks.html</loc>
-    <lastmod>2025-06-19T17:39:29.107Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</loc>
-    <lastmod>2024-03-02T19:01:54.955Z</lastmod>
+    <loc>https://andrewghazi.github.io/about.html</loc>
+    <lastmod>2024-12-20T22:11:09.616Z</lastmod>
   </url>
   <url>
     <loc>https://andrewghazi.github.io/posts/collapse_is_sick/sick.html</loc>
     <lastmod>2024-12-16T03:09:09.893Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/about.html</loc>
-    <lastmod>2024-12-20T22:11:09.616Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/ezpzmcmcpcpca/ezpzmcmcpcpca.html</loc>
+    <lastmod>2024-03-02T19:01:54.955Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/authors.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/quarto_tricks/quarto_tricks.html</loc>
+    <lastmod>2025-06-19T17:39:29.107Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/articles/adv_topics.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/use_options/options.html</loc>
+    <lastmod>2024-06-09T01:21:38.627Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/articles/pwy_ranef.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/rstudio_setup/rstudio_setup.html</loc>
+    <lastmod>2023-12-27T16:31:52.735Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/articles/index.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/int_loo/integrated_loo.html</loc>
+    <lastmod>2025-05-10T20:52:21.600Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_genome_intersections.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/havel/havel.html</loc>
+    <lastmod>2025-12-02T01:53:45.608Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_pwy_ranef.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/paste_image/paste_image.html</loc>
+    <lastmod>2024-02-24T17:46:34.510Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_p_value_histogram.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/tidy_dt/tidy_dt_translation.html</loc>
+    <lastmod>2025-08-01T01:24:10.159Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_lines.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/thebars/thebars.html</loc>
+    <lastmod>2024-11-30T21:04:46.069Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_pglmm.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/joint_ipw/joint_ipw.html</loc>
+    <lastmod>2025-05-10T21:12:57.013Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/olap_tree_and_meta.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/dyingforacup/dyingforacup.html</loc>
+    <lastmod>2025-06-19T17:48:12.645Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_pglmm_batch.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/quotations/quotations.html</loc>
+    <lastmod>2025-03-01T14:59:27.067Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/filter_gf.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/fsummary/fsummary.html</loc>
+    <lastmod>2025-06-19T17:45:26.558Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/filter_batch.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/col_pal/col_pal.html</loc>
+    <lastmod>2023-12-22T04:50:47.931Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_batch.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/power_skeleton/power_skeleton.html</loc>
+    <lastmod>2025-07-31T19:46:10.184Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_elpd_diff.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/voting_methods/voting_methods.html</loc>
+    <lastmod>2025-01-11T19:17:19.716Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_genome_intersection_histograms.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/geryon/geryon.html</loc>
+    <lastmod>2023-12-22T05:02:51.884Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_tree_with_post_pred.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/egregious/egregious.html</loc>
+    <lastmod>2025-04-20T21:47:08.055Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/plot_pwy_ranef_intervals.html</loc>
-    <lastmod>2025-12-03T19:45:24.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/posts/comc/comc.html</loc>
+    <lastmod>2024-09-22T16:15:36.669Z</lastmod>
   </url>
   <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/compute_clade_effects.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/reference/anpan_repeated_measures.html</loc>
-    <lastmod>2025-12-03T19:45:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andrewghazi.github.io/anpan/LICENSE.html</loc>
-    <lastmod>2025-12-03T19:45:22.000Z</lastmod>
+    <loc>https://andrewghazi.github.io/index.html</loc>
+    <lastmod>2025-05-11T22:35:29.895Z</lastmod>
   </url>
 </urlset>
