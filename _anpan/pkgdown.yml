@@ -1,0 +1,12 @@
+pandoc: 3.6.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  adv_topics: adv_topics.html
+  gene_model: gene_model.html
+  pglmm: pglmm.html
+  pwy_ranef: pwy_ranef.html
+last_built: 2025-12-03T19:43Z
+urls:
+  reference: https://andrewghazi.github.io/anpan/reference
+  article: https://andrewghazi.github.io/anpan/articles
