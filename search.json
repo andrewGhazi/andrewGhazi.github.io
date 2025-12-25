@@ -193,7 +193,7 @@
     "href": "posts/havel/havel.html",
     "title": "havel",
     "section": "",
-    "text": "Visualize and tabulate R package dependencies.\nI submitted my package havel to CRAN, we’ll see what they say. 0 NOTEs other than the “first submission” one.\nThe package is for visualizing and tabulating R package dependencies. The idea being that if a package author wants to remove dependencies, visualizations of the dependency network can help identify the low-hanging fruit. There’s also another function that tabulates things like “this dependency adds 6 unique downstream dependencies, this pair adds 8”, etc. Better documentation on the github readme linked above.\nHere’s an example:"
+    "text": "Visualize and tabulate R package dependencies.\nI submitted my package havel to CRAN, we’ll see what they say. 0 NOTEs other than the “first submission” one.\nedit: havel has been accepted 🎉 https://cran.r-project.org/package=havel\nThe package is for visualizing and tabulating R package dependencies. The idea being that if a package author wants to remove dependencies, visualizations of the dependency network can help identify the low-hanging fruit. There’s also another function that tabulates things like “this dependency adds 6 unique downstream dependencies, this pair adds 8”, etc. Better documentation on the github readme linked above.\nHere’s an example:"
   },
   {
     "objectID": "posts/paste_image/paste_image.html",
