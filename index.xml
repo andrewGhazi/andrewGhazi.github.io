@@ -22,7 +22,17 @@
 
 
 <p>A brief guide to examining eBird data with <code>duckdb</code>.</p>
-<p>I’ve been learning about birdwatching lately and wanted to play around with some observational data. <a href="https://www.birds.cornell.edu/home/">The Cornell Lab of Ornithology</a> provides access to their data on <a href="https://ebird.org/">eBird</a> through a <a href="https://science.ebird.org/en/use-ebird-data/download-ebird-data-products">data request form</a>. At time of writing, it has over two billion observations. So I thought I’d get two birds stoned at once and learn a bit about setting up duckb databases. It started off with a bit of a journey debugging hardware problems as well.</p>
+<p>I’ve been learning about birdwatching lately and wanted to play around with some observational data. <a href="https://www.birds.cornell.edu/home/">The Cornell Lab of Ornithology</a> provides access to their data on <a href="https://ebird.org/">eBird</a> through a <a href="https://science.ebird.org/en/use-ebird-data/download-ebird-data-products">data request form</a>. At time of writing, it has over two billion observations. I’ve also been meaning to learn more about databases, so I thought I’d get two birds stoned at once and try to interact with the eBird data using duckdb. It started off with a bit of a journey debugging hardware problems as well.</p>
+<p>I found the performance to be pretty good. A preview of the filtering speed relative to <code>auk</code>:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andrewghazi.github.io/posts/edbbirdduck/edbbirdduck_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <section id="overall-steps" class="level1">
 <h1>Overall steps</h1>
 <ol start="0" type="1">
@@ -670,8 +680,8 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div></div>
  2 G8511354              92
  3 G8511365              92
  4 G8511373              91
- 5 G8511366              90
- 6 G8511364              90
+ 5 G8511364              90
+ 6 G8511366              90
  7 G8511360              88
  8 G8511369              88
  9 G12500511             87
@@ -928,7 +938,7 @@ font-style: inherit;">collect</span>()</span>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-652.372 683.357  72.369 </code></pre>
+666.917 682.954  79.080 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">cjc <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1012,7 +1022,7 @@ font-style: inherit;">collect</span>()</span>
 <span id="cb26-10">})</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-124.324  47.134  13.910 </code></pre>
+123.692  51.058  20.226 </code></pre>
 </div>
 </div>
 <p>Nice.</p>
@@ -1261,7 +1271,7 @@ font-style: inherit;">print</span>()</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://andrewghazi.github.io/posts/edbbirdduck/edbbirdduck_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://andrewghazi.github.io/posts/edbbirdduck/edbbirdduck_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1361,23 +1371,23 @@ font-style: inherit;">collect</span>() </span>
 <span id="cb30-8">})</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-366.815  16.730  14.348 </code></pre>
+370.947  17.198  14.628 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1">uspecies</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3,188 × 3
-   STATE          COUNTY         n
- * &lt;chr&gt;          &lt;chr&gt;      &lt;int&gt;
- 1 South Carolina Georgetown   471
- 2 Texas          Williamson   559
- 3 Texas          Wilson       371
- 4 Colorado       El Paso      614
- 5 Texas          Fort Bend    505
- 6 Maine          Somerset     310
- 7 California     Placer       431
- 8 Tennessee      Davidson     439
- 9 Oregon         Multnomah    552
-10 Maine          Kennebec     356
+   STATE       COUNTY                       n
+ * &lt;chr&gt;       &lt;chr&gt;                    &lt;int&gt;
+ 1 Maryland    Anne Arundel               507
+ 2 Washington  King                       620
+ 3 Connecticut New Haven                  574
+ 4 Alaska      Denali Borough             245
+ 5 Florida     St. Johns                  483
+ 6 New York    Ulster                     407
+ 7 California  San Mateo                  681
+ 8 Alaska      Copper River Census Area   259
+ 9 Montana     Lewis and Clark            422
+10 Wisconsin   Portage                    400
 # ℹ 3,178 more rows</code></pre>
 </div>
 </div>
@@ -1498,7 +1508,12 @@ font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"Belted Kingfisher - all MA sightings"</span>)</span></code></pre></div></div>
+font-style: inherit;">"Belted Kingfisher - all MA sightings"</span>,</span>
+<span id="cb34-20">       <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">caption =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"eBird Basic Dataset. Version: EBD_relFeb-2026. Cornell Lab of Ornithology, Ithaca, New York. Feb 2026."</span>)</span></code></pre></div></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -2541,12 +2556,10 @@ font-style: inherit;">500</span>)</span></code></pre></div></div>
 <ol type="1">
 <li>Create a temporary table <code>obs</code> of observed counts</li>
 <li>Create a temporary table <code>zeros</code> of all relevant species with count set to 0</li>
-<li><code>z2k = anti_join(zeros, obs)</code></li>
-</ol>
+<li><code>z2k = anti_join(zeros, obs)</code>
 <ul>
-<li>That is, drop all the rows from <code>zeros</code> where there are corresponding entries in the observations</li>
-</ul>
-<ol type="1">
+<li>That is, drop all the rows from <code>zeros</code> where there are corresponding entries in the observations.</li>
+</ul></li>
 <li><code>union(obs, z2k)</code></li>
 </ol>
 <section id="citation-and-terms-of-use" class="level3">
